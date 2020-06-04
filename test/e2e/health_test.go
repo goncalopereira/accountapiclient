@@ -17,12 +17,35 @@ func TestHealth(t *testing.T) {
 	}
 }
 
-func TestFetch(t *testing.T) {
+var createData = test.NewAccountFromFile("create.json")
+
+func TestBEforeFetch(t *testing.T) {
 	client := accountAPIClient.NewAccountAPIClient()
-	client.Fetch("ad27e265-9605-4b4b-a0e5-3003ea9cc4dc")
+	client.Fetch(createData.ID)
 }
 
 func TestCreate(t *testing.T) {
 	client := accountAPIClient.NewAccountAPIClient()
-	client.Create(test.NewAccountFromFile("create.json"))
+	client.Create(createData)
+}
+
+func TestAfterFetch(t *testing.T) {
+	client := accountAPIClient.NewAccountAPIClient()
+	client.Fetch(createData.ID)
+}
+
+
+func TestList(t *testing.T) {
+	client := accountAPIClient.NewAccountAPIClient()
+	client.List("")
+}
+
+func TestDelete0(t *testing.T) {
+	client := accountAPIClient.NewAccountAPIClient()
+	client.Delete(createData.ID,0)
+}
+
+func TestDelete1(t *testing.T) {
+	client := accountAPIClient.NewAccountAPIClient()
+	client.Delete(createData.ID,1)
 }

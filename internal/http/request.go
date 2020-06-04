@@ -19,6 +19,18 @@ func NewRequest() *Request {
 }
 
 func (h *Request) Get(endpoint string) (*Response, error) {
+	//response, responseErr := http.Get(endpoint)
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+	response, responseErr := client.Do(req)
+
+	return handleResponse(endpoint, response, responseErr)
+}
+
+func (h *Request) Delete(endpoint string) (*Response, error) {
 	response, responseErr := http.Get(endpoint)
 
 	return handleResponse(endpoint, response, responseErr)
