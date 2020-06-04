@@ -11,6 +11,7 @@ import (
 //external http request for endpoint
 //returns response data
 type Request struct {
+	IRequest
 	client *http.Client
 }
 

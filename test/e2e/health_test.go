@@ -36,7 +36,7 @@ func TestAfterFetch(t *testing.T) {
 
 func TestList(t *testing.T) {
 	client := accountAPIClient.NewAccountAPIClient()
-	client.List("")
+	client.List(map[string]string{})
 }
 
 func TestDelete0(t *testing.T) {
