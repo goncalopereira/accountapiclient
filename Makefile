@@ -3,7 +3,7 @@
 fmt:
 	gofmt -w .
 build: fmt ## format and build all go files
-	go build -v ./pkg
+	go build -v ./...
 test: fmt ## run unit and integration test with no external dependencies
 	scripts/tasks/test.sh
 e2e: ## run tests onto local account api
