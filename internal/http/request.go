@@ -25,9 +25,7 @@ func (h *Request) Get(endpoint string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, responseErr := h.client.Do(req)
-
-	return handleResponse(endpoint, response, responseErr)
+	return h.handleRequest(endpoint, req)
 }
 
 func (h *Request) Delete(endpoint string) (*Response, error) {
@@ -35,8 +33,7 @@ func (h *Request) Delete(endpoint string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, responseErr := h.client.Do(req)
-	return handleResponse(endpoint, response, responseErr)
+	return h.handleRequest(endpoint, req)
 }
 
 func (h *Request) Post(endpoint string, requestData []byte) (*Response, error) {
@@ -44,11 +41,11 @@ func (h *Request) Post(endpoint string, requestData []byte) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, responseErr := h.client.Do(req)
-	return handleResponse(endpoint, response, responseErr)
+	return h.handleRequest(endpoint, req)
 }
 
-func handleResponse(endpoint string, response *http.Response, responseErr error) (*Response, error) {
+func (h *Request) handleRequest(endpoint string, req *http.Request) (*Response, error) {
+	response, responseErr := h.client.Do(req)
 	if response != nil {
 		defer response.Body.Close()
 	}
