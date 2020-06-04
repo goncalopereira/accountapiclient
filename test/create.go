@@ -14,7 +14,7 @@ import (
 
 func AccountCreateResponse() *account.Account {
 	account := NewAccountFromFile("create-response.json")
-	return &account
+	return account
 }
 
 func DuplicateAccountErrorResponse() *data.ErrorResponse {
