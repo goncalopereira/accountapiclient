@@ -5,6 +5,11 @@ services:
     build:
       dockerfile: ./build/test/Dockerfile
       context: .
+    depends_on:
+      - accountapi
+    environment:
+      - API_HOST=localhost
+      - API_PORT=8080
   accountapi:
     build:
       dockerfile: ./build/accountapi/Dockerfile
