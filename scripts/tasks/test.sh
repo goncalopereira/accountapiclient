@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-go test -v internal/**/*
+go test -v ./internal/...
