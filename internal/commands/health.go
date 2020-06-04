@@ -7,7 +7,7 @@ import (
 )
 
 func Health() error {
-	response, responseErr := http.Get("http://accountapi:8080/v1/health")
+	response, responseErr := http.Get("http://localhost:8080/v1/health")
 
 	if response != nil {
 		defer response.Body.Close()

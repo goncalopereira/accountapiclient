@@ -2,6 +2,7 @@ package e2e
 
 import (
 	http "github.com/goncalopereira/accountapiclient/internal/commands"
+	accountAPIClient "github.com/goncalopereira/accountapiclient/pkg"
 	"testing"
 )
 
@@ -13,4 +14,9 @@ func TestHealth(t *testing.T) {
 	if err != nil {
 		t.Errorf("Healthcheck failed with error: %v", err)
 	}
+}
+
+func TestFetch(t *testing.T) {
+	client := accountAPIClient.NewAccountAPIClient()
+	client.Fetch("ad27e265-9605-4b4b-a0e5-3003ea9cc4dc")
 }
