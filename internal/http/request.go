@@ -12,33 +12,40 @@ import (
 //external http request for endpoint
 //returns response data
 type Request struct {
+	client *http.Client
 }
 
 func NewRequest() *Request {
-	return &Request{}
+	r := &Request{}
+	r.client = &http.Client{}
+	return r
 }
 
 func (h *Request) Get(endpoint string) (*Response, error) {
-	//response, responseErr := http.Get(endpoint)
-	client := &http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
-	response, responseErr := client.Do(req)
+	response, responseErr :=h.client.Do(req)
 
 	return handleResponse(endpoint, response, responseErr)
 }
 
 func (h *Request) Delete(endpoint string) (*Response, error) {
-	response, responseErr := http.Get(endpoint)
-
+	req, err := http.NewRequest("DELETE", endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+	response, responseErr := h.client.Do(req)
 	return handleResponse(endpoint, response, responseErr)
 }
 
 func (h *Request) Post(endpoint string, requestData []byte) (*Response, error) {
-	response, responseErr := http.Post(endpoint, "application/vnd.api+json", bytes.NewBuffer(requestData))
-
+	req, err := http.NewRequest("POST", endpoint,  bytes.NewBuffer(requestData))
+	if err != nil {
+		return nil, err
+	}
+	response, responseErr := h.client.Do(req)
 	return handleResponse(endpoint, response, responseErr)
 }
 

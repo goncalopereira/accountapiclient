@@ -34,7 +34,6 @@ func TestAfterFetch(t *testing.T) {
 	client.Fetch(createData.ID)
 }
 
-
 func TestList(t *testing.T) {
 	client := accountAPIClient.NewAccountAPIClient()
 	client.List("")
@@ -42,10 +41,10 @@ func TestList(t *testing.T) {
 
 func TestDelete0(t *testing.T) {
 	client := accountAPIClient.NewAccountAPIClient()
-	client.Delete(createData.ID,0)
+	client.Delete(createData.ID, 0)
 }
 
 func TestDelete1(t *testing.T) {
 	client := accountAPIClient.NewAccountAPIClient()
-	client.Delete(createData.ID,1)
+	client.Delete(createData.ID, 1)
 }
