@@ -1,4 +1,3 @@
-//nolint:gosec
 package http
 
 import (
@@ -26,7 +25,7 @@ func (h *Request) Get(endpoint string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, responseErr :=h.client.Do(req)
+	response, responseErr := h.client.Do(req)
 
 	return handleResponse(endpoint, response, responseErr)
 }
@@ -41,7 +40,7 @@ func (h *Request) Delete(endpoint string) (*Response, error) {
 }
 
 func (h *Request) Post(endpoint string, requestData []byte) (*Response, error) {
-	req, err := http.NewRequest("POST", endpoint,  bytes.NewBuffer(requestData))
+	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(requestData))
 	if err != nil {
 		return nil, err
 	}
