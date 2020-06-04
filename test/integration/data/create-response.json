@@ -1,0 +1,21 @@
+{
+    "data": {
+        "attributes": {
+            "alternative_bank_account_names": null,
+            "bank_id": "400300",
+            "bank_id_code": "GBDSC",
+            "base_currency": "GBP",
+            "bic": "NWBKGB22",
+            "country": "GB"
+        },
+        "created_on": "2020-06-03T07:48:51.062Z",
+        "id": "ad27e265-9605-4b4b-a0e5-3003ea9cc4dc",
+        "modified_on": "2020-06-03T07:48:51.062Z",
+        "organisation_id": "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",
+        "type": "accounts",
+        "version": 0
+    },
+    "links": {
+        "self": "/v1/organisation/accounts/ad27e265-9605-4b4b-a0e5-3003ea9cc4dc"
+    }
+}
