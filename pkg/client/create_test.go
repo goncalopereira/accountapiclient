@@ -2,7 +2,6 @@
 package client_test
 
 import (
-	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
@@ -37,7 +36,7 @@ func TestClient_Create(t *testing.T) {
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
 
 	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, fmt.Errorf("broken config"))
+	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
 
 	tests := []struct {
 		name    string

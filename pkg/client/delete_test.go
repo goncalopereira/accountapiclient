@@ -2,7 +2,6 @@
 package client_test
 
 import (
-	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/http"
@@ -35,7 +34,7 @@ func TestClient_Delete(t *testing.T) {
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
 
 	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, fmt.Errorf("broken config"))
+	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
 
 	tests := []struct {
 		name    string
@@ -62,7 +61,7 @@ func TestClient_Delete(t *testing.T) {
 			nil,
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewDeleteRequestMock(nil, fmt.Errorf("boom"))},
+			fields{config: api, request: httptest.NewDeleteRequestMock(nil, test.ErrBrokenHTTPClient)},
 			args{id: "1", version: 1},
 			nil,
 			true},

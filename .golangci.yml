@@ -47,7 +47,7 @@ linters:
   # - gocognit
   # - godot
   # - godox
-  # - goerr113
+    - goerr113
   # - maligned
   # - nestif
   # - prealloc

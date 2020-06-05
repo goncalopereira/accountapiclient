@@ -2,7 +2,6 @@
 package client
 
 import (
-	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
@@ -41,7 +40,7 @@ func TestClient_List(t *testing.T) {
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
 
 	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, fmt.Errorf("broken config"))
+	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
 
 	tests := []struct {
 		name    string
@@ -71,7 +70,7 @@ func TestClient_List(t *testing.T) {
 			nil,
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(nil, fmt.Errorf("boom"))},
+			fields{config: api, request: httptest.NewGetRequestMock(nil, test.ErrBrokenHTTPClient)},
 			args{urls: &url.Values{}},
 			nil,
 			true},

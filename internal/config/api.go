@@ -14,6 +14,10 @@ type API struct {
 	accountsURL string
 }
 
+var (
+	ErrParametersCannotBeNil = fmt.Errorf("parameters cannot be nil")
+)
+
 func NewAPI(host string, port string, scheme string) IAPI {
 	a := &API{host: host, port: port, scheme: scheme}
 	a.accountsURL = "/v1/organisation/accounts"
@@ -42,7 +46,7 @@ func (c *API) Account(id string, parameters *url.Values) (*url.URL, error) {
 
 func buildURL(requestURL string, parameters *url.Values) (*url.URL, error) {
 	if parameters == nil {
-		return nil, fmt.Errorf("parameters cannot be nil")
+		return nil, ErrParametersCannotBeNil
 	}
 	u, err := url.Parse(requestURL)
 	if err != nil {
