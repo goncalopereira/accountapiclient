@@ -18,7 +18,7 @@ func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
 }
 
 //default new client with real http
-func NewDefaultAccountAPIClient() *Client {
+func NewClientFromEnv() *Client {
 	return NewClient(config.DefaultAPI(), internalhttp.NewRequest())
 }
 

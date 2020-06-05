@@ -1,5 +1,5 @@
 //nolint:scopelint,funlen
-package client
+package client_test
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
+	"github.com/goncalopereira/accountapiclient/pkg/client"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
@@ -73,9 +74,9 @@ func TestClient_Delete(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := NewClient(tt.fields.config, tt.fields.request)
+			c := client.NewClient(tt.fields.config, tt.fields.request)
 
-			got, err := client.Delete(tt.args.id, tt.args.version)
+			got, err := c.Delete(tt.args.id, tt.args.version)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 				return

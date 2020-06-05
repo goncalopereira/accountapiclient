@@ -4,7 +4,6 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/json"
-	"log"
 	"net/http"
 	"net/url"
 )
@@ -14,7 +13,6 @@ func (client *Client) Fetch(id string) (*data.Output, error) {
 	if configErr != nil {
 		return &data.Output{}, configErr
 	}
-	log.Print(requestURL.String())
 	response, requestErr := client.Request.Get(requestURL.String())
 	if requestErr != nil {
 		return &data.Output{}, requestErr
