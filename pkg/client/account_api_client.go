@@ -23,9 +23,11 @@ func NewClientFromEnv() *Client {
 
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {
 	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
+
 	errorResponseError := json.BodyToData(response.Body, errorResponse)
 	if errorResponseError != nil {
 		return nil, errorResponseError
 	}
+
 	return errorResponse, nil
 }

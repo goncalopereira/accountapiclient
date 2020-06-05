@@ -16,6 +16,7 @@ type Data struct {
 func NewAccount(id string, organisationID string, attributes Attributes) *Data {
 	a := &Data{}
 	a.Account = newData(id, organisationID, attributes)
+
 	return a
 }
 

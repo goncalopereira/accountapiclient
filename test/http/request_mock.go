@@ -17,17 +17,20 @@ type RequestMock struct {
 func NewGetRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
 	client.On("Get", mock.AnythingOfType("string")).Return(response, err).Once()
+
 	return client
 }
 func NewDeleteRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
 	client.On("Delete", mock.AnythingOfType("string")).Return(response, err).Once()
+
 	return client
 }
 
 func NewPostRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
 	client.On("Post", mock.AnythingOfType("string"), mock.Anything).Return(response, err).Once()
+
 	return client
 }
 
@@ -48,6 +51,7 @@ func (r *RequestMock) Delete(endpoint string) (*internalhttp.Response, error) {
 
 func returnResponseAndError(arguments mock.Arguments) (*internalhttp.Response, error) {
 	errArgument := arguments.Get(1)
+
 	var err error
 	if errArgument != nil {
 		err = errArgument.(error)

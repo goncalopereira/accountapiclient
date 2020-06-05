@@ -19,6 +19,7 @@ func TestClient_Fetch(t *testing.T) {
 		config  config.IAPI
 		request http.IRequest
 	}
+
 	type args struct {
 		id string
 	}

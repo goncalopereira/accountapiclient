@@ -16,6 +16,7 @@ func TestRequestBodyToData(t *testing.T) {
 	}
 
 	var badJSON = args{test.ReadJSON("badjson.txt"), account.Data{}}
+
 	var accountCreate = args{test.ReadJSON("create.json"), account.NewEmptyAccount()}
 
 	tests := []struct {

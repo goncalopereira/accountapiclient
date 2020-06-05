@@ -16,6 +16,7 @@ type Request struct {
 func NewRequest() *Request {
 	r := &Request{}
 	r.client = &http.Client{}
+
 	return r
 }
 
@@ -24,6 +25,7 @@ func (h *Request) Get(reqURL string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return h.handleRequest(req)
 }
 
@@ -32,6 +34,7 @@ func (h *Request) Delete(reqURL string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return h.handleRequest(req)
 }
 
@@ -40,6 +43,7 @@ func (h *Request) Post(reqURL string, requestData []byte) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return h.handleRequest(req)
 }
 

@@ -21,6 +21,7 @@ func TestClient_List(t *testing.T) {
 		config  config.IAPI
 		request http.IRequest
 	}
+
 	type args struct {
 		urls *url.Values
 	}

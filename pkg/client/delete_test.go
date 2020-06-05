@@ -19,6 +19,7 @@ func TestClient_Delete(t *testing.T) {
 		config  config.IAPI
 		request http.IRequest
 	}
+
 	type args struct {
 		id      string
 		version int

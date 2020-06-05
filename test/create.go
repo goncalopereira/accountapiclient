@@ -5,13 +5,6 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 )
 
-//func AccountCreateQuery() *command.Query {
-//	account := NewAccountFromFile("create.json")
-//	query := command.Query{}
-//	query.ID = account.ID
-//	return &query
-//}
-
 func AccountCreateRequest() *account.Data {
 	account := NewAccountFromFile("create.json")
 	return account

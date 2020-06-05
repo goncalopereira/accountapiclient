@@ -19,6 +19,7 @@ func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 		w.WriteHeader(response.StatusCode)
 		fmt.Fprintln(w, string(response.Body))
 	}))
+
 	return ts
 }
 

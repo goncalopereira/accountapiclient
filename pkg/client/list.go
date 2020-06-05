@@ -17,12 +17,15 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 	if configErr != nil {
 		return nil, configErr
 	}
+
 	response, requestErr := client.Request.Get(requestURL.String())
 	if requestErr != nil {
 		return nil, requestErr
 	}
+
 	if response.StatusCode == http.StatusOK {
 		responseAccounts := &account.AccountsData{}
+
 		accountErr := json.BodyToData(response.Body, responseAccounts)
 		if accountErr != nil {
 			return nil, accountErr
@@ -30,5 +33,6 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 
 		return responseAccounts, nil
 	}
+
 	return errorResponseHandling(response)
 }

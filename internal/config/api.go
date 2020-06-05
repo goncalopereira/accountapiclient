@@ -21,6 +21,7 @@ var (
 func NewAPI(host string, port string, scheme string) IAPI {
 	a := &API{host: host, port: port, scheme: scheme}
 	a.accountsURL = "/v1/organisation/accounts"
+
 	return a
 }
 
@@ -48,6 +49,7 @@ func buildURL(requestURL string, parameters *url.Values) (*url.URL, error) {
 	if parameters == nil {
 		return nil, ErrParametersCannotBeNil
 	}
+
 	u, err := url.Parse(requestURL)
 	if err != nil {
 		return nil, err
@@ -62,5 +64,6 @@ func GetEnv(key, defaultValue string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
 	}
+
 	return defaultValue
 }

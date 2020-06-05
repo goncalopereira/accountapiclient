@@ -20,6 +20,7 @@ func TestClient_Create(t *testing.T) {
 		config  config.IAPI
 		request http.IRequest
 	}
+
 	type args struct {
 		account *account.Data
 	}

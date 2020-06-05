@@ -10,6 +10,7 @@ func newData(id string, organisationID string, attributes Attributes) Account {
 	d.TypeOf = "accounts"
 	d.ID = id
 	d.Attributes = attributes
+
 	return d
 }
 

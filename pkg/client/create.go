@@ -13,10 +13,12 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 	if dataErr != nil {
 		return nil, dataErr
 	}
+
 	requestURL, configErr := client.config.Accounts(&url.Values{})
 	if configErr != nil {
 		return nil, configErr
 	}
+
 	response, requestErr := client.Request.Post(requestURL.String(), requestData)
 	if requestErr != nil {
 		return nil, requestErr
@@ -24,11 +26,14 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 
 	if response.StatusCode == http.StatusCreated {
 		responseAccount := &account.Data{}
+
 		accountErr := json.BodyToData(response.Body, responseAccount)
 		if accountErr != nil {
 			return nil, accountErr
 		}
+
 		return responseAccount, nil
 	}
+
 	return errorResponseHandling(response)
 }

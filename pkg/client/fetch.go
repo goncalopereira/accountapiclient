@@ -13,6 +13,7 @@ func (client *Client) Fetch(id string) (data.IOutput, error) {
 	if configErr != nil {
 		return nil, configErr
 	}
+
 	response, requestErr := client.Request.Get(requestURL.String())
 	if requestErr != nil {
 		return nil, requestErr
@@ -20,11 +21,14 @@ func (client *Client) Fetch(id string) (data.IOutput, error) {
 
 	if response.StatusCode == http.StatusOK {
 		responseAccount := &account.Data{}
+
 		accountErr := json.BodyToData(response.Body, responseAccount)
 		if accountErr != nil {
 			return nil, accountErr
 		}
+
 		return responseAccount, nil
 	}
+
 	return errorResponseHandling(response)
 }

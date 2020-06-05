@@ -19,6 +19,7 @@ func NewAPIMock(returnURL *url.URL, returnError error) config.IAPI {
 		Return(returnURL, returnError).Once()
 	api.On("Account", mock.AnythingOfType("string"), mock.AnythingOfType("*url.Values")).
 		Return(returnURL, returnError).Once()
+
 	return api
 }
 
@@ -33,6 +34,7 @@ func (a *APIMock) Account(id string, parameters *url.Values) (*url.URL, error) {
 
 func returnResponseAndError(arguments mock.Arguments) (*url.URL, error) {
 	errArgument := arguments.Get(1)
+
 	var err error
 	if errArgument != nil {
 		err = errArgument.(error)
