@@ -15,8 +15,9 @@ func TestRequestBodyToData(t *testing.T) {
 		data interface{}
 	}
 
-	var badJSON = args{test.ReadJSON("badjson.txt"), account.Account{}}
-	var accountCreate = args{test.ReadJSON("create.json"), account.NewEmptyAccount()}
+	var badJSON = args{test.ReadJSON("badjson.txt"), account.Data{}}
+
+	var accountCreate = args{test.ReadJSON("create.json"), account.Data{}}
 
 	tests := []struct {
 		name    string
@@ -24,7 +25,7 @@ func TestRequestBodyToData(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "BadJSON", args: badJSON, wantErr: true},
-		{name: "Account", args: accountCreate, wantErr: false},
+		{name: "AccountData", args: accountCreate, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -39,11 +40,11 @@ func TestDataToBody_WhenValidAccountThenTransformToJSONAndBackAndReturnAccount(t
 	attributes := account.Attributes{Country: "GB"}
 	attributes.PrivateIdentification = account.PrivateIdentification{PrivateIdentificationBirthCountry: "PT"}
 	attributes.OrganisationIdentification = account.OrganisationIdentification{OrganisationIdentificationCountry: "US"}
-	originalAccount := account.NewAccount("newid", "neworganisationId", attributes)
+	originalAccount := account.NewData("newid", "neworganisationId", attributes)
 
 	result, _ := json.DataToBody(originalAccount)
 
-	newAccount := account.NewEmptyAccount()
+	newAccount := account.Data{}
 	_ = json.BodyToData(result, &newAccount)
 
 	assert.Equal(t, "newid", newAccount.LinkData.ID)

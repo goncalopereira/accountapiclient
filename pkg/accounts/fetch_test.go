@@ -1,37 +1,32 @@
 //nolint:scopelint,funlen
-package client
+package accounts_test
 
 import (
-	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
+	"github.com/goncalopereira/accountapiclient/pkg/accounts"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
-	"net/url"
 	"reflect"
 	"testing"
 )
 
-func TestClient_List(t *testing.T) {
+func TestClient_Fetch(t *testing.T) {
 	type fields struct {
 		config  config.IAPI
 		request http.IRequest
 	}
+
 	type args struct {
-		urls *url.Values
+		id string
 	}
 
-	multipleAccounts := test.NewAccountsFromFile("list-response.json")
-	accountsBody, _ := json.DataToBody(multipleAccounts)
-	accountsResponse := &http.Response{StatusCode: 200, Body: accountsBody}
-
-	emptyList := test.NewAccountsFromFile("list-empty.json")
-	emptyAccountsBody, _ := json.DataToBody(emptyList)
-	emptyAccountsResponse := &http.Response{StatusCode: 200, Body: emptyAccountsBody}
+	completeAccount := test.NewAccountFromFile("complete-account.json")
+	accountBody, _ := json.DataToBody(completeAccount)
+	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
@@ -41,7 +36,7 @@ func TestClient_List(t *testing.T) {
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
 
 	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, fmt.Errorf("broken config"))
+	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
 
 	tests := []struct {
 		name    string
@@ -50,50 +45,46 @@ func TestClient_List(t *testing.T) {
 		want    data.IOutput
 		wantErr bool
 	}{
-		{"GivenAccountsWhenDefaultQueryThenReturnAccounts",
-			fields{config: api, request: httptest.NewGetRequestMock(accountsResponse, nil)},
-			args{urls: &url.Values{}},
-			multipleAccounts,
-			false},
-		{"GivenNoAccountsWhenDefaultQueryThenReturnNilArray",
-			fields{config: api, request: httptest.NewGetRequestMock(emptyAccountsResponse, nil)},
-			args{urls: &url.Values{}},
-			&account.Accounts{},
+		{"GivenAccountWhenValidIDThenReturnAccount",
+			fields{config: api, request: httptest.NewGetRequestMock(accountResponse, nil)},
+			args{id: "1"},
+			completeAccount,
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
-			args{urls: &url.Values{}},
+			args{id: "1"},
 			apiErrorMessage,
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
-			args{urls: &url.Values{}},
+			args{id: "1"},
 			nil,
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(nil, fmt.Errorf("boom"))},
-			args{urls: &url.Values{}},
+			fields{config: api, request: httptest.NewGetRequestMock(nil, test.ErrBrokenHTTPClient)},
+			args{id: "1"},
 			nil,
 			true},
 		{"WhenBrokenAPIConfigThrowsThenReturnError",
 			fields{config: brokenAPI, request: nil},
-			args{urls: &url.Values{}},
+			args{id: "1"},
 			nil,
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := NewClient(tt.fields.config, tt.fields.request)
-			got, err := c.List(tt.args.urls)
+			client := accounts.NewClient(tt.fields.config, tt.fields.request)
+
+			got, err := client.Fetch(tt.args.id)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Fetch() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if (err != nil) && tt.wantErr {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("List() got = %v, want %v", got, tt.want)
+				t.Errorf("Fetch() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

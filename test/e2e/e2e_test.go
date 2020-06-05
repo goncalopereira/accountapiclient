@@ -1,30 +1,28 @@
-package e2e
+package e2e_test
 
 import (
-	client2 "github.com/goncalopereira/accountapiclient/pkg/client"
+	client2 "github.com/goncalopereira/accountapiclient/pkg/accounts"
 	"github.com/goncalopereira/accountapiclient/test"
 	"github.com/stretchr/testify/assert"
 	"net/url"
 	"testing"
 )
 
-var createData = test.NewAccountFromFile("create.json")
-
 func TestBeforeFetch(t *testing.T) {
 	client := client2.NewClientFromEnv()
-	output, _ := client.Fetch(createData.ID)
+	output, _ := client.Fetch(test.NewAccountFromFile("create.json").ID)
 	t.Log(output.String())
 }
 
 func TestCreate(t *testing.T) {
 	client := client2.NewClientFromEnv()
-	output, _ := client.Create(createData)
+	output, _ := client.Create(test.NewAccountFromFile("create.json"))
 	t.Log(output.String())
 }
 
 func TestAfterFetch(t *testing.T) {
 	client := client2.NewClientFromEnv()
-	output, _ := client.Fetch(createData.ID)
+	output, _ := client.Fetch(test.NewAccountFromFile("create.json").ID)
 	t.Log(output.String())
 }
 

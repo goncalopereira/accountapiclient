@@ -1,4 +1,4 @@
-package client
+package accounts
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
@@ -11,18 +11,21 @@ import (
 //Returns List of accounts based on parameters
 //Noticed an empty list had data:null and thought about moving to empty array
 //But according to https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices
-//Null array is preferred in Go
+//Null array is preferred in Go.
 func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 	requestURL, configErr := client.config.Accounts(parameters)
 	if configErr != nil {
 		return nil, configErr
 	}
+
 	response, requestErr := client.Request.Get(requestURL.String())
 	if requestErr != nil {
 		return nil, requestErr
 	}
+
 	if response.StatusCode == http.StatusOK {
-		responseAccounts := &account.Accounts{}
+		responseAccounts := &account.AccountsData{}
+
 		accountErr := json.BodyToData(response.Body, responseAccounts)
 		if accountErr != nil {
 			return nil, accountErr
@@ -30,10 +33,6 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 
 		return responseAccounts, nil
 	}
-	errorResponse := &data.ErrorResponse{}
-	errorResponseError := json.BodyToData(response.Body, errorResponse)
-	if errorResponseError != nil {
-		return nil, errorResponseError
-	}
-	return errorResponse, nil
+
+	return errorResponseHandling(response)
 }

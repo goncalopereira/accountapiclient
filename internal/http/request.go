@@ -2,13 +2,12 @@ package http
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 //build the request wrapper to be able to test net/http separately from service
-//returns response data
+//returns response data.
 type Request struct {
 	IRequest
 	client *http.Client
@@ -17,6 +16,7 @@ type Request struct {
 func NewRequest() *Request {
 	r := &Request{}
 	r.client = &http.Client{}
+
 	return r
 }
 
@@ -25,6 +25,7 @@ func (h *Request) Get(reqURL string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return h.handleRequest(req)
 }
 
@@ -33,6 +34,7 @@ func (h *Request) Delete(reqURL string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return h.handleRequest(req)
 }
 
@@ -41,6 +43,7 @@ func (h *Request) Post(reqURL string, requestData []byte) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return h.handleRequest(req)
 }
 
@@ -58,8 +61,8 @@ func (h *Request) handleRequest(req *http.Request) (*Response, error) {
 	responseBody, bodyErr := ioutil.ReadAll(response.Body)
 
 	if responseErr != nil {
-		return nil, fmt.Errorf("request body: %v", bodyErr.Error())
+		return nil, bodyErr
 	}
 
-	return NewResponse(response.StatusCode, responseBody), nil
+	return &Response{StatusCode: response.StatusCode, Body: responseBody}, nil
 }

@@ -1,28 +1,25 @@
 package account
 
-type LinkData struct {
-	TypeOf string `json:"type"`
-	ID     string `json:"id"`
-}
+import (
+	"fmt"
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	"github.com/goncalopereira/accountapiclient/internal/json"
+)
 
-func newData(id string, organisationID string, attributes Attributes) Data {
-	d := Data{OrganisationID: organisationID}
-	d.TypeOf = "accounts"
-	d.ID = id
-	d.Attributes = attributes
-	return d
-}
-
+// https://api-docs.form3.tech/api.html#organisation-accounts-resource
 type Data struct {
-	LinkData
-	ResponseOnlyData
-	Attributes     `json:"attributes"`
-	OrganisationID string `json:"organisation_id"`
-	Relationships  `json:"relationships,omitempty"`
+	data.IOutput `json:",omitempty"` //force marshaling to hide fields
+	fmt.Stringer `json:",omitempty"`
+	Account      `json:"data"`
 }
 
-type ResponseOnlyData struct {
-	CreatedOn  string `json:"created_on,omitempty"` //TODO json unmarshal Time later
-	ModifiedOn string `json:"modified_on,omitempty"`
-	Version    int    `json:"version,omitempty"`
+func (a *Data) String() string {
+	account, _ := json.DataToBody(a)
+	return string(account)
+}
+
+func NewData(id string, organisationID string, attributes Attributes) *Data {
+	a := &Data{Account: NewAccount(id, organisationID, attributes)}
+
+	return a
 }

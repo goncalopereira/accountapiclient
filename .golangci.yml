@@ -41,18 +41,18 @@ linters:
     - whitespace
 
   # don't enable:
-  # - asciicheck
+    - asciicheck
   # - exhaustive (TODO: enable after next release; current release at time of writing is v1.27)
-  # - gochecknoglobals
-  # - gocognit
-  # - godot
-  # - godox
-  # - goerr113
+    - gochecknoglobals
+    - gocognit
+    - godot
+    - godox
+    - goerr113
   # - maligned
-  # - nestif
-  # - prealloc
-  # - testpackage
-  # - wsl
+    - nestif
+    - prealloc
+    - testpackage
+    - wsl
 
 issues:
   #   # List of regexps of issue texts to exclude, empty list by default.

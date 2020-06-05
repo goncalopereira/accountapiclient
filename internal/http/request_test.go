@@ -19,11 +19,12 @@ func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 		w.WriteHeader(response.StatusCode)
 		fmt.Fprintln(w, string(response.Body))
 	}))
+
 	return ts
 }
 
 func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := internalhttp.NewResponse(http.StatusOK, test.ReadJSON("complete-account.json"))
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test.ReadJSON("complete-account.json")}
 	ts := NewServerWithResponse(originalResponse)
 
 	r := internalhttp.NewRequest()
@@ -36,7 +37,8 @@ func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 }
 
 func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	ts := NewServerWithResponse(internalhttp.NewResponse(http.StatusCreated, test.ReadJSON("create-response.json")))
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test.ReadJSON("create-response.json")}
+	ts := NewServerWithResponse(originalResponse)
 
 	requestBody, _ := json.DataToBody(test.ReadJSON("create.json"))
 	response, err := internalhttp.NewRequest().Post(ts.URL, requestBody)
@@ -44,13 +46,13 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
 
-	var result = account.NewEmptyAccount()
+	var result = account.Data{}
 	_ = json.BodyToData(response.Body, &result)
-	assert.Equal(t, test.AccountCreateResponse().Data, result.Data)
+	assert.Equal(t, test.AccountCreateResponse().Account, result.Account)
 }
 
 func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	ts := NewServerWithResponse(internalhttp.NewResponse(http.StatusNoContent, nil))
+	ts := NewServerWithResponse(&internalhttp.Response{StatusCode: http.StatusNoContent, Body: nil})
 
 	response, err := internalhttp.NewRequest().Delete(ts.URL)
 

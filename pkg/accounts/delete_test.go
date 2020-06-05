@@ -1,13 +1,12 @@
 //nolint:scopelint,funlen
-package client_test
+package accounts_test
 
 import (
-	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
-	"github.com/goncalopereira/accountapiclient/pkg/client"
+	"github.com/goncalopereira/accountapiclient/pkg/accounts"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
@@ -20,6 +19,7 @@ func TestClient_Delete(t *testing.T) {
 		config  config.IAPI
 		request http.IRequest
 	}
+
 	type args struct {
 		id      string
 		version int
@@ -35,13 +35,13 @@ func TestClient_Delete(t *testing.T) {
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
 
 	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, fmt.Errorf("broken config"))
+	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
 
 	tests := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *data.ErrorResponse
+		want    data.IOutput
 		wantErr bool
 	}{
 		{"WhenGivenValidIDAndVersionThen204Empty",
@@ -62,7 +62,7 @@ func TestClient_Delete(t *testing.T) {
 			nil,
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewDeleteRequestMock(nil, fmt.Errorf("boom"))},
+			fields{config: api, request: httptest.NewDeleteRequestMock(nil, test.ErrBrokenHTTPClient)},
 			args{id: "1", version: 1},
 			nil,
 			true},
@@ -74,7 +74,7 @@ func TestClient_Delete(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := client.NewClient(tt.fields.config, tt.fields.request)
+			c := accounts.NewClient(tt.fields.config, tt.fields.request)
 
 			got, err := c.Delete(tt.args.id, tt.args.version)
 			if (err != nil) != tt.wantErr {

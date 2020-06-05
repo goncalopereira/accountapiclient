@@ -6,13 +6,13 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/json"
 )
 
-type Accounts struct {
+type AccountsData struct {
 	data.IOutput `json:",omitempty"`
 	fmt.Stringer `json:",omitempty"`
-	Data         *[]Data `json:"data"`
+	Accounts     *[]Account `json:"data"`
 }
 
-func (a *Accounts) String() string {
+func (a *AccountsData) String() string {
 	account, _ := json.DataToBody(a)
 	return string(account)
 }

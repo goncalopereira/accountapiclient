@@ -2,8 +2,8 @@ package config
 
 import (
 	"fmt"
-	"github.com/goncalopereira/accountapiclient/internal/env"
 	"net/url"
+	"os"
 )
 
 type API struct {
@@ -14,16 +14,21 @@ type API struct {
 	accountsURL string
 }
 
+var (
+	ErrParametersCannotBeNil = fmt.Errorf("parameters cannot be nil")
+)
+
 func NewAPI(host string, port string, scheme string) IAPI {
 	a := &API{host: host, port: port, scheme: scheme}
 	a.accountsURL = "/v1/organisation/accounts"
+
 	return a
 }
 
 func DefaultAPI() IAPI {
-	return NewAPI(env.GetEnv("API_HOST", "localhost"),
-		env.GetEnv("API_PORT", "8080"),
-		env.GetEnv("API_SCHEME", "http"))
+	return NewAPI(GetEnv("API_HOST", "localhost"),
+		GetEnv("API_PORT", "8080"),
+		GetEnv("API_SCHEME", "http"))
 }
 
 func (c *API) baseURL() string {
@@ -42,8 +47,9 @@ func (c *API) Account(id string, parameters *url.Values) (*url.URL, error) {
 
 func buildURL(requestURL string, parameters *url.Values) (*url.URL, error) {
 	if parameters == nil {
-		return nil, fmt.Errorf("parameters cannot be nil")
+		return nil, ErrParametersCannotBeNil
 	}
+
 	u, err := url.Parse(requestURL)
 	if err != nil {
 		return nil, err
@@ -52,4 +58,12 @@ func buildURL(requestURL string, parameters *url.Values) (*url.URL, error) {
 	u.RawQuery = parameters.Encode()
 
 	return u, nil
+}
+
+func GetEnv(key, defaultValue string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+
+	return defaultValue
 }
