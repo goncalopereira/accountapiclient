@@ -20,24 +20,24 @@ func NewRequest() *Request {
 	return r
 }
 
-func (h *Request) Get(reqURL fmt.Stringer) (*Response, error) {
-	req, err := http.NewRequest("GET", reqURL.String(), nil)
+func (h *Request) Get(reqURL string) (*Response, error) {
+	req, err := http.NewRequest("GET", reqURL, nil)
 	if err != nil {
 		return nil, err
 	}
 	return h.handleRequest(req)
 }
 
-func (h *Request) Delete(reqURL fmt.Stringer) (*Response, error) {
-	req, err := http.NewRequest("DELETE", reqURL.String(), nil)
+func (h *Request) Delete(reqURL string) (*Response, error) {
+	req, err := http.NewRequest("DELETE", reqURL, nil)
 	if err != nil {
 		return nil, err
 	}
 	return h.handleRequest(req)
 }
 
-func (h *Request) Post(reqURL fmt.Stringer, requestData []byte) (*Response, error) {
-	req, err := http.NewRequest("POST", reqURL.String(), bytes.NewBuffer(requestData))
+func (h *Request) Post(reqURL string, requestData []byte) (*Response, error) {
+	req, err := http.NewRequest("POST", reqURL, bytes.NewBuffer(requestData))
 	if err != nil {
 		return nil, err
 	}
