@@ -51,6 +51,6 @@ func (r *RequestMock) Post(endpoint string, requestData []byte) (*internalhttp.R
 }
 
 func (r *RequestMock) Delete(endpoint string) (*internalhttp.Response, error) {
-	_ = r.Called(endpoint, endpoint)
+	_ = r.Called(endpoint)
 	return &r.Response, r.Err
 }

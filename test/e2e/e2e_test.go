@@ -5,6 +5,7 @@ import (
 	http "github.com/goncalopereira/accountapiclient/internal/commands"
 	accountAPIClient "github.com/goncalopereira/accountapiclient/pkg"
 	"github.com/goncalopereira/accountapiclient/test"
+	"net/url"
 	"testing"
 )
 
@@ -37,7 +38,7 @@ func TestAfterFetch(t *testing.T) {
 
 func TestList(t *testing.T) {
 	client := accountAPIClient.NewAccountAPIClient()
-	_, _, _ = client.List(map[string]string{})
+	_, _, _ = client.List(&url.Values{})
 }
 
 func TestDelete0(t *testing.T) {
