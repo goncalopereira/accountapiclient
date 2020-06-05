@@ -2,7 +2,6 @@
 package json_test
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	account "github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/json"
 	"github.com/goncalopereira/accountapiclient/test"
@@ -16,8 +15,7 @@ func TestRequestBodyToData(t *testing.T) {
 		data interface{}
 	}
 
-	var healthUp = args{test.ReadJSON("health-up.json"), data.Health{}}
-	var badJSON = args{test.ReadJSON("badjson.txt"), data.Health{}}
+	var badJSON = args{test.ReadJSON("badjson.txt"), account.Account{}}
 	var accountCreate = args{test.ReadJSON("create.json"), account.NewEmptyAccount()}
 
 	tests := []struct {
@@ -25,7 +23,6 @@ func TestRequestBodyToData(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{name: "Health", args: healthUp, wantErr: false},
 		{name: "BadJSON", args: badJSON, wantErr: true},
 		{name: "Account", args: accountCreate, wantErr: false},
 	}

@@ -12,13 +12,11 @@ type API struct {
 	port        string
 	scheme      string
 	accountsURL string
-	healthURL   string
 }
 
 func NewAPI(host string, port string, scheme string) IAPI {
 	a := &API{host: host, port: port, scheme: scheme}
 	a.accountsURL = "/v1/organisation/accounts"
-	a.healthURL = "/v1/health"
 	return a
 }
 
@@ -42,12 +40,10 @@ func (c *API) Account(id string, parameters *url.Values) (*url.URL, error) {
 	return buildURL(requestURL, parameters)
 }
 
-func (c *API) Health() (*url.URL, error) {
-	requestURL := fmt.Sprintf("%s%s", c.baseURL(), c.healthURL)
-	return buildURL(requestURL, &url.Values{})
-}
-
 func buildURL(requestURL string, parameters *url.Values) (*url.URL, error) {
+	if parameters == nil {
+		return nil, fmt.Errorf("parameters cannot be nil")
+	}
 	u, err := url.Parse(requestURL)
 	if err != nil {
 		return nil, err
