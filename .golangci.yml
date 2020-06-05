@@ -46,7 +46,7 @@ linters:
     - gochecknoglobals
     - gocognit
     - godot
-  # - godox
+    - godox
     - goerr113
   # - maligned
     - nestif
