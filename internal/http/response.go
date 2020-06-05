@@ -8,7 +8,3 @@ type Response struct {
 func NewResponse(statusCode int, body []byte) *Response {
 	return &Response{StatusCode: statusCode, Body: body}
 }
-
-func NewBadResponse() *Response {
-	return &Response{}
-}

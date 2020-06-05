@@ -5,7 +5,7 @@ type LinkData struct {
 	ID     string `json:"id"`
 }
 
-func newAccountData(id string, organisationID string, attributes Attributes) Data {
+func newData(id string, organisationID string, attributes Attributes) Data {
 	d := Data{OrganisationID: organisationID}
 	d.TypeOf = "accounts"
 	d.ID = id

@@ -7,8 +7,7 @@ import (
 	"net/http"
 )
 
-//all use of net/http
-//external http request for endpoint
+//build the request wrapper to be able to test net/http separately from service
 //returns response data
 type Request struct {
 	IRequest
@@ -52,14 +51,14 @@ func (h *Request) handleRequest(endpoint string, req *http.Request) (*Response, 
 	}
 
 	if responseErr != nil {
-		return NewBadResponse(), responseErr
+		return nil, responseErr
 	}
 
 	//did not test ReadAll error, would require mocking it
 	responseBody, bodyErr := ioutil.ReadAll(response.Body)
 
 	if responseErr != nil {
-		return NewBadResponse(), fmt.Errorf("request %v body: %v", endpoint, bodyErr.Error())
+		return nil, fmt.Errorf("request %v body: %v", endpoint, bodyErr.Error())
 	}
 
 	return NewResponse(response.StatusCode, responseBody), nil

@@ -6,6 +6,9 @@ import (
 	"net/http"
 )
 
+//need to be able to mock net/http
+//looked into using Pact but with only an external Provider it would be too much to force it to use e2e tests
+//looked into using Sling but had to keep all third party libraries out of the client
 type RequestMock struct {
 	mock.Mock
 	internalhttp.IRequest
