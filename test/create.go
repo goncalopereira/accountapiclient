@@ -12,6 +12,11 @@ import (
 //	return &query
 //}
 
+func AccountCreateRequest() *account.Account {
+	account := NewAccountFromFile("create.json")
+	return account
+}
+
 func AccountCreateResponse() *account.Account {
 	account := NewAccountFromFile("create-response.json")
 	return account
