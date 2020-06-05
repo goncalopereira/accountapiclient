@@ -22,7 +22,7 @@ func (client *Client) Delete(id string, version int) (*data.ErrorResponse, error
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
-	errorResponse := &data.ErrorResponse{}
+	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
 	errorResponseError := json.BodyToData(response.Body, errorResponse)
 	if errorResponseError != nil {
 		return nil, errorResponseError

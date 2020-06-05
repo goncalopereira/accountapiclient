@@ -30,7 +30,7 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 
 		return responseAccounts, nil
 	}
-	errorResponse := &data.ErrorResponse{}
+	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
 	errorResponseError := json.BodyToData(response.Body, errorResponse)
 	if errorResponseError != nil {
 		return nil, errorResponseError
