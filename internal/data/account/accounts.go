@@ -7,8 +7,8 @@ import (
 )
 
 type Accounts struct {
-	data.IOutput `json:"omitempty"`
-	fmt.Stringer `json:"accountsignore,omitempty"`
+	data.IOutput `json:",omitempty"`
+	fmt.Stringer `json:",omitempty"`
 	Data         *[]Data `json:"data"`
 }
 

@@ -6,8 +6,8 @@ import (
 )
 
 type ErrorResponse struct {
-	IOutput      `json:"omitempty"`
-	fmt.Stringer `json:"errorresponseignore,omitempty"`
+	IOutput      `json:",omitempty"`
+	fmt.Stringer `json:",omitempty"`
 	ErrorMessage string `json:"error_message"`
 }
 

@@ -8,10 +8,8 @@ import (
 
 // https://api-docs.form3.tech/api.html#organisation-accounts-resource
 type Account struct {
-	data.IOutput `json:"omitempty"` //force marshaling to hide fields
-	//accountignore is there to prevent govet
-	//from thinking all Stringer ignore are the same
-	fmt.Stringer `json:"accountignore,omitempty"`
+	data.IOutput `json:",omitempty"` //force marshaling to hide fields
+	fmt.Stringer `json:",omitempty"`
 	Data         `json:"data"`
 }
 

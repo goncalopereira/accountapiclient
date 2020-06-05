@@ -23,7 +23,7 @@ func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 }
 
 func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := internalhttp.NewResponse(http.StatusOK, test.ReadJSON("health-up.json"))
+	originalResponse := internalhttp.NewResponse(http.StatusOK, test.ReadJSON("complete-account.json"))
 	ts := NewServerWithResponse(originalResponse)
 
 	r := internalhttp.NewRequest()
