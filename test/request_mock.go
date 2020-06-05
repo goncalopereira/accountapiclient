@@ -3,7 +3,6 @@ package test
 import (
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/stretchr/testify/mock"
-	"net/http"
 )
 
 //need to be able to mock net/http
@@ -12,45 +11,46 @@ import (
 type RequestMock struct {
 	mock.Mock
 	internalhttp.IRequest
-	Response internalhttp.Response
-	Err      error
 }
 
-func NewGetRequestMock(response internalhttp.Response, err error) *RequestMock {
+func NewGetRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
-	client.On("Get", "http://localhost:8080/endpoint").Return(http.Response{}, nil)
-	client.Response = response
-	client.Err = err
+	client.On("Get", mock.AnythingOfType("string")).Return(response, err).Once()
+	return client
+}
+func NewDeleteRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
+	client := new(RequestMock)
+	client.On("Delete", mock.AnythingOfType("string")).Return(response, err).Once()
 	return client
 }
 
-func NewDeleteRequestMock(response internalhttp.Response, err error) *RequestMock {
+func NewPostRequestMock(requestData []byte, response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
-	client.On("Delete", "http://localhost:8080/endpoint").Return(http.Response{}, nil)
-	client.Response = response
-	client.Err = err
-	return client
-}
-
-func NewPostRequestMock(requestData []byte, response internalhttp.Response, err error) *RequestMock {
-	client := new(RequestMock)
-	client.On("Post", "http://localhost:8080/endpoint", requestData).Return(http.Response{}, nil)
-	client.Response = response
-	client.Err = err
+	client.On("Post", mock.AnythingOfType("string"), requestData).Return(response, err).Once()
 	return client
 }
 
 func (r *RequestMock) Get(endpoint string) (*internalhttp.Response, error) {
-	_ = r.Called(endpoint)
-	return &r.Response, r.Err
+	arguments := r.Called(endpoint)
+	return returnResponseAndError(arguments)
 }
 
 func (r *RequestMock) Post(endpoint string, requestData []byte) (*internalhttp.Response, error) {
-	_ = r.Called(endpoint, requestData)
-	return &r.Response, r.Err
+	arguments := r.Called(endpoint, requestData)
+	return returnResponseAndError(arguments)
 }
 
 func (r *RequestMock) Delete(endpoint string) (*internalhttp.Response, error) {
-	_ = r.Called(endpoint)
-	return &r.Response, r.Err
+	arguments := r.Called(endpoint)
+	return returnResponseAndError(arguments)
+}
+
+func returnResponseAndError(arguments mock.Arguments) (*internalhttp.Response, error) {
+	errArgument := arguments.Get(1)
+	var err error
+	if errArgument != nil {
+		err = errArgument.(error)
+	}
+
+	return arguments.Get(0).(*internalhttp.Response), err
 }

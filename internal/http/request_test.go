@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"strings"
 	"testing"
 )
@@ -28,8 +27,7 @@ func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 	ts := NewServerWithResponse(originalResponse)
 
 	r := internalhttp.NewRequest()
-	u, _ := url.Parse(ts.URL)
-	response, err := r.Get(u)
+	response, err := r.Get(ts.URL)
 
 	assert.Nil(t, err)
 	assert.Equal(t, originalResponse.StatusCode, response.StatusCode)
@@ -41,8 +39,7 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	ts := NewServerWithResponse(internalhttp.NewResponse(http.StatusCreated, test.ReadJSON("create-response.json")))
 
 	requestBody, _ := json.DataToBody(test.ReadJSON("create.json"))
-	u, _ := url.Parse(ts.URL)
-	response, err := internalhttp.NewRequest().Post(u, requestBody)
+	response, err := internalhttp.NewRequest().Post(ts.URL, requestBody)
 
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
