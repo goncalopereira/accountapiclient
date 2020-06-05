@@ -9,7 +9,7 @@ type Output struct {
 	fmt.Stringer
 	Account       *account.Account
 	ErrorResponse *ErrorResponse
-	Accounts      *[]account.Account
+	Accounts      *account.Accounts
 }
 
 func (o *Output) String() string {

@@ -3,16 +3,10 @@ package e2e
 import (
 	client2 "github.com/goncalopereira/accountapiclient/pkg/client"
 	"github.com/goncalopereira/accountapiclient/test"
+	"github.com/stretchr/testify/assert"
 	"net/url"
 	"testing"
 )
-
-//	"github.com/stretchr/testify/assert"
-
-func TestHealth(t *testing.T) {
-	client := client2.NewClientFromEnv()
-	_, _ = client.Health()
-}
 
 var createData = test.NewAccountFromFile("create.json")
 
@@ -22,35 +16,44 @@ func TestBeforeFetch(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-	t.Log(output.String())
+	t.Log(output.Account.String())
 }
 
 func TestCreate(t *testing.T) {
 	client := client2.NewClientFromEnv()
 	output, _ := client.Create(createData)
-	t.Log(output.String())
+	t.Log(output.Accounts.String())
 }
 
 func TestAfterFetch(t *testing.T) {
 	client := client2.NewClientFromEnv()
 	output, _ := client.Fetch(createData.ID)
-	t.Log(output.String())
+	t.Log(output.Account.String())
 }
 
 func TestList(t *testing.T) {
 	client := client2.NewClientFromEnv()
-	output, _ := client.List(&url.Values{})
-	t.Log(output.String())
+	output, err := client.List(&url.Values{})
+	assert.Nil(t, output.ErrorResponse)
+	assert.Nil(t, err)
+	t.Log(output.Accounts.String())
 }
 
-func TestDelete0(t *testing.T) {
+func TestListWithPage2Empty(t *testing.T) {
 	client := client2.NewClientFromEnv()
-	output, _ := client.Delete(createData.ID, 0)
-	t.Log(output.String())
+	params := &url.Values{}
+	params.Add("page[number]", "1")
+	output, err := client.List(params)
+	assert.Nil(t, output.ErrorResponse)
+	assert.Nil(t, err)
+	t.Log(output.Accounts.String())
 }
 
-func TestDelete1(t *testing.T) {
+/*func TestDelete1(t *testing.T) {
 	client := client2.NewClientFromEnv()
-	output, _ := client.Delete(createData.ID, 1)
+	output, err := client.Delete(createData.ID, 0)
+	assert.Nil(t, output.ErrorResponse)
+	assert.Nil(t, err)
 	t.Log(output.String())
 }
+*/
