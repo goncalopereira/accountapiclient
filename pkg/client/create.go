@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-func (client *Client) Create(accountRequest *account.Account) (data.IOutput, error) {
+func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error) {
 	requestData, dataErr := json.DataToBody(accountRequest)
 	if dataErr != nil {
 		return nil, dataErr
@@ -23,7 +23,7 @@ func (client *Client) Create(accountRequest *account.Account) (data.IOutput, err
 	}
 
 	if response.StatusCode == http.StatusCreated {
-		responseAccount := &account.Account{}
+		responseAccount := &account.Data{}
 		accountErr := json.BodyToData(response.Body, responseAccount)
 		if accountErr != nil {
 			return nil, accountErr

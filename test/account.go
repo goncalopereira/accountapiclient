@@ -6,12 +6,12 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/json"
 )
 
-func NewAccountsFromFile(filename string) *account.Accounts {
-	accounts := account.Accounts{}
+func NewAccountsFromFile(filename string) *account.AccountsData {
+	accounts := account.AccountsData{}
 	_ = json.BodyToData(ReadJSON(filename), &accounts)
 	return &accounts
 }
-func NewAccountFromFile(filename string) *account.Account {
+func NewAccountFromFile(filename string) *account.Data {
 	accountToHydrate := account.NewEmptyAccount()
 	_ = json.BodyToData(ReadJSON(filename), &accountToHydrate)
 	return &accountToHydrate

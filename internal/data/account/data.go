@@ -5,15 +5,15 @@ type LinkData struct {
 	ID     string `json:"id"`
 }
 
-func newData(id string, organisationID string, attributes Attributes) Data {
-	d := Data{OrganisationID: organisationID}
+func newData(id string, organisationID string, attributes Attributes) Account {
+	d := Account{OrganisationID: organisationID}
 	d.TypeOf = "accounts"
 	d.ID = id
 	d.Attributes = attributes
 	return d
 }
 
-type Data struct {
+type Account struct {
 	LinkData
 	ResponseOnlyData
 	Attributes     `json:"attributes"`

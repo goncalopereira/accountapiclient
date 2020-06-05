@@ -12,16 +12,16 @@ import (
 //	return &query
 //}
 
-func AccountCreateRequest() *account.Account {
+func AccountCreateRequest() *account.Data {
 	account := NewAccountFromFile("create.json")
 	return account
 }
 
-func AccountCreateResponse() *account.Account {
+func AccountCreateResponse() *account.Data {
 	account := NewAccountFromFile("create-response.json")
 	return account
 }
 
 func DuplicateAccountErrorResponse() *data.ErrorResponse {
-	return &data.ErrorResponse{ErrorMessage: "Account cannot be created as it violates a duplicate constraint"}
+	return &data.ErrorResponse{ErrorMessage: "AccountData cannot be created as it violates a duplicate constraint"}
 }

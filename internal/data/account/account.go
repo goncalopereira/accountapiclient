@@ -7,23 +7,23 @@ import (
 )
 
 // https://api-docs.form3.tech/api.html#organisation-accounts-resource
-type Account struct {
+type Data struct {
 	data.IOutput `json:",omitempty"` //force marshaling to hide fields
 	fmt.Stringer `json:",omitempty"`
-	Data         `json:"data"`
+	Account      `json:"data"`
 }
 
-func NewAccount(id string, organisationID string, attributes Attributes) *Account {
-	a := &Account{}
-	a.Data = newData(id, organisationID, attributes)
+func NewAccount(id string, organisationID string, attributes Attributes) *Data {
+	a := &Data{}
+	a.Account = newData(id, organisationID, attributes)
 	return a
 }
 
-func NewEmptyAccount() Account {
-	return Account{}
+func NewEmptyAccount() Data {
+	return Data{}
 }
 
-func (a *Account) String() string {
+func (a *Data) String() string {
 	account, _ := json.DataToBody(a)
 	return string(account)
 }

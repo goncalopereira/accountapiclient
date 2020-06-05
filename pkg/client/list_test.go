@@ -58,7 +58,7 @@ func TestClient_List(t *testing.T) {
 		{"GivenNoAccountsWhenDefaultQueryThenReturnNilArray",
 			fields{config: api, request: httptest.NewGetRequestMock(emptyAccountsResponse, nil)},
 			args{urls: &url.Values{}},
-			&account.Accounts{},
+			&account.AccountsData{},
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},

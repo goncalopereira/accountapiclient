@@ -61,5 +61,5 @@ func (h *Request) handleRequest(req *http.Request) (*Response, error) {
 		return nil, fmt.Errorf("request body: %v", bodyErr.Error())
 	}
 
-	return NewResponse(response.StatusCode, responseBody), nil
+	return &Response{StatusCode: response.StatusCode, Body: responseBody}, nil
 }

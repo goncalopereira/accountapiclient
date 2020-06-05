@@ -22,7 +22,7 @@ func TestClient_Create(t *testing.T) {
 		request http.IRequest
 	}
 	type args struct {
-		account *account.Account
+		account *account.Data
 	}
 
 	createdAccount := test.NewAccountFromFile("create-response.json")

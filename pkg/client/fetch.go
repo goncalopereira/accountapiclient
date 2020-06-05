@@ -19,7 +19,7 @@ func (client *Client) Fetch(id string) (data.IOutput, error) {
 	}
 
 	if response.StatusCode == http.StatusOK {
-		responseAccount := &account.Account{}
+		responseAccount := &account.Data{}
 		accountErr := json.BodyToData(response.Body, responseAccount)
 		if accountErr != nil {
 			return nil, accountErr

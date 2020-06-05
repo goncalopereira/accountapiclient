@@ -22,7 +22,7 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 		return nil, requestErr
 	}
 	if response.StatusCode == http.StatusOK {
-		responseAccounts := &account.Accounts{}
+		responseAccounts := &account.AccountsData{}
 		accountErr := json.BodyToData(response.Body, responseAccounts)
 		if accountErr != nil {
 			return nil, accountErr

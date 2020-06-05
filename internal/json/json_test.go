@@ -15,7 +15,7 @@ func TestRequestBodyToData(t *testing.T) {
 		data interface{}
 	}
 
-	var badJSON = args{test.ReadJSON("badjson.txt"), account.Account{}}
+	var badJSON = args{test.ReadJSON("badjson.txt"), account.Data{}}
 	var accountCreate = args{test.ReadJSON("create.json"), account.NewEmptyAccount()}
 
 	tests := []struct {
@@ -24,7 +24,7 @@ func TestRequestBodyToData(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "BadJSON", args: badJSON, wantErr: true},
-		{name: "Account", args: accountCreate, wantErr: false},
+		{name: "AccountData", args: accountCreate, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
