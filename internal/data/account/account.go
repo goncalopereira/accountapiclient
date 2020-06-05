@@ -7,7 +7,7 @@ type Account struct {
 
 func NewAccount(id string, organisationID string, attributes Attributes) *Account {
 	a := &Account{}
-	a.Data = newAccountData(id, organisationID, attributes)
+	a.Data = newData(id, organisationID, attributes)
 	return a
 }
 

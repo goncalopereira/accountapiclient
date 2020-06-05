@@ -48,19 +48,3 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	_ = json.BodyToData(response.Body, &result)
 	assert.Equal(t, test.AccountCreateResponse().Data, result.Data)
 }
-
-func TestPost_WhenAPIConnectErrorThenReturnError(t *testing.T) {
-	r := internalhttp.NewRequest()
-	response, err := r.Post("http://127.0.0.1:111", nil) //use IPV4 here otherwise you might get IPV6
-
-	assert.NotNil(t, err)
-	assert.Equal(t, internalhttp.NewBadResponse(), response)
-}
-
-func TestGet_WhenAPIConnectErrorThenReturnError(t *testing.T) {
-	r := internalhttp.NewRequest()
-	response, err := r.Get("http://127.0.0.1:111") //use IPV4 here otherwise you might get IPV6
-
-	assert.NotNil(t, err)
-	assert.Equal(t, internalhttp.NewBadResponse(), response)
-}
