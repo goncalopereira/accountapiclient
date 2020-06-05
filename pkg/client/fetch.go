@@ -8,31 +8,28 @@ import (
 	"net/url"
 )
 
-func (client *Client) Fetch(id string) (*data.Output, error) {
+func (client *Client) Fetch(id string) (data.IOutput, error) {
 	requestURL, configErr := client.config.Account(id, &url.Values{})
 	if configErr != nil {
-		return &data.Output{}, configErr
+		return nil, configErr
 	}
 	response, requestErr := client.Request.Get(requestURL.String())
 	if requestErr != nil {
-		return &data.Output{}, requestErr
+		return nil, requestErr
 	}
 
-	output := &data.Output{}
 	if response.StatusCode == http.StatusOK {
 		responseAccount := &account.Account{}
 		accountErr := json.BodyToData(response.Body, responseAccount)
 		if accountErr != nil {
-			return output, accountErr
+			return nil, accountErr
 		}
-		output.Account = responseAccount
-		return output, nil
+		return responseAccount, nil
 	}
 	errorResponse := &data.ErrorResponse{}
 	errorResponseError := json.BodyToData(response.Body, errorResponse)
 	if errorResponseError != nil {
-		return output, errorResponseError
+		return nil, errorResponseError
 	}
-	output.ErrorResponse = errorResponse
-	return output, nil
+	return errorResponse, nil
 }

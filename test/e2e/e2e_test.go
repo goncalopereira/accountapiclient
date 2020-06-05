@@ -12,31 +12,27 @@ var createData = test.NewAccountFromFile("create.json")
 
 func TestBeforeFetch(t *testing.T) {
 	client := client2.NewClientFromEnv()
-	output, err := client.Fetch(createData.ID)
-	if err != nil {
-		t.Log(err)
-	}
-	t.Log(output.Account.String())
+	output, _ := client.Fetch(createData.ID)
+	t.Log(output.String())
 }
 
 func TestCreate(t *testing.T) {
 	client := client2.NewClientFromEnv()
 	output, _ := client.Create(createData)
-	t.Log(output.Accounts.String())
+	t.Log(output.String())
 }
 
 func TestAfterFetch(t *testing.T) {
 	client := client2.NewClientFromEnv()
 	output, _ := client.Fetch(createData.ID)
-	t.Log(output.Account.String())
+	t.Log(output.String())
 }
 
 func TestList(t *testing.T) {
 	client := client2.NewClientFromEnv()
 	output, err := client.List(&url.Values{})
-	assert.Nil(t, output.ErrorResponse)
 	assert.Nil(t, err)
-	t.Log(output.Accounts.String())
+	t.Log(output.String())
 }
 
 func TestListWithPage2Empty(t *testing.T) {
@@ -44,9 +40,8 @@ func TestListWithPage2Empty(t *testing.T) {
 	params := &url.Values{}
 	params.Add("page[number]", "1")
 	output, err := client.List(params)
-	assert.Nil(t, output.ErrorResponse)
 	assert.Nil(t, err)
-	t.Log(output.Accounts.String())
+	t.Log(output.String())
 }
 
 /*func TestDelete1(t *testing.T) {

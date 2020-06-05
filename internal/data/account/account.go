@@ -2,18 +2,23 @@ package account
 
 import (
 	"fmt"
+	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/json"
 )
 
 // https://api-docs.form3.tech/api.html#organisation-accounts-resource
 type Account struct {
-	fmt.Stringer
-	Data `json:"data"`
+	data.IOutput `json:"omitempty"` //force marshaling to hide fields
+	//accountignore is there to prevent govet
+	//from thinking all Stringer ignore are the same
+	fmt.Stringer `json:"accountignore,omitempty"`
+	Data         `json:"data"`
 }
 
 type Accounts struct {
-	fmt.Stringer
-	Data *[]Data `json:"data"`
+	data.IOutput `json:"omitempty"`
+	fmt.Stringer `json:"accountsignore,omitempty"`
+	Data         *[]Data `json:"data"`
 }
 
 func (a *Accounts) String() string {
