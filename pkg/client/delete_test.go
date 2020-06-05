@@ -41,20 +41,20 @@ func TestClient_Delete(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *data.Output
+		want    *data.ErrorResponse
 		wantErr bool
 	}{
 		{"WhenGivenValidIDAndVersionThen204Empty",
 			fields{config: api, request: httptest.NewDeleteRequestMock(deleteResponse, nil)},
 			args{id: "1", version: 1},
-			&data.Output{},
+			nil,
 			false},
 		//includes 404 not found
 		//includes 409 specified version incorrect
 		{"WhenGivenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewDeleteRequestMock(errorResponse, nil)},
 			args{id: "1", version: 1},
-			&data.Output{ErrorResponse: apiErrorMessage},
+			apiErrorMessage,
 			false},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewDeleteRequestMock(brokenResponse, nil)},

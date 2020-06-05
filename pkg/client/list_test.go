@@ -47,23 +47,23 @@ func TestClient_List(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *data.Output
+		want    data.IOutput
 		wantErr bool
 	}{
 		{"GivenAccountsWhenDefaultQueryThenReturnAccounts",
 			fields{config: api, request: httptest.NewGetRequestMock(accountsResponse, nil)},
 			args{urls: &url.Values{}},
-			&data.Output{Accounts: multipleAccounts},
+			multipleAccounts,
 			false},
-		{"GivenNoAccountsWhenDefaultQueryThenReturnEmptyArray",
+		{"GivenNoAccountsWhenDefaultQueryThenReturnNilArray",
 			fields{config: api, request: httptest.NewGetRequestMock(emptyAccountsResponse, nil)},
 			args{urls: &url.Values{}},
-			&data.Output{Accounts: &account.Accounts{}},
+			&account.Accounts{},
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
 			args{urls: &url.Values{}},
-			&data.Output{ErrorResponse: apiErrorMessage},
+			apiErrorMessage,
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},

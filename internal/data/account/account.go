@@ -2,23 +2,15 @@ package account
 
 import (
 	"fmt"
+	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/json"
 )
 
 // https://api-docs.form3.tech/api.html#organisation-accounts-resource
 type Account struct {
-	fmt.Stringer
-	Data `json:"data"`
-}
-
-type Accounts struct {
-	fmt.Stringer
-	Data *[]Data `json:"data"`
-}
-
-func (a *Accounts) String() string {
-	account, _ := json.DataToBody(a)
-	return string(account)
+	data.IOutput `json:",omitempty"` //force marshaling to hide fields
+	fmt.Stringer `json:",omitempty"`
+	Data         `json:"data"`
 }
 
 func NewAccount(id string, organisationID string, attributes Attributes) *Account {

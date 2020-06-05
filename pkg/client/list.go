@@ -12,31 +12,28 @@ import (
 //Noticed an empty list had data:null and thought about moving to empty array
 //But according to https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices
 //Null array is preferred in Go
-func (client *Client) List(parameters *url.Values) (*data.Output, error) {
+func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 	requestURL, configErr := client.config.Accounts(parameters)
 	if configErr != nil {
-		return &data.Output{}, configErr
+		return nil, configErr
 	}
 	response, requestErr := client.Request.Get(requestURL.String())
 	if requestErr != nil {
-		return &data.Output{}, requestErr
+		return nil, requestErr
 	}
-	output := &data.Output{}
 	if response.StatusCode == http.StatusOK {
 		responseAccounts := &account.Accounts{}
 		accountErr := json.BodyToData(response.Body, responseAccounts)
 		if accountErr != nil {
-			return output, accountErr
+			return nil, accountErr
 		}
 
-		output.Accounts = responseAccounts
-		return output, nil
+		return responseAccounts, nil
 	}
 	errorResponse := &data.ErrorResponse{}
 	errorResponseError := json.BodyToData(response.Body, errorResponse)
 	if errorResponseError != nil {
-		return output, errorResponseError
+		return nil, errorResponseError
 	}
-	output.ErrorResponse = errorResponse
-	return output, nil
+	return errorResponse, nil
 }
