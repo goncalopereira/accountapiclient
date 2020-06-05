@@ -31,5 +31,4 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return responseAccount, nil
 	}
 	return errorResponseHandling(response)
-
 }
