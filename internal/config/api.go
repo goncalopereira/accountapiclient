@@ -18,7 +18,7 @@ type API struct {
 func NewAPI(host string, port string, scheme string) IAPI {
 	a := &API{host: host, port: port, scheme: scheme}
 	a.accountsURL = "/v1/organisation/accounts"
-	a.healthURL = "/v1/health1"
+	a.healthURL = "/v1/health"
 	return a
 }
 
