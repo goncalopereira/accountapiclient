@@ -13,7 +13,7 @@ func NewAccountsFromFile(filename string) *account.AccountsData {
 	return &accounts
 }
 func NewAccountFromFile(filename string) *account.Data {
-	accountToHydrate := account.NewEmptyAccount()
+	accountToHydrate := account.Data{}
 	_ = json.BodyToData(ReadJSON(filename), &accountToHydrate)
 
 	return &accountToHydrate

@@ -17,7 +17,7 @@ func TestRequestBodyToData(t *testing.T) {
 
 	var badJSON = args{test.ReadJSON("badjson.txt"), account.Data{}}
 
-	var accountCreate = args{test.ReadJSON("create.json"), account.NewEmptyAccount()}
+	var accountCreate = args{test.ReadJSON("create.json"), account.Data{}}
 
 	tests := []struct {
 		name    string
@@ -40,11 +40,11 @@ func TestDataToBody_WhenValidAccountThenTransformToJSONAndBackAndReturnAccount(t
 	attributes := account.Attributes{Country: "GB"}
 	attributes.PrivateIdentification = account.PrivateIdentification{PrivateIdentificationBirthCountry: "PT"}
 	attributes.OrganisationIdentification = account.OrganisationIdentification{OrganisationIdentificationCountry: "US"}
-	originalAccount := account.NewAccount("newid", "neworganisationId", attributes)
+	originalAccount := account.NewData("newid", "neworganisationId", attributes)
 
 	result, _ := json.DataToBody(originalAccount)
 
-	newAccount := account.NewEmptyAccount()
+	newAccount := account.Data{}
 	_ = json.BodyToData(result, &newAccount)
 
 	assert.Equal(t, "newid", newAccount.LinkData.ID)
