@@ -22,7 +22,7 @@ type Account struct {
 }
 
 type ResponseOnlyData struct {
-	CreatedOn  string `json:"created_on,omitempty"` //TODO json unmarshal Time later
+	CreatedOn  string `json:"created_on,omitempty"` //json unmarshal Time some other day
 	ModifiedOn string `json:"modified_on,omitempty"`
 	Version    int    `json:"version,omitempty"`
 }

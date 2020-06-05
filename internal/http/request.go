@@ -2,7 +2,6 @@ package http
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -58,7 +57,7 @@ func (h *Request) handleRequest(req *http.Request) (*Response, error) {
 	responseBody, bodyErr := ioutil.ReadAll(response.Body)
 
 	if responseErr != nil {
-		return nil, fmt.Errorf("request body: %v", bodyErr.Error())
+		return nil, bodyErr
 	}
 
 	return &Response{StatusCode: response.StatusCode, Body: responseBody}, nil
