@@ -1,4 +1,4 @@
-package test
+package http_test
 
 import (
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
@@ -13,6 +13,7 @@ type RequestMock struct {
 	internalhttp.IRequest
 }
 
+//could improve by getting correct urls instead of any
 func NewGetRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
 	client.On("Get", mock.AnythingOfType("string")).Return(response, err).Once()

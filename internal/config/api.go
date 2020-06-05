@@ -7,6 +7,7 @@ import (
 )
 
 type API struct {
+	IAPI
 	host        string
 	port        string
 	scheme      string
@@ -14,15 +15,17 @@ type API struct {
 	healthURL   string
 }
 
-func NewAPI(host string, port string, scheme string) *API {
+func NewAPI(host string, port string, scheme string) IAPI {
 	a := &API{host: host, port: port, scheme: scheme}
 	a.accountsURL = "/v1/organisation/accounts"
 	a.healthURL = "/v1/health1"
 	return a
 }
 
-func DefaultAPI() *API {
-	return NewAPI(env.GetEnv("API_HOST", "localhost"), env.GetEnv("API_PORT", "8080"), env.GetEnv("API_SCHEME", "http"))
+func DefaultAPI() IAPI {
+	return NewAPI(env.GetEnv("API_HOST", "localhost"),
+		env.GetEnv("API_PORT", "8080"),
+		env.GetEnv("API_SCHEME", "http"))
 }
 
 func (c *API) baseURL() string {
