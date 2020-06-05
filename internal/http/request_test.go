@@ -48,3 +48,12 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	_ = json.BodyToData(response.Body, &result)
 	assert.Equal(t, test.AccountCreateResponse().Data, result.Data)
 }
+
+func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
+	ts := NewServerWithResponse(internalhttp.NewResponse(http.StatusNoContent, nil))
+
+	response, err := internalhttp.NewRequest().Delete(ts.URL)
+
+	assert.Nil(t, err)
+	assert.Equal(t, http.StatusNoContent, response.StatusCode)
+}
