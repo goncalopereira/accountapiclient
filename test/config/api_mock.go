@@ -13,9 +13,12 @@ type APIMock struct {
 
 func NewAPIMock(returnURL *url.URL, returnError error) config.IAPI {
 	api := new(APIMock)
-	api.On("Accounts", mock.AnythingOfType("*url.Values")).Return(returnURL, returnError).Once()
-	api.On("Account", mock.AnythingOfType("string"), mock.AnythingOfType("*url.Values")).Return(returnURL, returnError).Once()
-	api.On("Health", mock.AnythingOfType("*url.Values")).Return(returnURL, returnError).Once()
+	api.On("Accounts", mock.AnythingOfType("*url.Values")).
+		Return(returnURL, returnError).Once()
+	api.On("Account", mock.AnythingOfType("string"), mock.AnythingOfType("*url.Values")).
+		Return(returnURL, returnError).Once()
+	api.On("Health", mock.AnythingOfType("*url.Values")).
+		Return(returnURL, returnError).Once()
 	return api
 }
 
@@ -23,11 +26,11 @@ func (a *APIMock) Accounts(parameters *url.Values) (*url.URL, error) {
 	arguments := a.Called(parameters)
 	return returnResponseAndError(arguments)
 }
-func (a *APIMock)  Account(id string, parameters *url.Values) (*url.URL, error) {
+func (a *APIMock) Account(id string, parameters *url.Values) (*url.URL, error) {
 	arguments := a.Called(id, parameters)
 	return returnResponseAndError(arguments)
 }
-func (a *APIMock)  Health() (*url.URL, error) {
+func (a *APIMock) Health() (*url.URL, error) {
 	arguments := a.Called()
 	return returnResponseAndError(arguments)
 }
