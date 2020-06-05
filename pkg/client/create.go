@@ -30,10 +30,6 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		}
 		return responseAccount, nil
 	}
-	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
-	errorResponseError := json.BodyToData(response.Body, errorResponse)
-	if errorResponseError != nil {
-		return nil, errorResponseError
-	}
-	return errorResponse, nil
+	return errorResponseHandling(response)
+
 }

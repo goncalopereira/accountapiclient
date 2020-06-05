@@ -41,7 +41,7 @@ func TestClient_Delete(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *data.ErrorResponse
+		want    data.IOutput
 		wantErr bool
 	}{
 		{"WhenGivenValidIDAndVersionThen204Empty",

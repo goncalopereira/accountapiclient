@@ -2,13 +2,12 @@ package client
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"net/http"
 	"net/url"
 	"strconv"
 )
 
-func (client *Client) Delete(id string, version int) (*data.ErrorResponse, error) {
+func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 	parameters := &url.Values{}
 	parameters.Add("version", strconv.Itoa(version))
 	requestURL, configErr := client.config.Account(id, parameters)
@@ -22,10 +21,5 @@ func (client *Client) Delete(id string, version int) (*data.ErrorResponse, error
 	if response.StatusCode == http.StatusNoContent {
 		return nil, nil
 	}
-	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
-	errorResponseError := json.BodyToData(response.Body, errorResponse)
-	if errorResponseError != nil {
-		return nil, errorResponseError
-	}
-	return errorResponse, nil
+	return errorResponseHandling(response)
 }
