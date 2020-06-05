@@ -12,6 +12,6 @@ docker:
 	@docker-compose build --no-cache test
 	@docker-compose up --force-recreate --abort-on-container-exit --exit-code-from test
 cover:
-	go test ./internal/* -coverprofile=coverage.out
+	go test ./... -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 	rm coverage.out
