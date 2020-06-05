@@ -16,87 +16,83 @@ type Client struct {
 	request http.IRequest
 }
 
-type Output struct {
-	Account       *account.Account
-	ErrorResponse *data.ErrorResponse
-	Accounts      *[]account.Account
+func NewClient(config *config.API, request http.IRequest) *Client {
+	return &Client{config: config, request: request}
 }
 
 //default new client with real http
-func NewAccountAPIClient() *Client {
-	client := &Client{config: config.DefaultAPI()}
-	client.request = http.NewRequest()
-	return client
+func NewDefaultAccountAPIClient() *Client {
+	return NewClient(config.DefaultAPI(), http.NewRequest())
 }
 
-func (client *Client) Fetch(id string) (*Output, error) {
+func (client *Client) Fetch(id string) (*data.Output, error) {
 	requestURL, configErr := client.config.Account(id, &url.Values{})
 	if configErr != nil {
-		return &Output{}, configErr
+		return &data.Output{}, configErr
 	}
 	log.Print(requestURL.String())
 	response, requestErr := client.request.Get(requestURL)
 	if requestErr != nil {
-		return &Output{}, requestErr
+		return &data.Output{}, requestErr
 	}
 	return handleResponse(response)
 }
 
-func handleResponse(response *http.Response) (*Output, error) {
+func handleResponse(response *http.Response) (*data.Output, error) {
 	log.Print(strconv.Itoa(response.StatusCode))
 	log.Print(string(response.Body))
-	return &Output{}, nil
+	return &data.Output{}, nil
 }
 
-func (client *Client) Create(account *account.Account) (*Output, error) {
+func (client *Client) Create(account *account.Account) (*data.Output, error) {
 	requestData, dataErr := json.DataToBody(account)
 	if dataErr != nil {
-		return &Output{}, dataErr
+		return &data.Output{}, dataErr
 	}
 	requestURL, configErr := client.config.Accounts(&url.Values{})
 	if configErr != nil {
-		return &Output{}, configErr
+		return &data.Output{}, configErr
 	}
 	response, requestErr := client.request.Post(requestURL, requestData)
 	if requestErr != nil {
-		return &Output{}, requestErr
+		return &data.Output{}, requestErr
 	}
 	return handleResponse(response)
 }
 
-func (client *Client) List(parameters *url.Values) (*Output, error) {
+func (client *Client) List(parameters *url.Values) (*data.Output, error) {
 	requestURL, configErr := client.config.Accounts(parameters)
 	if configErr != nil {
-		return &Output{}, configErr
+		return &data.Output{}, configErr
 	}
 	response, requestErr := client.request.Get(requestURL)
 	if requestErr != nil {
-		return &Output{}, requestErr
+		return &data.Output{}, requestErr
 	}
 	return handleResponse(response)
 }
-func (client *Client) Delete(id string, version int) (*Output, error) {
+func (client *Client) Delete(id string, version int) (*data.Output, error) {
 	parameters := &url.Values{}
 	parameters.Add("version", strconv.Itoa(version))
 	requestURL, configErr := client.config.Account(id, parameters)
 	if configErr != nil {
-		return &Output{}, configErr
+		return &data.Output{}, configErr
 	}
 	response, requestErr := client.request.Delete(requestURL)
 	if requestErr != nil {
-		return &Output{}, requestErr
+		return &data.Output{}, requestErr
 	}
 	return handleResponse(response)
 }
 
-func (client *Client) Health() (*Output, error) {
+func (client *Client) Health() (*data.Output, error) {
 	requestURL, configErr := client.config.Health()
 	if configErr != nil {
-		return &Output{}, configErr
+		return &data.Output{}, configErr
 	}
 	response, requestErr := client.request.Get(requestURL)
 	if requestErr != nil {
-		return &Output{}, requestErr
+		return &data.Output{}, requestErr
 	}
 	return handleResponse(response)
 }

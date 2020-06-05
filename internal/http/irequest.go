@@ -1,6 +1,9 @@
 package http
 
+import "fmt"
+
 type IRequest interface {
-	Get(endpoint string) (*Response, error)
-	Post(endpoint string, requestData []byte) (*Response, error)
+	Get(reqURL fmt.Stringer) (*Response, error)
+	Delete(reqURL fmt.Stringer) (*Response, error)
+	Post(reqURL fmt.Stringer, requestData []byte) (*Response, error)
 }
