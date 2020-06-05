@@ -1,12 +1,12 @@
 //nolint:scopelint,funlen
-package client_test
+package accounts_test
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
-	"github.com/goncalopereira/accountapiclient/pkg/client"
+	"github.com/goncalopereira/accountapiclient/pkg/accounts"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
@@ -14,19 +14,18 @@ import (
 	"testing"
 )
 
-func TestClient_Fetch(t *testing.T) {
+func TestClient_Delete(t *testing.T) {
 	type fields struct {
 		config  config.IAPI
 		request http.IRequest
 	}
 
 	type args struct {
-		id string
+		id      string
+		version int
 	}
 
-	completeAccount := test.NewAccountFromFile("complete-account.json")
-	accountBody, _ := json.DataToBody(completeAccount)
-	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
+	deleteResponse := &http.Response{StatusCode: 204}
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
@@ -45,24 +44,26 @@ func TestClient_Fetch(t *testing.T) {
 		want    data.IOutput
 		wantErr bool
 	}{
-		{"GivenAccountWhenValidIDThenReturnAccount",
-			fields{config: api, request: httptest.NewGetRequestMock(accountResponse, nil)},
-			args{id: "1"},
-			completeAccount,
+		{"WhenGivenValidIDAndVersionThen204Empty",
+			fields{config: api, request: httptest.NewDeleteRequestMock(deleteResponse, nil)},
+			args{id: "1", version: 1},
+			nil,
 			false},
-		{"WhenNon200ThenReturnErrorMessage",
-			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
-			args{id: "1"},
+		//includes 404 not found
+		//includes 409 specified version incorrect
+		{"WhenGivenNon200ThenReturnErrorMessage",
+			fields{config: api, request: httptest.NewDeleteRequestMock(errorResponse, nil)},
+			args{id: "1", version: 1},
 			apiErrorMessage,
 			false},
-		{"WhenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
-			args{id: "1"},
+		{"WhenGivenNon200BrokenResponseThenReturnError",
+			fields{config: api, request: httptest.NewDeleteRequestMock(brokenResponse, nil)},
+			args{id: "1", version: 1},
 			nil,
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{id: "1"},
+			fields{config: api, request: httptest.NewDeleteRequestMock(nil, test.ErrBrokenHTTPClient)},
+			args{id: "1", version: 1},
 			nil,
 			true},
 		{"WhenBrokenAPIConfigThrowsThenReturnError",
@@ -73,18 +74,18 @@ func TestClient_Fetch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := client.NewClient(tt.fields.config, tt.fields.request)
+			c := accounts.NewClient(tt.fields.config, tt.fields.request)
 
-			got, err := client.Fetch(tt.args.id)
+			got, err := c.Delete(tt.args.id, tt.args.version)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Fetch() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if (err != nil) && tt.wantErr {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Fetch() got = %v, want %v", got, tt.want)
+				t.Errorf("Delete() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

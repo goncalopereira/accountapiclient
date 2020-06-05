@@ -1,4 +1,4 @@
-package client
+package accounts
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"

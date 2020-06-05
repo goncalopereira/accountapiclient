@@ -1,7 +1,7 @@
 package e2e_test
 
 import (
-	client2 "github.com/goncalopereira/accountapiclient/pkg/client"
+	client2 "github.com/goncalopereira/accountapiclient/pkg/accounts"
 	"github.com/goncalopereira/accountapiclient/test"
 	"github.com/stretchr/testify/assert"
 	"net/url"

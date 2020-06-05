@@ -1,4 +1,4 @@
-package client
+package accounts
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/config"
@@ -16,7 +16,7 @@ func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
 	return &Client{config: config, Request: request}
 }
 
-//default new client with real http
+//default new client with real http.
 func NewClientFromEnv() *Client {
 	return NewClient(config.DefaultAPI(), internalhttp.NewRequest())
 }

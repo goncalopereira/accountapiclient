@@ -1,5 +1,5 @@
 //nolint:scopelint,funlen
-package client_test
+package accounts_test
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/config"
@@ -7,7 +7,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
-	"github.com/goncalopereira/accountapiclient/pkg/client"
+	"github.com/goncalopereira/accountapiclient/pkg/accounts"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
@@ -73,7 +73,7 @@ func TestClient_Create(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := client.NewClient(tt.fields.config, tt.fields.request)
+			client := accounts.NewClient(tt.fields.config, tt.fields.request)
 
 			got, err := client.Create(tt.args.account)
 			if (err != nil) != tt.wantErr {

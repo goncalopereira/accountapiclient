@@ -6,13 +6,13 @@ import (
 	"net/url"
 )
 
-//API mock required to wrap around environment config issues
+//API mock required to wrap around environment config issues.
 type APIMock struct {
 	mock.Mock
 	config.IAPI
 }
 
-//ideally have a better implementation than just mock anything
+//ideally have a better implementation than just mock anything.
 func NewAPIMock(returnURL *url.URL, returnError error) config.IAPI {
 	api := new(APIMock)
 	api.On("Accounts", mock.AnythingOfType("*url.Values")).

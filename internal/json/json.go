@@ -6,7 +6,7 @@ import (
 )
 
 //json parser and tests for the account/error response marshaling
-//will try to hydrate given interface with http response
+//will try to hydrate given interface with http response.
 func BodyToData(body []byte, data interface{}) error {
 	unmarshallErr := json.Unmarshal(body, &data)
 

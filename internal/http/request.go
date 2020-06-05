@@ -7,7 +7,7 @@ import (
 )
 
 //build the request wrapper to be able to test net/http separately from service
-//returns response data
+//returns response data.
 type Request struct {
 	IRequest
 	client *http.Client
