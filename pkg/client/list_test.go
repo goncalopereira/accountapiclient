@@ -1,5 +1,5 @@
 //nolint:scopelint,funlen
-package client
+package client_test
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/config"
@@ -7,6 +7,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
+	"github.com/goncalopereira/accountapiclient/pkg/client"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
@@ -82,7 +83,7 @@ func TestClient_List(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := NewClient(tt.fields.config, tt.fields.request)
+			c := client.NewClient(tt.fields.config, tt.fields.request)
 			got, err := c.List(tt.args.urls)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)

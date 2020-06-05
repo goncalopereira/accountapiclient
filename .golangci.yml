@@ -41,7 +41,7 @@ linters:
     - whitespace
 
   # don't enable:
-  # - asciicheck
+    - asciicheck
   # - exhaustive (TODO: enable after next release; current release at time of writing is v1.27)
   # - gochecknoglobals
   # - gocognit
@@ -49,9 +49,9 @@ linters:
   # - godox
     - goerr113
   # - maligned
-  # - nestif
-  # - prealloc
-  # - testpackage
+    - nestif
+    - prealloc
+    - testpackage
   # - wsl
 
 issues:

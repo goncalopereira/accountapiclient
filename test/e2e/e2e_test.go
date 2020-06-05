@@ -1,4 +1,4 @@
-package e2e
+package e2e_test
 
 import (
 	client2 "github.com/goncalopereira/accountapiclient/pkg/client"
