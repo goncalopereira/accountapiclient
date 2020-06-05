@@ -45,17 +45,17 @@ func TestClient_Fetch(t *testing.T) {
 		want    *data.Output
 		wantErr bool
 	}{
-		{"WhenGivenValidIDThenReturnAccount",
+		{"GivenAccountWhenValidIDThenReturnAccount",
 			fields{config: api, request: httptest.NewGetRequestMock(accountResponse, nil)},
 			args{id: "1"},
 			&data.Output{Account: completeAccount},
 			false},
-		{"WhenGivenNon200ThenReturnErrorMessage",
+		{"WhenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
 			args{id: "1"},
 			&data.Output{ErrorResponse: apiErrorMessage},
 			false},
-		{"WhenGivenNon200BrokenResponseThenReturnError",
+		{"WhenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
 			args{id: "1"},
 			nil,

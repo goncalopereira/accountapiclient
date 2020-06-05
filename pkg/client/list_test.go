@@ -55,7 +55,7 @@ func TestClient_List(t *testing.T) {
 			args{urls: &url.Values{}},
 			&data.Output{Accounts: multipleAccounts},
 			false},
-		{"GivenNoAccountsWhenDefaultQueryThenReturnEmptyArray",
+		{"GivenNoAccountsWhenDefaultQueryThenReturnNilArray",
 			fields{config: api, request: httptest.NewGetRequestMock(emptyAccountsResponse, nil)},
 			args{urls: &url.Values{}},
 			&data.Output{Accounts: &account.Accounts{}},

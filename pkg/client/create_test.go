@@ -46,12 +46,12 @@ func TestClient_Create(t *testing.T) {
 		want    *data.Output
 		wantErr bool
 	}{
-		{"WhenGivenValidIDThenReturnAccount",
+		{"GivenNoAccountWhenPostAccountThenReturnAccount",
 			fields{config: api, request: httptest.NewPostRequestMock(accountResponse, nil)},
 			args{account: test.AccountCreateRequest()},
 			&data.Output{Account: createdAccount},
 			false},
-		{name: "WhenGiven409ThenReturnErrorMessage", //409 conflict existing
+		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
 			fields: fields{config: api, request: httptest.NewPostRequestMock(errorResponse, nil)},
 			args:   args{account: test.AccountCreateRequest()},
 			want:   &data.Output{ErrorResponse: test.DuplicateAccountErrorResponse()}},
