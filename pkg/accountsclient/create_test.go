@@ -11,6 +11,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -26,12 +27,17 @@ func TestClient_Create(t *testing.T) {
 	}
 
 	createdAccount := test.NewAccountFromFile("create-response.json")
-	accountBody, _ := json.DataToBytes(createdAccount)
+
+	accountBody, err := json.DataToBytes(createdAccount)
+	assert.Nil(t, err)
+
 	accountResponse := &http.Response{StatusCode: 201, Body: accountBody}
 
 	apiErrorMessage := test.DuplicateAccountErrorResponse()
 
-	errorBody, _ := json.DataToBytes(apiErrorMessage)
+	errorBody, err := json.DataToBytes(apiErrorMessage)
+	assert.Nil(t, err)
+
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}

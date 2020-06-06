@@ -16,7 +16,7 @@ func ReadJSON(path string) []byte {
 
 	bytes, err := ioutil.ReadAll(jsonFile)
 	if err != nil {
-		panic(err)
+		panic("could not read test data")
 	}
 
 	return bytes

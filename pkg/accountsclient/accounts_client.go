@@ -21,18 +21,18 @@ func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {
 	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
 
-	errorResponseError := json.BytesToData(response.Body, errorResponse)
-	if errorResponseError != nil {
-		return &data.NoOp{}, errorResponseError
+	err := json.BytesToData(response.Body, errorResponse)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
 	return errorResponse, nil
 }
 
 func validResponseHandling(response *internalhttp.Response, responseData data.IOutput) (data.IOutput, error) {
-	accountErr := json.BytesToData(response.Body, responseData)
-	if accountErr != nil {
-		return &data.NoOp{}, accountErr
+	err := json.BytesToData(response.Body, responseData)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
 	return responseData, nil
@@ -42,14 +42,14 @@ func (client *Client) handleRequest(
 	method string,
 	requestURL string,
 	data []byte) (*internalhttp.Response, error) {
-	req, requestErr := http.NewRequest(method, requestURL, bytes.NewBuffer(data))
-	if requestErr != nil {
-		return nil, requestErr
+	req, err := http.NewRequest(method, requestURL, bytes.NewBuffer(data))
+	if err != nil {
+		return nil, err
 	}
 
-	response, responseErr := client.Request.Do(req)
-	if responseErr != nil {
-		return nil, responseErr
+	response, err := client.Request.Do(req)
+	if err != nil {
+		return nil, err
 	}
 
 	return response, nil

@@ -13,6 +13,9 @@ type AccountsData struct {
 }
 
 func (a AccountsData) String() string {
-	account, _ := json.DataToBytes(a)
+	account, err := json.DataToBytes(a)
+	if err != nil {
+		return ""
+	}
 	return string(account)
 }

@@ -8,20 +8,20 @@ import (
 //json parser and tests for the account/error response marshaling
 //will try to hydrate given interface with http response.
 func BytesToData(body []byte, data interface{}) error {
-	unmarshallErr := json.Unmarshal(body, &data)
+	err := json.Unmarshal(body, &data)
 
-	if unmarshallErr != nil {
-		return fmt.Errorf("BytesToData: %w", unmarshallErr)
+	if err != nil {
+		return fmt.Errorf("BytesToData: %w", err)
 	}
 
 	return nil
 }
 
 func DataToBytes(data interface{}) ([]byte, error) {
-	bytes, marshalErr := json.Marshal(data)
+	bytes, err := json.Marshal(data)
 
-	if marshalErr != nil {
-		return nil, fmt.Errorf("DataToBytes: %w", marshalErr)
+	if err != nil {
+		return nil, fmt.Errorf("DataToBytes: %w", err)
 	}
 
 	return bytes, nil

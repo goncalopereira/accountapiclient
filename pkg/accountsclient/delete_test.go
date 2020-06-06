@@ -10,6 +10,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -29,7 +30,9 @@ func TestClient_Delete(t *testing.T) {
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
-	errorBody, _ := json.DataToBytes(apiErrorMessage)
+	errorBody, err := json.DataToBytes(apiErrorMessage)
+	assert.Nil(t, err)
+
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}

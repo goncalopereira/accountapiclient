@@ -8,20 +8,29 @@ import (
 
 func NewAccountsFromFile(filename string) *account.AccountsData {
 	accounts := account.AccountsData{}
-	_ = json.BytesToData(ReadJSON(filename), &accounts)
+	err := json.BytesToData(ReadJSON(filename), &accounts)
+	if err != nil {
+		panic("could not hydrate test data")
+	}
 
 	return &accounts
 }
 func NewAccountFromFile(filename string) *account.Data {
 	accountToHydrate := account.Data{}
-	_ = json.BytesToData(ReadJSON(filename), &accountToHydrate)
+	err := json.BytesToData(ReadJSON(filename), &accountToHydrate)
+	if err != nil {
+		panic("could not hydrate test data")
+	}
 
 	return &accountToHydrate
 }
 
 func NewErrorMessageFromFile(filename string) *data.ErrorResponse {
 	errorResponseToHydrate := data.ErrorResponse{}
-	_ = json.BytesToData(ReadJSON(filename), &errorResponseToHydrate)
+	err := json.BytesToData(ReadJSON(filename), &errorResponseToHydrate)
+	if err != nil {
+		panic("could not hydrate test data")
+	}
 
 	return &errorResponseToHydrate
 }

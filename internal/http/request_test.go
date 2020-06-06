@@ -30,7 +30,9 @@ func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 
 	r := internalhttp.NewRequest()
 
-	req, _ := http.NewRequest("GET", ts.URL, nil)
+	req, err := http.NewRequest("GET", ts.URL, nil)
+	assert.Nil(t, err)
+
 	response, err := r.Do(req)
 
 	assert.Nil(t, err)
@@ -43,7 +45,8 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test.ReadJSON("create-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	req, _ := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create.json")))
+	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create.json")))
+	assert.Nil(t, err)
 
 	response, err := internalhttp.NewRequest().Do(req)
 
@@ -58,7 +61,9 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 	ts := NewServerWithResponse(&internalhttp.Response{StatusCode: http.StatusNoContent, Body: nil})
 
-	req, _ := http.NewRequest("DELETE", ts.URL, nil)
+	req, err := http.NewRequest("DELETE", ts.URL, nil)
+	assert.Nil(t, err)
+
 	response, err := internalhttp.NewRequest().Do(req)
 
 	assert.Nil(t, err)

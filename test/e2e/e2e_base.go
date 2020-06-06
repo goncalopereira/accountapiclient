@@ -66,7 +66,9 @@ func (suite *BaseTestSuite) SetupSuite() {
 //try to clean up the api without accessing the DB
 //will not work if more than 1 page returned.
 func (suite *BaseTestSuite) setupDeleteAllAccounts(client *client2.Client) {
-	accounts, _ := client.List(&url.Values{})
+	accounts, err := client.List(&url.Values{})
+	assert.Nil(suite.T(), err)
+
 	accountsData := accounts.(*account.AccountsData)
 
 	if accountsData.Accounts == nil {
@@ -74,7 +76,6 @@ func (suite *BaseTestSuite) setupDeleteAllAccounts(client *client2.Client) {
 	}
 
 	for _, a := range *accountsData.Accounts {
-		suite.T().Logf("deleting %s", a.ID)
 		output, err := client.Delete(a.ID, 0) //versionId does not work on fake api
 		assert.Nil(suite.T(), err)
 		assert.IsType(suite.T(), &data.NoContent{}, output)

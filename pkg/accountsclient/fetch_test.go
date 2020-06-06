@@ -10,6 +10,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -25,12 +26,16 @@ func TestClient_Fetch(t *testing.T) {
 	}
 
 	completeAccount := test.NewAccountFromFile("complete-account.json")
-	accountBody, _ := json.DataToBytes(completeAccount)
+	accountBody, err := json.DataToBytes(completeAccount)
+	assert.Nil(t, err)
+
 	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
-	errorBody, _ := json.DataToBytes(apiErrorMessage)
+	errorBody, err := json.DataToBytes(apiErrorMessage)
+	assert.Nil(t, err)
+
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
