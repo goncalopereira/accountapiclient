@@ -13,16 +13,10 @@ func (client *Client) Fetch(id string) (data.IOutput, error) {
 		return nil, configErr
 	}
 
-	req, err := http.NewRequest("GET", requestURL.String(), nil)
-	if err != nil {
-		return nil, err
+	response, responseErr := client.handleRequest("GET", requestURL, nil)
+	if responseErr != nil {
+		return nil, responseErr
 	}
-
-	response, requestErr := client.Request.Do(req)
-	if requestErr != nil {
-		return nil, requestErr
-	}
-
 	if response.StatusCode == http.StatusOK {
 		return validResponseHandling(response, &account.Data{})
 	}
