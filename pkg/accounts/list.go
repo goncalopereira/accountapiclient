@@ -14,12 +14,12 @@ import (
 func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 	requestURL, configErr := client.config.Accounts(parameters)
 	if configErr != nil {
-		return nil, configErr
+		return &data.NoOp{}, configErr
 	}
 
 	response, responseErr := client.handleRequest("GET", requestURL.String(), nil)
 	if responseErr != nil {
-		return nil, responseErr
+		return &data.NoOp{}, responseErr
 	}
 
 	if response.StatusCode == http.StatusOK {

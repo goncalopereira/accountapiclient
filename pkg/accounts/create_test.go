@@ -58,7 +58,7 @@ func TestClient_Create(t *testing.T) {
 		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
 			args{account: test.AccountCreateRequest()},
-			nil,
+			&data.NoOp{},
 			true},
 		/*		{"WhenHTTPClientThrowsThenReturnError",
 				fields{config: api, request: httptest.NewGetRequestMock(nil, fmt.Errorf("boom"))},
@@ -68,7 +68,7 @@ func TestClient_Create(t *testing.T) {
 		{"WhenBrokenAPIConfigThrowsThenReturnError",
 			fields{config: brokenAPI, request: nil},
 			args{account: test.AccountCreateRequest()},
-			nil,
+			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {

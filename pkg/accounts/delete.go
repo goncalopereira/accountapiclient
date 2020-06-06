@@ -13,16 +13,16 @@ func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 
 	requestURL, configErr := client.config.Account(id, parameters)
 	if configErr != nil {
-		return nil, configErr
+		return &data.NoOp{}, configErr
 	}
 
-	response, responseErr := client.handleRequest("GET", requestURL.String(), nil)
+	response, responseErr := client.handleRequest("DELETE", requestURL.String(), nil)
 	if responseErr != nil {
-		return nil, responseErr
+		return &data.NoOp{}, responseErr
 	}
 
 	if response.StatusCode == http.StatusNoContent {
-		return nil, nil
+		return &data.NoContent{}, nil
 	}
 
 	return errorResponseHandling(response)

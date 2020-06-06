@@ -48,3 +48,10 @@ func TestListWithPage2Empty(t *testing.T) {
 	assert.Nil(t, err)
 	t.Log(output.String())
 }
+
+func TestDelete(t *testing.T) {
+	client := NewClientFromEnv()
+	output, err := client.Delete(test.NewAccountFromFile("create.json").ID, 0)
+	assert.Nil(t, err)
+	t.Log(output.String())
+}

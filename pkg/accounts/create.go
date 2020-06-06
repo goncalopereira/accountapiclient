@@ -10,12 +10,12 @@ import (
 func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error) {
 	requestURL, configErr := client.config.Accounts(&url.Values{})
 	if configErr != nil {
-		return nil, configErr
+		return &data.NoOp{}, configErr
 	}
 
 	response, responseErr := client.handleRequest("POST", requestURL.String(), accountRequest)
 	if responseErr != nil {
-		return nil, responseErr
+		return &data.NoOp{}, responseErr
 	}
 
 	if response.StatusCode == http.StatusCreated {

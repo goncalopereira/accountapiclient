@@ -47,7 +47,7 @@ func TestClient_Delete(t *testing.T) {
 		{"WhenGivenValidIDAndVersionThen204Empty",
 			fields{config: api, request: httptest.NewGetRequestMock(deleteResponse, nil)},
 			args{id: "1", version: 1},
-			nil,
+			&data.NoContent{},
 			false},
 		//includes 404 not found
 		//includes 409 specified version incorrect
@@ -59,17 +59,17 @@ func TestClient_Delete(t *testing.T) {
 		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
 			args{id: "1", version: 1},
-			nil,
+			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(nil, test.ErrBrokenHTTPClient)},
 			args{id: "1", version: 1},
-			nil,
+			&data.NoOp{},
 			true},
 		{"WhenBrokenAPIConfigThrowsThenReturnError",
 			fields{config: brokenAPI, request: nil},
 			args{id: "1"},
-			nil,
+			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {

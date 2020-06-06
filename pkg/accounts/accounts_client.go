@@ -23,7 +23,7 @@ func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error
 
 	errorResponseError := json.BodyToData(response.Body, errorResponse)
 	if errorResponseError != nil {
-		return nil, errorResponseError
+		return &data.NoOp{}, errorResponseError
 	}
 
 	return errorResponse, nil
@@ -32,7 +32,7 @@ func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error
 func validResponseHandling(response *internalhttp.Response, responseData data.IOutput) (data.IOutput, error) {
 	accountErr := json.BodyToData(response.Body, responseData)
 	if accountErr != nil {
-		return nil, accountErr
+		return &data.NoOp{}, accountErr
 	}
 
 	return responseData, nil
