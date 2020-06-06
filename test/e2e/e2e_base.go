@@ -11,9 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"math/rand"
 	"net/url"
-	"strconv"
 )
 
 //I prefer to focus on unit tests and prevent E2E
@@ -24,19 +22,11 @@ type BaseTestSuite struct {
 	suite.Suite
 	NewAccountID uuid.UUID
 	Client       *client2.Client
-	BankID       string
 }
 
 //default new client with real http.
 func NewClientFromEnv() *client2.Client {
 	return client2.NewClient(api.DefaultAPI(), internalhttp.NewRequest())
-}
-
-const MaxBankID = 999999
-const MinBankID = 100000
-
-func RandomBankID() int {
-	return rand.Intn(MaxBankID-MinBankID) - MinBankID
 }
 
 func (suite *BaseTestSuite) SetupNewAccount(newAccount *account.Data) {
@@ -60,7 +50,6 @@ func (suite *BaseTestSuite) SetupTest() {
 func (suite *BaseTestSuite) SetupSuite() {
 	suite.NewAccountID = uuid.New()
 	suite.Client = NewClientFromEnv()
-	suite.BankID = strconv.Itoa(RandomBankID())
 }
 
 //try to clean up the api without accessing the DB

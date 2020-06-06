@@ -23,7 +23,6 @@ func TestNoAccountsTestSuite(t *testing.T) {
 //testing with an added filter but fake api does not respect filters.
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenListThenEmptyList() {
 	params := &url.Values{}
-	params.Add("filter[bank_id]", suite.BankID)
 	output, err := suite.Client.List(params)
 
 	assert.Nil(suite.T(), err)
