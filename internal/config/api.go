@@ -8,10 +8,7 @@ import (
 
 type API struct {
 	IAPI
-	host        string
-	port        string
-	scheme      string
-	accountsURL string
+	apiURL *url.URL
 }
 
 var (
@@ -19,41 +16,36 @@ var (
 )
 
 func DefaultAPI() IAPI {
-	return &API{host: GetEnv("API_HOST", "localhost"),
-		port:        GetEnv("API_PORT", "8080"),
-		scheme:      GetEnv("API_SCHEME", "http"),
-		accountsURL: "/v1/organisation/accounts"}
-}
-
-func (c *API) baseURL() string {
-	return c.scheme + "://" + c.host + ":" + c.port
+	return &API{apiURL: &url.URL{
+		Scheme: GetEnv("API_SCHEME", "http"),
+		Host: fmt.Sprintf("%s:%s",
+			GetEnv("API_HOST", "localhost"),
+			GetEnv("API_PORT", "8080")),
+		Path: "/v1/organisation/accounts"}}
 }
 
 func (c *API) Accounts(parameters *url.Values) (*url.URL, error) {
-	requestURL := fmt.Sprintf("%s%s", c.baseURL(), c.accountsURL)
-	return buildURL(requestURL, parameters)
+	return buildURL(*c.apiURL, parameters)
 }
 
 func (c *API) Account(id string, parameters *url.Values) (*url.URL, error) {
-	requestURL := fmt.Sprintf("%s%s/%s", c.baseURL(), c.accountsURL, id)
-	return buildURL(requestURL, parameters)
+	newUrl := *c.apiURL
+	newUrl.Path = fmt.Sprintf("%s/%s", c.apiURL.Path, id)
+	return buildURL(newUrl, parameters)
 }
 
-func buildURL(requestURL string, parameters *url.Values) (*url.URL, error) {
+//makes copy of apiURL and adds parameters to call api.
+func buildURL(apiUrl url.URL, parameters *url.Values) (*url.URL, error) {
 	if parameters == nil {
 		return nil, ErrParametersCannotBeNil
 	}
 
-	u, err := url.Parse(requestURL)
-	if err != nil {
-		return nil, err
-	}
+	apiUrl.RawQuery = parameters.Encode()
 
-	u.RawQuery = parameters.Encode()
-
-	return u, nil
+	return &apiUrl, nil
 }
 
+//gets api configuration env variables or default values
 func GetEnv(key, defaultValue string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
