@@ -6,12 +6,14 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 )
 
+const ErrCouldNotHydrateTestData = "could not hydrate test data"
+
 func NewAccountsFromFile(filename string) *account.AccountsData {
 	accounts := account.AccountsData{}
 
 	err := json.Unmarshal(ReadJSON(filename), &accounts)
 	if err != nil {
-		panic("could not hydrate test data")
+		panic(ErrCouldNotHydrateTestData)
 	}
 
 	return &accounts
@@ -21,7 +23,7 @@ func NewAccountFromFile(filename string) *account.Data {
 
 	err := json.Unmarshal(ReadJSON(filename), &accountToHydrate)
 	if err != nil {
-		panic("could not hydrate test data")
+		panic(ErrCouldNotHydrateTestData)
 	}
 
 	return &accountToHydrate
@@ -32,7 +34,7 @@ func NewErrorMessageFromFile(filename string) *data.ErrorResponse {
 
 	err := json.Unmarshal(ReadJSON(filename), &errorResponseToHydrate)
 	if err != nil {
-		panic("could not hydrate test data")
+		panic(ErrCouldNotHydrateTestData)
 	}
 
 	return &errorResponseToHydrate
