@@ -8,6 +8,7 @@ import (
 
 func NewAccountsFromFile(filename string) *account.AccountsData {
 	accounts := account.AccountsData{}
+
 	err := json.BytesToData(ReadJSON(filename), &accounts)
 	if err != nil {
 		panic("could not hydrate test data")
@@ -17,6 +18,7 @@ func NewAccountsFromFile(filename string) *account.AccountsData {
 }
 func NewAccountFromFile(filename string) *account.Data {
 	accountToHydrate := account.Data{}
+
 	err := json.BytesToData(ReadJSON(filename), &accountToHydrate)
 	if err != nil {
 		panic("could not hydrate test data")
@@ -27,6 +29,7 @@ func NewAccountFromFile(filename string) *account.Data {
 
 func NewErrorMessageFromFile(filename string) *data.ErrorResponse {
 	errorResponseToHydrate := data.ErrorResponse{}
+
 	err := json.BytesToData(ReadJSON(filename), &errorResponseToHydrate)
 	if err != nil {
 		panic("could not hydrate test data")
