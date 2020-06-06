@@ -24,10 +24,6 @@ func NewGetRequestMock(response *internalhttp.Response, err error) internalhttp.
 
 func (r *RequestMock) Do(req *http.Request) (*internalhttp.Response, error) {
 	arguments := r.Called(req)
-	return returnResponseAndError(arguments)
-}
-
-func returnResponseAndError(arguments mock.Arguments) (*internalhttp.Response, error) {
 	errArgument := arguments.Get(1)
 
 	var err error
