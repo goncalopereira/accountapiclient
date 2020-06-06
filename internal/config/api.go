@@ -19,9 +19,9 @@ var (
 )
 
 func DefaultAPI() IAPI {
-	return &API{host:GetEnv("API_HOST", "localhost"),
-		port: GetEnv("API_PORT", "8080"),
-		scheme: GetEnv("API_SCHEME", "http"),
+	return &API{host: GetEnv("API_HOST", "localhost"),
+		port:        GetEnv("API_PORT", "8080"),
+		scheme:      GetEnv("API_SCHEME", "http"),
 		accountsURL: "/v1/organisation/accounts"}
 }
 
