@@ -2,6 +2,7 @@
 package http_test
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
@@ -28,7 +29,9 @@ func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 	ts := NewServerWithResponse(originalResponse)
 
 	r := internalhttp.NewRequest()
-	response, err := r.Get(ts.URL)
+
+	req, _ := http.NewRequest("GET", ts.URL, nil)
+	response, err := r.Get(req)
 
 	assert.Nil(t, err)
 	assert.Equal(t, originalResponse.StatusCode, response.StatusCode)
@@ -40,8 +43,9 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test.ReadJSON("create-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	requestBody, _ := json.DataToBody(test.ReadJSON("create.json"))
-	response, err := internalhttp.NewRequest().Post(ts.URL, requestBody)
+	req, _ := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create.json")))
+
+	response, err := internalhttp.NewRequest().Get(req)
 
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
@@ -54,7 +58,8 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 	ts := NewServerWithResponse(&internalhttp.Response{StatusCode: http.StatusNoContent, Body: nil})
 
-	response, err := internalhttp.NewRequest().Delete(ts.URL)
+	req, _ := http.NewRequest("DELETE", ts.URL, nil)
+	response, err := internalhttp.NewRequest().Get(req)
 
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusNoContent, response.StatusCode)

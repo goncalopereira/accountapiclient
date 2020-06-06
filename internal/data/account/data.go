@@ -17,9 +17,3 @@ func (a *Data) String() string {
 	account, _ := json.DataToBody(a)
 	return string(account)
 }
-
-func NewData(id string, organisationID string, attributes Attributes) *Data {
-	a := &Data{Account: NewAccount(id, organisationID, attributes)}
-
-	return a
-}

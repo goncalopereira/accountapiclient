@@ -16,7 +16,12 @@ func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 		return nil, configErr
 	}
 
-	response, requestErr := client.Request.Delete(requestURL.String())
+	req, err := http.NewRequest("DELETE", requestURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response, requestErr := client.Request.Get(req)
 	if requestErr != nil {
 		return nil, requestErr
 	}

@@ -36,24 +36,6 @@ func TestRequestBodyToData(t *testing.T) {
 	}
 }
 
-func TestDataToBody_WhenValidAccountThenTransformToJSONAndBackAndReturnAccount(t *testing.T) {
-	attributes := account.Attributes{Country: "GB"}
-	attributes.PrivateIdentification = account.PrivateIdentification{PrivateIdentificationBirthCountry: "PT"}
-	attributes.OrganisationIdentification = account.OrganisationIdentification{OrganisationIdentificationCountry: "US"}
-	originalAccount := account.NewData("newid", "neworganisationId", attributes)
-
-	result, _ := json.DataToBody(originalAccount)
-
-	newAccount := account.Data{}
-	_ = json.BodyToData(result, &newAccount)
-
-	assert.Equal(t, "newid", newAccount.LinkData.ID)
-	assert.Equal(t, "neworganisationId", newAccount.OrganisationID)
-	assert.Equal(t, "PT", newAccount.Attributes.PrivateIdentificationBirthCountry)
-	assert.Equal(t, "US", newAccount.Attributes.OrganisationIdentificationCountry)
-	assert.Equal(t, "GB", newAccount.Attributes.Country)
-}
-
 func TestDataToBody_WhenReadingAccountFromFileThenReturnAccount(t *testing.T) {
 	newAccount := test.NewAccountFromFile("complete-account.json")
 

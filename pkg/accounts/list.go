@@ -3,7 +3,6 @@ package accounts
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"net/http"
 	"net/url"
 )
@@ -18,20 +17,18 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 		return nil, configErr
 	}
 
-	response, requestErr := client.Request.Get(requestURL.String())
+	req, err := http.NewRequest("GET", requestURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response, requestErr := client.Request.Get(req)
 	if requestErr != nil {
 		return nil, requestErr
 	}
 
 	if response.StatusCode == http.StatusOK {
-		responseAccounts := &account.AccountsData{}
-
-		accountErr := json.BodyToData(response.Body, responseAccounts)
-		if accountErr != nil {
-			return nil, accountErr
-		}
-
-		return responseAccounts, nil
+		return validResponseHandling(response, &account.AccountsData{})
 	}
 
 	return errorResponseHandling(response)

@@ -18,17 +18,11 @@ var (
 	ErrParametersCannotBeNil = fmt.Errorf("parameters cannot be nil")
 )
 
-func NewAPI(host string, port string, scheme string) IAPI {
-	a := &API{host: host, port: port, scheme: scheme}
-	a.accountsURL = "/v1/organisation/accounts"
-
-	return a
-}
-
 func DefaultAPI() IAPI {
-	return NewAPI(GetEnv("API_HOST", "localhost"),
-		GetEnv("API_PORT", "8080"),
-		GetEnv("API_SCHEME", "http"))
+	return &API{host: GetEnv("API_HOST", "localhost"),
+		port:        GetEnv("API_PORT", "8080"),
+		scheme:      GetEnv("API_SCHEME", "http"),
+		accountsURL: "/v1/organisation/accounts"}
 }
 
 func (c *API) baseURL() string {

@@ -31,3 +31,12 @@ func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error
 
 	return errorResponse, nil
 }
+
+func validResponseHandling(response *internalhttp.Response, responseData data.IOutput) (data.IOutput, error) {
+	accountErr := json.BodyToData(response.Body, responseData)
+	if accountErr != nil {
+		return nil, accountErr
+	}
+
+	return responseData, nil
+}
