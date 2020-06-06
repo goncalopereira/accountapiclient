@@ -1,4 +1,4 @@
-package config
+package api
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 )
 
 type API struct {
-	IAPI
 	apiURL *url.URL
 }
 
@@ -15,7 +14,7 @@ var (
 	ErrParametersCannotBeNil = fmt.Errorf("parameters cannot be nil")
 )
 
-func DefaultAPI() IAPI {
+func DefaultAPI() *API {
 	return &API{apiURL: &url.URL{
 		Scheme: GetEnv("API_SCHEME", "http"),
 		Host: fmt.Sprintf("%s:%s",

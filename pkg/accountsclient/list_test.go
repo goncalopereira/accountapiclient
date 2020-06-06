@@ -3,13 +3,12 @@ package accountsclient_test
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/config"
+	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
-	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
 	"net/url"
@@ -19,7 +18,7 @@ import (
 
 func TestClient_List(t *testing.T) {
 	type fields struct {
-		config  config.IAPI
+		config  *api.API
 		request http.IRequest
 	}
 
@@ -50,8 +49,7 @@ func TestClient_List(t *testing.T) {
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
 
-	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
+	api := api.DefaultAPI()
 
 	tests := []struct {
 		name    string
@@ -82,11 +80,6 @@ func TestClient_List(t *testing.T) {
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
 			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{urls: &url.Values{}},
-			&data.NoOp{},
-			true},
-		{"WhenBrokenAPIConfigThrowsThenReturnError",
-			fields{config: brokenAPI, request: nil},
 			args{urls: &url.Values{}},
 			&data.NoOp{},
 			true},

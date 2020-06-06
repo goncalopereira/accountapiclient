@@ -2,7 +2,7 @@ package e2e
 
 import (
 	"fmt"
-	"github.com/goncalopereira/accountapiclient/internal/config"
+	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
@@ -29,7 +29,7 @@ type BaseTestSuite struct {
 
 //default new client with real http.
 func NewClientFromEnv() *client2.Client {
-	return client2.NewClient(config.DefaultAPI(), internalhttp.NewRequest())
+	return client2.NewClient(api.DefaultAPI(), internalhttp.NewRequest())
 }
 
 const MaxBankID = 999999

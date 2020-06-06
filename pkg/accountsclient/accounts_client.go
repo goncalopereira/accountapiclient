@@ -3,18 +3,18 @@ package accountsclient
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/config"
+	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"net/http"
 )
 
 type Client struct {
-	config  config.IAPI
+	config  *api.API
 	Request internalhttp.IRequest
 }
 
-func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
+func NewClient(config *api.API, request internalhttp.IRequest) *Client {
 	return &Client{config: config, Request: request}
 }
 
