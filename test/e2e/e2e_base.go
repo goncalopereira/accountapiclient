@@ -39,7 +39,6 @@ func randomBankID() int {
 }
 
 func (suite *BaseTestSuite) SetupNewAccount(newAccount *account.Data) {
-	suite.T().Logf("creating setup account %s", newAccount.ID)
 	output, err := suite.Client.Create(newAccount)
 
 	assert.Nil(suite.T(), err)

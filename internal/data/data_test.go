@@ -7,7 +7,7 @@ import (
 )
 
 func TestData_WhenReadingAccountFromFileThenReturnAccount(t *testing.T) {
-	data := test.NewAccountFromFile("complete-account.json")
+	data := test.NewAccountFromFile("fetch-response.json")
 
 	assert.Equal(t, "ad27e265-9605-4b4b-a0e5-3003ea9cc4dc", data.ID)
 	assert.Equal(t, "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c", data.OrganisationID)

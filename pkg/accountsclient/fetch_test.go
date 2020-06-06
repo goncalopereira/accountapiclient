@@ -25,7 +25,7 @@ func TestClient_Fetch(t *testing.T) {
 		id string
 	}
 
-	completeAccount := test.NewAccountFromFile("complete-account.json")
+	completeAccount := test.NewAccountFromFile("fetch-response.json")
 	accountBody, err := json.DataToBytes(completeAccount)
 	assert.Nil(t, err)
 

@@ -34,7 +34,7 @@ func TestClient_List(t *testing.T) {
 
 	accountsResponse := &http.Response{StatusCode: 200, Body: accountsBody}
 
-	emptyList := test.NewAccountsFromFile("list-empty.json")
+	emptyList := test.NewAccountsFromFile("list-response-empty.json")
 
 	emptyAccountsBody, err := json.DataToBytes(emptyList)
 	assert.Nil(t, err)
