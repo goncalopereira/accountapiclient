@@ -13,7 +13,7 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return nil, configErr
 	}
 
-	response, responseErr := client.handleRequest("POST", requestURL, accountRequest)
+	response, responseErr := client.handleRequest("POST", requestURL.String(), accountRequest)
 	if responseErr != nil {
 		return nil, responseErr
 	}

@@ -17,7 +17,7 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 		return nil, configErr
 	}
 
-	response, responseErr := client.handleRequest("GET", requestURL, nil)
+	response, responseErr := client.handleRequest("GET", requestURL.String(), nil)
 	if responseErr != nil {
 		return nil, responseErr
 	}

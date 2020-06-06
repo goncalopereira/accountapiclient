@@ -9,18 +9,21 @@ import (
 //returns response data.
 type Request struct {
 	IRequest
-	client *http.Client
+	*http.Client
 }
 
 func NewRequest() *Request {
 	r := &Request{}
-	r.client = &http.Client{}
+	r.Client = &http.Client{}
 
 	return r
 }
 
+//wraps the Do method to be mockabble
+//also handles the response reading to be able to close http.response.body
+//returns a plain response type with just status code and body byte array.
 func (h *Request) Do(req *http.Request) (*Response, error) {
-	response, responseErr := h.client.Do(req)
+	response, responseErr := h.Client.Do(req)
 	if response != nil {
 		defer response.Body.Close()
 	}

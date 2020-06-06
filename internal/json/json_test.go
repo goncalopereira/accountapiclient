@@ -1,4 +1,4 @@
-//nolint:scopelint,lll
+//nolint:scopelint
 package json_test
 
 import (
