@@ -21,3 +21,9 @@ func DuplicateAccountErrorResponse() *data.ErrorResponse {
 		ErrorMessage: "Account cannot be created as it violates a duplicate constraint",
 		StatusCode:   http.StatusConflict}
 }
+
+func ServerErrorResponse() *data.ErrorResponse {
+	errorMessage := NewErrorMessageFromFile("server-error.json")
+	errorMessage.StatusCode = 500
+	return errorMessage
+}

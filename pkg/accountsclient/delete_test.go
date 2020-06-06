@@ -27,9 +27,7 @@ func TestClient_Delete(t *testing.T) {
 
 	deleteResponse := &http.Response{StatusCode: 204}
 
-	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
-
-	errorBody, err := json.Marshal(apiErrorMessage)
+	errorBody, err := json.Marshal(test.ServerErrorResponse())
 	assert.Nil(t, err)
 
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
@@ -55,7 +53,7 @@ func TestClient_Delete(t *testing.T) {
 		{"WhenGivenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
 			args{id: "1", version: 1},
-			apiErrorMessage,
+			test.ServerErrorResponse(),
 			false},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},

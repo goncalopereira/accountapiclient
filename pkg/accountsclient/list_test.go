@@ -40,9 +40,7 @@ func TestClient_List(t *testing.T) {
 
 	emptyAccountsResponse := &http.Response{StatusCode: 200, Body: emptyAccountsBody}
 
-	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
-
-	errorBody, err := json.Marshal(apiErrorMessage)
+	errorBody, err := json.Marshal(test.ServerErrorResponse())
 	assert.Nil(t, err)
 
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
@@ -71,7 +69,7 @@ func TestClient_List(t *testing.T) {
 		{"WhenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
 			args{urls: &url.Values{}},
-			apiErrorMessage,
+			test.ServerErrorResponse(),
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},

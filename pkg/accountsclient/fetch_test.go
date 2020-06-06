@@ -30,9 +30,7 @@ func TestClient_Fetch(t *testing.T) {
 
 	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
 
-	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
-
-	errorBody, err := json.Marshal(apiErrorMessage)
+	errorBody, err := json.Marshal(test.ServerErrorResponse())
 	assert.Nil(t, err)
 
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
@@ -56,7 +54,7 @@ func TestClient_Fetch(t *testing.T) {
 		{"WhenNon200ThenReturnErrorMessage",
 			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
 			args{id: "1"},
-			apiErrorMessage,
+			test.ServerErrorResponse(),
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
