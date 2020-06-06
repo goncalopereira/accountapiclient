@@ -25,14 +25,7 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 	}
 
 	if response.StatusCode == http.StatusCreated {
-		responseAccount := &account.Data{}
-
-		accountErr := json.BodyToData(response.Body, responseAccount)
-		if accountErr != nil {
-			return nil, accountErr
-		}
-
-		return responseAccount, nil
+		return validResponseHandling(response, &account.Data{})
 	}
 
 	return errorResponseHandling(response)
