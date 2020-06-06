@@ -26,10 +26,9 @@ func TestOneAccountTestSuite(t *testing.T) {
 
 func (suite *OneAccountTestSuite) SetupTest() {
 	suite.BaseTestSuite.SetupTest()
-	suite.SetupNewAccount(suite.NewAccount())
+	suite.SetupNewAccount(suite.NewAccount(suite.NewAccountID))
 }
 
-//testing with an added filter but fake api does not respect filters.
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenListThenListWithOneAccount() {
 	params := &url.Values{}
 	output, err := suite.Client.List(params)
@@ -61,7 +60,7 @@ func (suite *OneAccountTestSuite) TestGivenOneAccountWhenDeleteIDAndVersion0Then
 }
 
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenCreateSameIDThenErrorMessage() {
-	output, err := suite.Client.Create(suite.NewAccount())
+	output, err := suite.Client.Create(suite.NewAccount(suite.NewAccountID))
 
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), test.DuplicateAccountErrorResponse(), output.(*data.ErrorResponse))

@@ -1,6 +1,7 @@
 package e2e
 
 import (
+	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
@@ -34,7 +35,7 @@ func NewClientFromEnv() *client2.Client {
 const MaxBankID = 999999
 const MinBankID = 100000
 
-func randomBankID() int {
+func RandomBankID() int {
 	return rand.Intn(MaxBankID-MinBankID) - MinBankID
 }
 
@@ -45,9 +46,9 @@ func (suite *BaseTestSuite) SetupNewAccount(newAccount *account.Data) {
 	assert.IsType(suite.T(), &account.Data{}, output)
 }
 
-func (suite *BaseTestSuite) NewAccount() *account.Data {
+func (suite *BaseTestSuite) NewAccount(id fmt.Stringer) *account.Data {
 	newAccount := test.NewAccountFromFile("create.json")
-	newAccount.ID = suite.NewAccountID.String()
+	newAccount.ID = id.String()
 
 	return newAccount
 }
@@ -59,7 +60,7 @@ func (suite *BaseTestSuite) SetupTest() {
 func (suite *BaseTestSuite) SetupSuite() {
 	suite.NewAccountID = uuid.New()
 	suite.Client = NewClientFromEnv()
-	suite.BankID = strconv.Itoa(randomBankID())
+	suite.BankID = strconv.Itoa(RandomBankID())
 }
 
 //try to clean up the api without accessing the DB
