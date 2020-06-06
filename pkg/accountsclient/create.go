@@ -19,7 +19,7 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return &data.NoOp{}, err
 	}
 
-	response, err := client.handleRequest(http.MethodGet, requestURL.String(), requestData)
+	response, err := client.handleRequest(http.MethodPost, requestURL.String(), requestData)
 	if err != nil {
 		return &data.NoOp{}, err
 	}
