@@ -13,7 +13,12 @@ func (client *Client) Fetch(id string) (data.IOutput, error) {
 		return nil, configErr
 	}
 
-	response, requestErr := client.Request.Get(requestURL.String())
+	req, err := http.NewRequest("GET", requestURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response, requestErr := client.Request.Get(req)
 	if requestErr != nil {
 		return nil, requestErr
 	}

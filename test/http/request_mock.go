@@ -3,6 +3,7 @@ package http_test
 import (
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/stretchr/testify/mock"
+	"net/http"
 )
 
 //need to be able to mock net/http
@@ -16,13 +17,7 @@ type RequestMock struct {
 //could improve by getting correct urls instead of any.
 func NewGetRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
-	client.On("Get", mock.AnythingOfType("string")).Return(response, err).Once()
-
-	return client
-}
-func NewDeleteRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
-	client := new(RequestMock)
-	client.On("Delete", mock.AnythingOfType("string")).Return(response, err).Once()
+	client.On("Get", mock.AnythingOfType("*http.Request")).Return(response, err).Once()
 
 	return client
 }
@@ -34,18 +29,13 @@ func NewPostRequestMock(response *internalhttp.Response, err error) internalhttp
 	return client
 }
 
-func (r *RequestMock) Get(endpoint string) (*internalhttp.Response, error) {
-	arguments := r.Called(endpoint)
+func (r *RequestMock) Get(req *http.Request) (*internalhttp.Response, error) {
+	arguments := r.Called(req)
 	return returnResponseAndError(arguments)
 }
 
 func (r *RequestMock) Post(endpoint string, requestData []byte) (*internalhttp.Response, error) {
 	arguments := r.Called(endpoint, requestData)
-	return returnResponseAndError(arguments)
-}
-
-func (r *RequestMock) Delete(endpoint string) (*internalhttp.Response, error) {
-	arguments := r.Called(endpoint)
 	return returnResponseAndError(arguments)
 }
 
