@@ -5,7 +5,6 @@ import (
 	account "github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/json"
 	"github.com/goncalopereira/accountapiclient/test"
-	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -34,27 +33,4 @@ func TestRequestBodyToData(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestDataToBody_WhenReadingAccountFromFileThenReturnAccount(t *testing.T) {
-	newAccount := test.NewAccountFromFile("complete-account.json")
-
-	assert.Equal(t, "ad27e265-9605-4b4b-a0e5-3003ea9cc4dc", newAccount.ID)
-	assert.Equal(t, "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c", newAccount.OrganisationID)
-	assert.Equal(t, "GB", newAccount.Country)
-	assert.Equal(t, "GB", newAccount.Attributes.Country)
-
-	assert.Equal(t, []string{"Sam Holder"}, newAccount.AlternativeNames) //test array
-	assert.Equal(t, []string{"Samantha Holder"}, newAccount.Name)
-
-	assert.Equal(t, "2017-07-23", newAccount.PrivateIdentificationBirthDate)                   //private ID
-	assert.Equal(t, []string{"10 Avenue des Champs"}, newAccount.PrivateIdentificationAddress) //private ID
-
-	assert.Equal(t, "123654", newAccount.OrganisationIdentificationIdentification) //org ID
-
-	assert.Equal(t, "1970-01-01", newAccount.OrganisationIdentification.Actors[0].BirthDate) //Actors
-	assert.Equal(t, "Jeff Page", newAccount.OrganisationIdentification.Actors[0].Names[0])   //Actors
-
-	assert.Equal(t, "a52d13a4-f435-4c00-cfad-f5e7ac5972df", newAccount.RelationshipsMasterAccount.Data[0].ID) //master account
-	assert.Equal(t, "c1023677-70ee-417a-9a6a-e211241f1e9c", newAccount.RelationshipsAccountEvents.Data[0].ID) //account events
 }

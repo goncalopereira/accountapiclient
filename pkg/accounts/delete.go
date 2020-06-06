@@ -21,7 +21,7 @@ func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 		return nil, err
 	}
 
-	response, requestErr := client.Request.Get(req)
+	response, requestErr := client.Request.Do(req)
 	if requestErr != nil {
 		return nil, requestErr
 	}

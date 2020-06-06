@@ -22,7 +22,7 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 		return nil, err
 	}
 
-	response, requestErr := client.Request.Get(req)
+	response, requestErr := client.Request.Do(req)
 	if requestErr != nil {
 		return nil, requestErr
 	}

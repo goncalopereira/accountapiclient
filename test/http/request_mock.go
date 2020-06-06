@@ -17,12 +17,12 @@ type RequestMock struct {
 //could improve by getting correct urls instead of any.
 func NewGetRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)
-	client.On("Get", mock.AnythingOfType("*http.Request")).Return(response, err).Once()
+	client.On("Do", mock.AnythingOfType("*http.Request")).Return(response, err).Once()
 
 	return client
 }
 
-func (r *RequestMock) Get(req *http.Request) (*internalhttp.Response, error) {
+func (r *RequestMock) Do(req *http.Request) (*internalhttp.Response, error) {
 	arguments := r.Called(req)
 	return returnResponseAndError(arguments)
 }

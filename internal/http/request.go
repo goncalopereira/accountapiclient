@@ -19,11 +19,7 @@ func NewRequest() *Request {
 	return r
 }
 
-func (h *Request) Get(req *http.Request) (*Response, error) {
-	return h.handleRequest(req)
-}
-
-func (h *Request) handleRequest(req *http.Request) (*Response, error) {
+func (h *Request) Do(req *http.Request) (*Response, error) {
 	response, responseErr := h.client.Do(req)
 	if response != nil {
 		defer response.Body.Close()

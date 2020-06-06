@@ -16,11 +16,6 @@ func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
 	return &Client{config: config, Request: request}
 }
 
-//default new client with real http.
-func NewClientFromEnv() *Client {
-	return NewClient(config.DefaultAPI(), internalhttp.NewRequest())
-}
-
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {
 	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
 

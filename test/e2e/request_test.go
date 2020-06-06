@@ -11,7 +11,7 @@ func TestPost_WhenAPIConnectErrorThenReturnError(t *testing.T) {
 	r := internalhttp.NewRequest()
 
 	req, _ := http.NewRequest("POST", "http://127.0.0.1:111", nil)
-	response, err := r.Get(req) //use IPV4 here otherwise you might get IPV6
+	response, err := r.Do(req) //use IPV4 here otherwise you might get IPV6
 
 	assert.NotNil(t, err)
 	assert.Nil(t, response)
@@ -21,7 +21,7 @@ func TestGet_WhenAPIConnectErrorThenReturnError(t *testing.T) {
 	r := internalhttp.NewRequest()
 
 	req, _ := http.NewRequest("GET", "http://127.0.0.1:111", nil)
-	response, err := r.Get(req) //use IPV4 here otherwise you might get IPV6
+	response, err := r.Do(req) //use IPV4 here otherwise you might get IPV6
 
 	assert.NotNil(t, err)
 	assert.Nil(t, response)
