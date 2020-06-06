@@ -16,7 +16,7 @@ func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 		return &data.NoOp{}, err
 	}
 
-	response, err := client.handleRequest("DELETE", requestURL.String(), nil)
+	response, err := client.handleRequest(http.MethodDelete, requestURL.String(), nil)
 	if err != nil {
 		return &data.NoOp{}, err
 	}

@@ -13,7 +13,7 @@ func (client *Client) Fetch(id string) (data.IOutput, error) {
 		return &data.NoOp{}, err
 	}
 
-	response, err := client.handleRequest("GET", requestURL.String(), nil)
+	response, err := client.handleRequest(http.MethodGet, requestURL.String(), nil)
 	if err != nil {
 		return &data.NoOp{}, err
 	}

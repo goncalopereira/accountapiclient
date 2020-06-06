@@ -20,7 +20,7 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 		return &data.NoOp{}, err
 	}
 
-	response, err := client.handleRequest("GET", requestURL.String(), nil)
+	response, err := client.handleRequest(http.MethodGet, requestURL.String(), nil)
 	if err != nil {
 		return &data.NoOp{}, err
 	}
