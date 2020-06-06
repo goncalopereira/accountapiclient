@@ -1,6 +1,6 @@
 package data
 
-//Implementing Null Object Pattern, non nil result
+//Implementing Null Object Pattern, non nil result.
 type NoOp struct {
 	IOutput
 }

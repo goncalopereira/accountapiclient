@@ -2,11 +2,11 @@
 package accountsclient_test
 
 import (
+	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
@@ -28,14 +28,14 @@ func TestClient_Create(t *testing.T) {
 
 	createdAccount := test.NewAccountFromFile("create-response.json")
 
-	accountBody, err := json.DataToBytes(createdAccount)
+	accountBody, err := json.Marshal(createdAccount)
 	assert.Nil(t, err)
 
 	accountResponse := &http.Response{StatusCode: 201, Body: accountBody}
 
 	apiErrorMessage := test.DuplicateAccountErrorResponse()
 
-	errorBody, err := json.DataToBytes(apiErrorMessage)
+	errorBody, err := json.Marshal(apiErrorMessage)
 	assert.Nil(t, err)
 
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
