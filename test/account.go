@@ -1,15 +1,15 @@
 package test
 
 import (
+	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 )
 
 func NewAccountsFromFile(filename string) *account.AccountsData {
 	accounts := account.AccountsData{}
 
-	err := json.BytesToData(ReadJSON(filename), &accounts)
+	err := json.Unmarshal(ReadJSON(filename), &accounts)
 	if err != nil {
 		panic("could not hydrate test data")
 	}
@@ -19,7 +19,7 @@ func NewAccountsFromFile(filename string) *account.AccountsData {
 func NewAccountFromFile(filename string) *account.Data {
 	accountToHydrate := account.Data{}
 
-	err := json.BytesToData(ReadJSON(filename), &accountToHydrate)
+	err := json.Unmarshal(ReadJSON(filename), &accountToHydrate)
 	if err != nil {
 		panic("could not hydrate test data")
 	}
@@ -30,7 +30,7 @@ func NewAccountFromFile(filename string) *account.Data {
 func NewErrorMessageFromFile(filename string) *data.ErrorResponse {
 	errorResponseToHydrate := data.ErrorResponse{}
 
-	err := json.BytesToData(ReadJSON(filename), &errorResponseToHydrate)
+	err := json.Unmarshal(ReadJSON(filename), &errorResponseToHydrate)
 	if err != nil {
 		panic("could not hydrate test data")
 	}

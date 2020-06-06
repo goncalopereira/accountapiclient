@@ -2,10 +2,10 @@ package accountsclient
 
 import (
 	"bytes"
+	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"net/http"
 )
 
@@ -21,7 +21,7 @@ func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {
 	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
 
-	err := json.BytesToData(response.Body, errorResponse)
+	err := json.Unmarshal(response.Body, &errorResponse)
 	if err != nil {
 		return &data.NoOp{}, err
 	}
@@ -30,7 +30,7 @@ func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error
 }
 
 func validResponseHandling(response *internalhttp.Response, responseData data.IOutput) (data.IOutput, error) {
-	err := json.BytesToData(response.Body, responseData)
+	err := json.Unmarshal(response.Body, responseData)
 	if err != nil {
 		return &data.NoOp{}, err
 	}

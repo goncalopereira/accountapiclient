@@ -3,10 +3,10 @@ package http_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"github.com/goncalopereira/accountapiclient/test"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -54,7 +54,9 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
 
 	var result = account.Data{}
-	_ = json.BytesToData(response.Body, &result)
+	err = json.Unmarshal(response.Body, &result)
+
+	assert.Nil(t, err)
 	assert.Equal(t, test.AccountCreateResponse().Account, result.Account)
 }
 
