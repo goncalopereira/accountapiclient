@@ -1,12 +1,13 @@
 //nolint:scopelint,funlen
-package accounts_test
+package accountsclient_test
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
+	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
-	"github.com/goncalopereira/accountapiclient/pkg/accounts"
+	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
@@ -14,21 +15,21 @@ import (
 	"testing"
 )
 
-func TestClient_Fetch(t *testing.T) {
+func TestClient_Create(t *testing.T) {
 	type fields struct {
 		config  config.IAPI
 		request http.IRequest
 	}
 
 	type args struct {
-		id string
+		account *account.Data
 	}
 
-	completeAccount := test.NewAccountFromFile("complete-account.json")
-	accountBody, _ := json.DataToBytes(completeAccount)
-	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
+	createdAccount := test.NewAccountFromFile("create-response.json")
+	accountBody, _ := json.DataToBytes(createdAccount)
+	accountResponse := &http.Response{StatusCode: 201, Body: accountBody}
 
-	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
+	apiErrorMessage := test.DuplicateAccountErrorResponse()
 
 	errorBody, _ := json.DataToBytes(apiErrorMessage)
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
@@ -45,46 +46,45 @@ func TestClient_Fetch(t *testing.T) {
 		want    data.IOutput
 		wantErr bool
 	}{
-		{"GivenAccountWhenValidIDThenReturnAccount",
+		{"GivenNoAccountWhenPostAccountThenReturnAccount",
 			fields{config: api, request: httptest.NewGetRequestMock(accountResponse, nil)},
-			args{id: "1"},
-			completeAccount,
+			args{account: test.AccountCreateRequest()},
+			createdAccount,
 			false},
-		{"WhenNon200ThenReturnErrorMessage",
-			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
-			args{id: "1"},
-			apiErrorMessage,
-			false},
-		{"WhenNon200BrokenResponseThenReturnError",
+		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
+			fields: fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
+			args:   args{account: test.AccountCreateRequest()},
+			want:   test.DuplicateAccountErrorResponse()},
+		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
-			args{id: "1"},
+			args{account: test.AccountCreateRequest()},
 			&data.NoOp{},
 			true},
-		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{id: "1"},
-			&data.NoOp{},
-			true},
+		/*		{"WhenHTTPClientThrowsThenReturnError",
+				fields{config: api, request: httptest.NewGetRequestMock(nil, fmt.Errorf("boom"))},
+				args{account: test.AccountCreateRequest()},
+				nil,
+				true},*/
 		{"WhenBrokenAPIConfigThrowsThenReturnError",
 			fields{config: brokenAPI, request: nil},
-			args{id: "1"},
+			args{account: test.AccountCreateRequest()},
 			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := accounts.NewClient(tt.fields.config, tt.fields.request)
+			client := accountsclient.NewClient(tt.fields.config, tt.fields.request)
 
-			got, err := client.Fetch(tt.args.id)
+			got, err := client.Create(tt.args.account)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Fetch() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if (err != nil) && tt.wantErr {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Fetch() got = %v, want %v", got, tt.want)
+				t.Errorf("Create() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
