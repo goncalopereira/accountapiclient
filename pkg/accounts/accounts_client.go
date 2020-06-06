@@ -41,13 +41,8 @@ func validResponseHandling(response *internalhttp.Response, responseData data.IO
 func (client *Client) handleRequest(
 	method string,
 	requestURL string,
-	data interface{}) (*internalhttp.Response, error) {
-	requestData, dataErr := json.DataToBody(data)
-	if dataErr != nil {
-		return nil, dataErr
-	}
-
-	req, requestErr := http.NewRequest(method, requestURL, bytes.NewBuffer(requestData))
+	data []byte) (*internalhttp.Response, error) {
+	req, requestErr := http.NewRequest(method, requestURL, bytes.NewBuffer(data))
 	if requestErr != nil {
 		return nil, requestErr
 	}

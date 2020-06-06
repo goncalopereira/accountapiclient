@@ -1,7 +1,7 @@
 package data
 
 //Implementing Null Object Pattern to be able to String() any result
-//Also for Delete to have a non nil valid result
+//Also for Delete to have a non nil valid result.
 type NoOp struct {
 	IOutput
 }

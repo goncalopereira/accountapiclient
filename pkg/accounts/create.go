@@ -3,6 +3,7 @@ package accounts
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
+	"github.com/goncalopereira/accountapiclient/internal/json"
 	"net/http"
 	"net/url"
 )
@@ -13,7 +14,12 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return &data.NoOp{}, configErr
 	}
 
-	response, responseErr := client.handleRequest("POST", requestURL.String(), accountRequest)
+	requestData, dataErr := json.DataToBody(accountRequest)
+	if dataErr != nil {
+		return nil, dataErr
+	}
+
+	response, responseErr := client.handleRequest("POST", requestURL.String(), requestData)
 	if responseErr != nil {
 		return &data.NoOp{}, responseErr
 	}
