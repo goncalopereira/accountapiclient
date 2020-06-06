@@ -3,7 +3,6 @@ package accountsclient_test
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
@@ -17,7 +16,6 @@ import (
 
 func TestClient_Create(t *testing.T) {
 	type fields struct {
-		config  *api.API
 		request http.IRequest
 	}
 
@@ -41,8 +39,6 @@ func TestClient_Create(t *testing.T) {
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
 
-	api := api.DefaultAPI()
-
 	tests := []struct {
 		name    string
 		fields  fields
@@ -51,28 +47,28 @@ func TestClient_Create(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenNoAccountWhenPostAccountThenReturnAccount",
-			fields{config: api, request: httptest.NewRequestMock(accountResponse, nil)},
-			args{account: test.AccountCreateRequest()},
+			fields{request: httptest.NewRequestMock(accountResponse, nil)},
+			args{account: test.CreateRequestData()},
 			createdAccount,
 			false},
 		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
-			fields: fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
-			args:   args{account: test.AccountCreateRequest()},
+			fields: fields{request: httptest.NewRequestMock(errorResponse, nil)},
+			args:   args{account: test.CreateRequestData()},
 			want:   test.DuplicateAccountErrorResponse()},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
-			args{account: test.AccountCreateRequest()},
+			fields{request: httptest.NewRequestMock(brokenResponse, nil)},
+			args{account: test.CreateRequestData()},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{account: test.AccountCreateRequest()},
+			fields{request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
+			args{account: test.CreateRequestData()},
 			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := accountsclient.NewClient(tt.fields.config, tt.fields.request)
+			client := accountsclient.NewClient(tt.fields.request)
 
 			got, err := client.Create(tt.args.account)
 			if (err != nil) != tt.wantErr {

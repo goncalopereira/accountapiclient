@@ -14,8 +14,8 @@ type Client struct {
 	Request internalhttp.IRequest
 }
 
-func NewClient(config *api.API, request internalhttp.IRequest) *Client {
-	return &Client{config: config, Request: request}
+func NewClient(request internalhttp.IRequest) *Client {
+	return &Client{config: api.DefaultAPI(), Request: request}
 }
 
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {

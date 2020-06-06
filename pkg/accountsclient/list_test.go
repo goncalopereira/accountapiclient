@@ -84,7 +84,7 @@ func TestClient_List(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := accountsclient.NewClient(tt.fields.config, tt.fields.request)
+			c := accountsclient.NewClient(tt.fields.request)
 			got, err := c.List(tt.args.urls)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)

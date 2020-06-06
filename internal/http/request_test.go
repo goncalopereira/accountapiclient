@@ -57,7 +57,7 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	err = json.Unmarshal(response.Body, &result)
 
 	assert.Nil(t, err)
-	assert.Equal(t, test.AccountCreateResponse().Account, result.Account)
+	assert.Equal(t, test.CreateResponseData().Account, result.Account)
 }
 
 func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {

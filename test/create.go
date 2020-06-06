@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-func AccountCreateRequest() *account.Data {
+func CreateRequestData() *account.Data {
 	account := NewAccountFromFile("create.json")
 	return account
 }
 
-func AccountCreateResponse() *account.Data {
+func CreateResponseData() *account.Data {
 	account := NewAccountFromFile("create-response.json")
 	return account
 }
