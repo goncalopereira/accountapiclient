@@ -6,11 +6,12 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/internal/http"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"net/url"
 	"reflect"
 	"testing"
@@ -19,7 +20,7 @@ import (
 func TestClient_List(t *testing.T) {
 	type fields struct {
 		config  *api.API
-		request http.IRequest
+		request internalhttp.IRequest
 	}
 
 	type args struct {
@@ -31,21 +32,21 @@ func TestClient_List(t *testing.T) {
 	accountsBody, err := json.Marshal(multipleAccounts)
 	assert.Nil(t, err)
 
-	accountsResponse := &http.Response{StatusCode: 200, Body: accountsBody}
+	accountsResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: accountsBody}
 
 	emptyList := test.NewAccountsFromFile("list-response-empty.json")
 
 	emptyAccountsBody, err := json.Marshal(emptyList)
 	assert.Nil(t, err)
 
-	emptyAccountsResponse := &http.Response{StatusCode: 200, Body: emptyAccountsBody}
+	emptyAccountsResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: emptyAccountsBody}
 
 	errorBody, err := json.Marshal(test.ServerErrorResponse())
 	assert.Nil(t, err)
 
-	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
+	errorResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: errorBody}
 
-	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
+	brokenResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: nil}
 
 	api := api.DefaultAPI()
 

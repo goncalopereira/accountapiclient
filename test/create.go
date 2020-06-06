@@ -24,7 +24,7 @@ func DuplicateAccountErrorResponse() *data.ErrorResponse {
 
 func ServerErrorResponse() *data.ErrorResponse {
 	errorMessage := NewErrorMessageFromFile("server-error.json")
-	errorMessage.StatusCode = 500
+	errorMessage.StatusCode = http.StatusInternalServerError
 
 	return errorMessage
 }

@@ -4,18 +4,19 @@ package accountsclient_test
 import (
 	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/http"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"reflect"
 	"testing"
 )
 
 func TestClient_Fetch(t *testing.T) {
 	type fields struct {
-		request http.IRequest
+		request internalhttp.IRequest
 	}
 
 	type args struct {
@@ -26,14 +27,14 @@ func TestClient_Fetch(t *testing.T) {
 	accountBody, err := json.Marshal(completeAccount)
 	assert.Nil(t, err)
 
-	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
+	accountResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: accountBody}
 
 	errorBody, err := json.Marshal(test.ServerErrorResponse())
 	assert.Nil(t, err)
 
-	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
+	errorResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: errorBody}
 
-	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
+	brokenResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: nil}
 
 	tests := []struct {
 		name    string
