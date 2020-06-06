@@ -13,6 +13,6 @@ type ErrorResponse struct {
 }
 
 func (e *ErrorResponse) String() string {
-	error, _ := json.DataToBody(e)
+	error, _ := json.DataToBytes(e)
 	return string(error)
 }

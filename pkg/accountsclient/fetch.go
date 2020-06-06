@@ -1,4 +1,4 @@
-package accounts
+package accountsclient
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
@@ -10,17 +10,12 @@ import (
 func (client *Client) Fetch(id string) (data.IOutput, error) {
 	requestURL, configErr := client.config.Account(id, &url.Values{})
 	if configErr != nil {
-		return nil, configErr
+		return &data.NoOp{}, configErr
 	}
 
-	req, err := http.NewRequest("GET", requestURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	response, requestErr := client.Request.Do(req)
-	if requestErr != nil {
-		return nil, requestErr
+	response, responseErr := client.handleRequest("GET", requestURL.String(), nil)
+	if responseErr != nil {
+		return &data.NoOp{}, responseErr
 	}
 
 	if response.StatusCode == http.StatusOK {

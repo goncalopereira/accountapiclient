@@ -1,5 +1,5 @@
 //nolint:scopelint,funlen
-package accounts_test
+package accountsclient_test
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/config"
@@ -7,7 +7,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/json"
-	"github.com/goncalopereira/accountapiclient/pkg/accounts"
+	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
@@ -26,12 +26,12 @@ func TestClient_Create(t *testing.T) {
 	}
 
 	createdAccount := test.NewAccountFromFile("create-response.json")
-	accountBody, _ := json.DataToBody(createdAccount)
+	accountBody, _ := json.DataToBytes(createdAccount)
 	accountResponse := &http.Response{StatusCode: 201, Body: accountBody}
 
 	apiErrorMessage := test.DuplicateAccountErrorResponse()
 
-	errorBody, _ := json.DataToBody(apiErrorMessage)
+	errorBody, _ := json.DataToBytes(apiErrorMessage)
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
@@ -58,7 +58,7 @@ func TestClient_Create(t *testing.T) {
 		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
 			args{account: test.AccountCreateRequest()},
-			nil,
+			&data.NoOp{},
 			true},
 		/*		{"WhenHTTPClientThrowsThenReturnError",
 				fields{config: api, request: httptest.NewGetRequestMock(nil, fmt.Errorf("boom"))},
@@ -68,12 +68,12 @@ func TestClient_Create(t *testing.T) {
 		{"WhenBrokenAPIConfigThrowsThenReturnError",
 			fields{config: brokenAPI, request: nil},
 			args{account: test.AccountCreateRequest()},
-			nil,
+			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := accounts.NewClient(tt.fields.config, tt.fields.request)
+			client := accountsclient.NewClient(tt.fields.config, tt.fields.request)
 
 			got, err := client.Create(tt.args.account)
 			if (err != nil) != tt.wantErr {

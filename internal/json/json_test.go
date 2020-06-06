@@ -1,4 +1,4 @@
-//nolint:scopelint,lll
+//nolint:scopelint
 package json_test
 
 import (
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRequestBodyToData(t *testing.T) {
+func TestBytesToData(t *testing.T) {
 	type args struct {
 		body []byte
 		data interface{}
@@ -28,8 +28,8 @@ func TestRequestBodyToData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := json.BodyToData(tt.args.body, tt.args.data); (err != nil) != tt.wantErr {
-				t.Errorf("BodyToData() error = %v, wantErr %v", err, tt.wantErr)
+			if err := json.BytesToData(tt.args.body, tt.args.data); (err != nil) != tt.wantErr {
+				t.Errorf("BytesToData() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

@@ -3,6 +3,7 @@ package test
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
+	"net/http"
 )
 
 func AccountCreateRequest() *account.Data {
@@ -16,5 +17,7 @@ func AccountCreateResponse() *account.Data {
 }
 
 func DuplicateAccountErrorResponse() *data.ErrorResponse {
-	return &data.ErrorResponse{ErrorMessage: "AccountData cannot be created as it violates a duplicate constraint"}
+	return &data.ErrorResponse{
+		ErrorMessage: "Account cannot be created as it violates a duplicate constraint",
+		StatusCode:   http.StatusConflict}
 }

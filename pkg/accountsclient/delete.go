@@ -1,4 +1,4 @@
-package accounts
+package accountsclient
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
@@ -13,21 +13,16 @@ func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 
 	requestURL, configErr := client.config.Account(id, parameters)
 	if configErr != nil {
-		return nil, configErr
+		return &data.NoOp{}, configErr
 	}
 
-	req, err := http.NewRequest("DELETE", requestURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	response, requestErr := client.Request.Do(req)
-	if requestErr != nil {
-		return nil, requestErr
+	response, responseErr := client.handleRequest("DELETE", requestURL.String(), nil)
+	if responseErr != nil {
+		return &data.NoOp{}, responseErr
 	}
 
 	if response.StatusCode == http.StatusNoContent {
-		return nil, nil
+		return &data.NoContent{}, nil
 	}
 
 	return errorResponseHandling(response)

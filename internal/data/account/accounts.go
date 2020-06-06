@@ -12,7 +12,7 @@ type AccountsData struct {
 	Accounts     *[]Account `json:"data"`
 }
 
-func (a *AccountsData) String() string {
-	account, _ := json.DataToBody(a)
+func (a AccountsData) String() string {
+	account, _ := json.DataToBytes(a)
 	return string(account)
 }
