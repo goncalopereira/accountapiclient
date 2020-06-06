@@ -12,6 +12,7 @@ type Request struct {
 	*http.Client
 }
 
+//NewRequest builds the Request type by default with real http.Client.
 func NewRequest() *Request {
 	r := &Request{}
 	r.Client = &http.Client{}

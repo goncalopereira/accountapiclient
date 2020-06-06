@@ -7,6 +7,8 @@ import (
 	"net/url"
 )
 
+//Fetch receives the Account id
+//Returns IOutput with Account, ErrorMessage, or NoOp when error.
 func (client *Client) Fetch(id string) (data.IOutput, error) {
 	requestURL, err := client.config.Account(id, &url.Values{})
 	if err != nil {

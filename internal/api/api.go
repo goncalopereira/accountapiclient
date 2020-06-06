@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+//API holds configuration for client
+//env for URL and path
+//logic for build account paths.
 type API struct {
 	apiURL *url.URL
 }

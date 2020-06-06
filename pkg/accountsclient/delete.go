@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+//Delete receives the account id and version
+//Returns IOutput with NoContent, or NoOp when error.
 func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 	parameters := &url.Values{}
 	parameters.Add("version", strconv.Itoa(version))
