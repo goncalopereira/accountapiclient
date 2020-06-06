@@ -23,20 +23,20 @@ func NewRequest() *Request {
 //also handles the response reading to be able to close http.response.body
 //returns a plain response type with just status code and body byte array.
 func (h *Request) Do(req *http.Request) (*Response, error) {
-	response, responseErr := h.Client.Do(req)
+	response, err := h.Client.Do(req)
 	if response != nil {
 		defer response.Body.Close()
 	}
 
-	if responseErr != nil {
-		return nil, responseErr
+	if err != nil {
+		return nil, err
 	}
 
 	//did not test ReadAll error, would require mocking it
-	responseBody, bodyErr := ioutil.ReadAll(response.Body)
+	responseBody, err := ioutil.ReadAll(response.Body)
 
-	if responseErr != nil {
-		return nil, bodyErr
+	if err != nil {
+		return nil, err
 	}
 
 	return &Response{StatusCode: response.StatusCode, Body: responseBody}, nil

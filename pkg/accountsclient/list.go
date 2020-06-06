@@ -15,14 +15,14 @@ import (
 //Did not add a parameter filter to pick the available ones as the API might change this quickly
 //There is the issue of developers mistyping filter names but that's a testing issue.
 func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
-	requestURL, configErr := client.config.Accounts(parameters)
-	if configErr != nil {
-		return &data.NoOp{}, configErr
+	requestURL, err := client.config.Accounts(parameters)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
-	response, responseErr := client.handleRequest("GET", requestURL.String(), nil)
-	if responseErr != nil {
-		return &data.NoOp{}, responseErr
+	response, err := client.handleRequest("GET", requestURL.String(), nil)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
 	if response.StatusCode == http.StatusOK {

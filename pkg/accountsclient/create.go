@@ -9,9 +9,9 @@ import (
 )
 
 func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error) {
-	requestURL, configErr := client.config.Accounts(&url.Values{})
-	if configErr != nil {
-		return &data.NoOp{}, configErr
+	requestURL, err := client.config.Accounts(&url.Values{})
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
 	requestData, err := json.Marshal(accountRequest)
@@ -19,9 +19,9 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return &data.NoOp{}, err
 	}
 
-	response, responseErr := client.handleRequest("POST", requestURL.String(), requestData)
-	if responseErr != nil {
-		return &data.NoOp{}, responseErr
+	response, err := client.handleRequest("POST", requestURL.String(), requestData)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
 	if response.StatusCode == http.StatusCreated {

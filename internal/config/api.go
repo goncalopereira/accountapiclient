@@ -29,23 +29,24 @@ func (c *API) Accounts(parameters *url.Values) (*url.URL, error) {
 }
 
 func (c *API) Account(id string, parameters *url.Values) (*url.URL, error) {
-	newUrl := *c.apiURL
-	newUrl.Path = fmt.Sprintf("%s/%s", c.apiURL.Path, id)
-	return buildURL(newUrl, parameters)
+	newURL := *c.apiURL
+	newURL.Path = fmt.Sprintf("%s/%s", c.apiURL.Path, id)
+
+	return buildURL(newURL, parameters)
 }
 
 //makes copy of apiURL and adds parameters to call api.
-func buildURL(apiUrl url.URL, parameters *url.Values) (*url.URL, error) {
+func buildURL(apiURL url.URL, parameters *url.Values) (*url.URL, error) {
 	if parameters == nil {
 		return nil, ErrParametersCannotBeNil
 	}
 
-	apiUrl.RawQuery = parameters.Encode()
+	apiURL.RawQuery = parameters.Encode()
 
-	return &apiUrl, nil
+	return &apiURL, nil
 }
 
-//gets api configuration env variables or default values
+//gets api configuration env variables or default values.
 func GetEnv(key, defaultValue string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
