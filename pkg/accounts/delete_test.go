@@ -29,7 +29,7 @@ func TestClient_Delete(t *testing.T) {
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
-	errorBody, _ := json.DataToBody(apiErrorMessage)
+	errorBody, _ := json.DataToBytes(apiErrorMessage)
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}

@@ -51,7 +51,7 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
 
 	var result = account.Data{}
-	_ = json.BodyToData(response.Body, &result)
+	_ = json.BytesToData(response.Body, &result)
 	assert.Equal(t, test.AccountCreateResponse().Account, result.Account)
 }
 

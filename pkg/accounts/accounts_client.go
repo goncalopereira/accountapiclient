@@ -21,7 +21,7 @@ func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {
 	errorResponse := &data.ErrorResponse{StatusCode: response.StatusCode}
 
-	errorResponseError := json.BodyToData(response.Body, errorResponse)
+	errorResponseError := json.BytesToData(response.Body, errorResponse)
 	if errorResponseError != nil {
 		return &data.NoOp{}, errorResponseError
 	}
@@ -30,7 +30,7 @@ func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error
 }
 
 func validResponseHandling(response *internalhttp.Response, responseData data.IOutput) (data.IOutput, error) {
-	accountErr := json.BodyToData(response.Body, responseData)
+	accountErr := json.BytesToData(response.Body, responseData)
 	if accountErr != nil {
 		return &data.NoOp{}, accountErr
 	}

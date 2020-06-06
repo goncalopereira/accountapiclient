@@ -26,12 +26,12 @@ func TestClient_Create(t *testing.T) {
 	}
 
 	createdAccount := test.NewAccountFromFile("create-response.json")
-	accountBody, _ := json.DataToBody(createdAccount)
+	accountBody, _ := json.DataToBytes(createdAccount)
 	accountResponse := &http.Response{StatusCode: 201, Body: accountBody}
 
 	apiErrorMessage := test.DuplicateAccountErrorResponse()
 
-	errorBody, _ := json.DataToBody(apiErrorMessage)
+	errorBody, _ := json.DataToBytes(apiErrorMessage)
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}

@@ -14,7 +14,7 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return &data.NoOp{}, configErr
 	}
 
-	requestData, dataErr := json.DataToBody(accountRequest)
+	requestData, dataErr := json.DataToBytes(accountRequest)
 	if dataErr != nil {
 		return nil, dataErr
 	}

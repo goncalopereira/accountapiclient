@@ -27,16 +27,16 @@ func TestClient_List(t *testing.T) {
 	}
 
 	multipleAccounts := test.NewAccountsFromFile("list-response.json")
-	accountsBody, _ := json.DataToBody(multipleAccounts)
+	accountsBody, _ := json.DataToBytes(multipleAccounts)
 	accountsResponse := &http.Response{StatusCode: 200, Body: accountsBody}
 
 	emptyList := test.NewAccountsFromFile("list-empty.json")
-	emptyAccountsBody, _ := json.DataToBody(emptyList)
+	emptyAccountsBody, _ := json.DataToBytes(emptyList)
 	emptyAccountsResponse := &http.Response{StatusCode: 200, Body: emptyAccountsBody}
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
-	errorBody, _ := json.DataToBody(apiErrorMessage)
+	errorBody, _ := json.DataToBytes(apiErrorMessage)
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}

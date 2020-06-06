@@ -8,20 +8,20 @@ import (
 
 func NewAccountsFromFile(filename string) *account.AccountsData {
 	accounts := account.AccountsData{}
-	_ = json.BodyToData(ReadJSON(filename), &accounts)
+	_ = json.BytesToData(ReadJSON(filename), &accounts)
 
 	return &accounts
 }
 func NewAccountFromFile(filename string) *account.Data {
 	accountToHydrate := account.Data{}
-	_ = json.BodyToData(ReadJSON(filename), &accountToHydrate)
+	_ = json.BytesToData(ReadJSON(filename), &accountToHydrate)
 
 	return &accountToHydrate
 }
 
 func NewErrorMessageFromFile(filename string) *data.ErrorResponse {
 	errorResponseToHydrate := data.ErrorResponse{}
-	_ = json.BodyToData(ReadJSON(filename), &errorResponseToHydrate)
+	_ = json.BytesToData(ReadJSON(filename), &errorResponseToHydrate)
 
 	return &errorResponseToHydrate
 }

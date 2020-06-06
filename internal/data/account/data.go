@@ -14,6 +14,6 @@ type Data struct {
 }
 
 func (a *Data) String() string {
-	account, _ := json.DataToBody(a)
+	account, _ := json.DataToBytes(a)
 	return string(account)
 }

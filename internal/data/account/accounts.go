@@ -13,6 +13,6 @@ type AccountsData struct {
 }
 
 func (a *AccountsData) String() string {
-	account, _ := json.DataToBody(a)
+	account, _ := json.DataToBytes(a)
 	return string(account)
 }

@@ -25,12 +25,12 @@ func TestClient_Fetch(t *testing.T) {
 	}
 
 	completeAccount := test.NewAccountFromFile("complete-account.json")
-	accountBody, _ := json.DataToBody(completeAccount)
+	accountBody, _ := json.DataToBytes(completeAccount)
 	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
-	errorBody, _ := json.DataToBody(apiErrorMessage)
+	errorBody, _ := json.DataToBytes(apiErrorMessage)
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
