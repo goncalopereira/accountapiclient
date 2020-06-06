@@ -14,6 +14,7 @@ var (
 	ErrParametersCannotBeNil = fmt.Errorf("parameters cannot be nil")
 )
 
+//default values for API based on ENV.
 func DefaultAPI() *API {
 	return &API{apiURL: &url.URL{
 		Scheme: GetEnv("API_SCHEME", "http"),
@@ -23,10 +24,12 @@ func DefaultAPI() *API {
 		Path: "/v1/organisation/accounts"}}
 }
 
+//returns full url for accounts resource.
 func (c *API) Accounts(parameters *url.Values) (*url.URL, error) {
 	return buildURL(*c.apiURL, parameters)
 }
 
+//returns full url for given account.
 func (c *API) Account(id string, parameters *url.Values) (*url.URL, error) {
 	newURL := *c.apiURL
 	newURL.Path = fmt.Sprintf("%s/%s", c.apiURL.Path, id)
