@@ -2,14 +2,15 @@
 package accountsclient_test
 
 import (
+	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/http"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -29,7 +30,9 @@ func TestClient_Delete(t *testing.T) {
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
-	errorBody, _ := json.DataToBytes(apiErrorMessage)
+	errorBody, err := json.Marshal(apiErrorMessage)
+	assert.Nil(t, err)
+
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
@@ -45,24 +48,24 @@ func TestClient_Delete(t *testing.T) {
 		wantErr bool
 	}{
 		{"WhenGivenValidIDAndVersionThen204Empty",
-			fields{config: api, request: httptest.NewGetRequestMock(deleteResponse, nil)},
+			fields{config: api, request: httptest.NewRequestMock(deleteResponse, nil)},
 			args{id: "1", version: 1},
 			&data.NoContent{},
 			false},
 		//includes 404 not found
 		//includes 409 specified version incorrect
 		{"WhenGivenNon200ThenReturnErrorMessage",
-			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
+			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
 			args{id: "1", version: 1},
 			apiErrorMessage,
 			false},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
+			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
 			args{id: "1", version: 1},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(nil, test.ErrBrokenHTTPClient)},
+			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
 			args{id: "1", version: 1},
 			&data.NoOp{},
 			true},

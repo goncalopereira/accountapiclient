@@ -2,14 +2,15 @@
 package accountsclient_test
 
 import (
+	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/http"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/goncalopereira/accountapiclient/test"
 	configtest "github.com/goncalopereira/accountapiclient/test/config"
 	httptest "github.com/goncalopereira/accountapiclient/test/http"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -24,13 +25,17 @@ func TestClient_Fetch(t *testing.T) {
 		id string
 	}
 
-	completeAccount := test.NewAccountFromFile("complete-account.json")
-	accountBody, _ := json.DataToBytes(completeAccount)
+	completeAccount := test.NewAccountFromFile("fetch-response.json")
+	accountBody, err := json.Marshal(completeAccount)
+	assert.Nil(t, err)
+
 	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
 
 	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
 
-	errorBody, _ := json.DataToBytes(apiErrorMessage)
+	errorBody, err := json.Marshal(apiErrorMessage)
+	assert.Nil(t, err)
+
 	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
 
 	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
@@ -46,22 +51,22 @@ func TestClient_Fetch(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenAccountWhenValidIDThenReturnAccount",
-			fields{config: api, request: httptest.NewGetRequestMock(accountResponse, nil)},
+			fields{config: api, request: httptest.NewRequestMock(accountResponse, nil)},
 			args{id: "1"},
 			completeAccount,
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
-			fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
+			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
 			args{id: "1"},
 			apiErrorMessage,
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
+			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
 			args{id: "1"},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewGetRequestMock(nil, test.ErrBrokenHTTPClient)},
+			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
 			args{id: "1"},
 			&data.NoOp{},
 			true},

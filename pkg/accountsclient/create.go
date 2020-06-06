@@ -1,9 +1,9 @@
 package accountsclient
 
 import (
+	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"net/http"
 	"net/url"
 )
@@ -14,9 +14,9 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return &data.NoOp{}, configErr
 	}
 
-	requestData, dataErr := json.DataToBytes(accountRequest)
-	if dataErr != nil {
-		return nil, dataErr
+	requestData, err := json.Marshal(accountRequest)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
 	response, responseErr := client.handleRequest("POST", requestURL.String(), requestData)

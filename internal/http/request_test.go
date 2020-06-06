@@ -3,10 +3,10 @@ package http_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	"github.com/goncalopereira/accountapiclient/internal/json"
 	"github.com/goncalopereira/accountapiclient/test"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -25,12 +25,14 @@ func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 }
 
 func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test.ReadJSON("complete-account.json")}
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test.ReadJSON("fetch-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
 	r := internalhttp.NewRequest()
 
-	req, _ := http.NewRequest("GET", ts.URL, nil)
+	req, err := http.NewRequest("GET", ts.URL, nil)
+	assert.Nil(t, err)
+
 	response, err := r.Do(req)
 
 	assert.Nil(t, err)
@@ -43,7 +45,8 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test.ReadJSON("create-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	req, _ := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create.json")))
+	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create.json")))
+	assert.Nil(t, err)
 
 	response, err := internalhttp.NewRequest().Do(req)
 
@@ -51,14 +54,18 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
 
 	var result = account.Data{}
-	_ = json.BytesToData(response.Body, &result)
+	err = json.Unmarshal(response.Body, &result)
+
+	assert.Nil(t, err)
 	assert.Equal(t, test.AccountCreateResponse().Account, result.Account)
 }
 
 func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 	ts := NewServerWithResponse(&internalhttp.Response{StatusCode: http.StatusNoContent, Body: nil})
 
-	req, _ := http.NewRequest("DELETE", ts.URL, nil)
+	req, err := http.NewRequest("DELETE", ts.URL, nil)
+	assert.Nil(t, err)
+
 	response, err := internalhttp.NewRequest().Do(req)
 
 	assert.Nil(t, err)
