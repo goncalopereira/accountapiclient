@@ -22,20 +22,8 @@ func NewGetRequestMock(response *internalhttp.Response, err error) internalhttp.
 	return client
 }
 
-func NewPostRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
-	client := new(RequestMock)
-	client.On("Post", mock.AnythingOfType("string"), mock.Anything).Return(response, err).Once()
-
-	return client
-}
-
 func (r *RequestMock) Get(req *http.Request) (*internalhttp.Response, error) {
 	arguments := r.Called(req)
-	return returnResponseAndError(arguments)
-}
-
-func (r *RequestMock) Post(endpoint string, requestData []byte) (*internalhttp.Response, error) {
-	arguments := r.Called(endpoint, requestData)
 	return returnResponseAndError(arguments)
 }
 

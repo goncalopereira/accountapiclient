@@ -1,7 +1,6 @@
 package http
 
 import (
-	"bytes"
 	"io/ioutil"
 	"net/http"
 )
@@ -21,15 +20,6 @@ func NewRequest() *Request {
 }
 
 func (h *Request) Get(req *http.Request) (*Response, error) {
-	return h.handleRequest(req)
-}
-
-func (h *Request) Post(reqURL string, requestData []byte) (*Response, error) {
-	req, err := http.NewRequest("POST", reqURL, bytes.NewBuffer(requestData))
-	if err != nil {
-		return nil, err
-	}
-
 	return h.handleRequest(req)
 }
 

@@ -47,16 +47,16 @@ func TestClient_Create(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenNoAccountWhenPostAccountThenReturnAccount",
-			fields{config: api, request: httptest.NewPostRequestMock(accountResponse, nil)},
+			fields{config: api, request: httptest.NewGetRequestMock(accountResponse, nil)},
 			args{account: test.AccountCreateRequest()},
 			createdAccount,
 			false},
 		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
-			fields: fields{config: api, request: httptest.NewPostRequestMock(errorResponse, nil)},
+			fields: fields{config: api, request: httptest.NewGetRequestMock(errorResponse, nil)},
 			args:   args{account: test.AccountCreateRequest()},
 			want:   test.DuplicateAccountErrorResponse()},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewPostRequestMock(brokenResponse, nil)},
+			fields{config: api, request: httptest.NewGetRequestMock(brokenResponse, nil)},
 			args{account: test.AccountCreateRequest()},
 			nil,
 			true},

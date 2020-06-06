@@ -1,6 +1,7 @@
 package accounts
 
 import (
+	"bytes"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"github.com/goncalopereira/accountapiclient/internal/json"
@@ -19,7 +20,12 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 		return nil, configErr
 	}
 
-	response, requestErr := client.Request.Post(requestURL.String(), requestData)
+	req, err := http.NewRequest("POST", requestURL.String(), bytes.NewBuffer(requestData))
+	if err != nil {
+		return nil, err
+	}
+
+	response, requestErr := client.Request.Get(req)
 	if requestErr != nil {
 		return nil, requestErr
 	}
