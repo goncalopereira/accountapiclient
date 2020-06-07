@@ -9,7 +9,7 @@ import (
 )
 
 //Delete deletes an Account based on ID and Version,
-//returns IOutput with NoContent, or NoOp when error.
+//returns IOutput with Deleted, or NoOp when error.
 func (client *Client) Delete(id uuid.UUID, version int) (data.IOutput, error) {
 	parameters := &url.Values{}
 	parameters.Add("version", strconv.Itoa(version))
@@ -25,7 +25,7 @@ func (client *Client) Delete(id uuid.UUID, version int) (data.IOutput, error) {
 	}
 
 	if response.StatusCode == http.StatusNoContent {
-		return &data.NoContent{}, nil
+		return &data.Deleted{}, nil
 	}
 
 	return errorResponseHandling(response)

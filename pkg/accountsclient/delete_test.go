@@ -42,7 +42,7 @@ func TestClient_Delete(t *testing.T) {
 		{"WhenGivenValidIDAndVersionThen204Empty",
 			fields{request: test.NewRequestMock(deleteResponse, nil)},
 			args{id: uuid.New(), version: 1},
-			&data.NoContent{},
+			&data.Deleted{},
 			false},
 		//includes 404 not found
 		//includes 409 specified version incorrect

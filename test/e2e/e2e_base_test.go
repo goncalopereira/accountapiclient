@@ -58,6 +58,6 @@ func (suite *BaseTestSuite) setupDeleteAllAccounts(client *accountsclient.Client
 	for _, a := range *accountsData.Accounts {
 		output, err := client.Delete(a.ID, 0) //versionId does not work on fake api
 		assert.Nil(suite.T(), err)
-		assert.IsType(suite.T(), &data.NoContent{}, output)
+		assert.IsType(suite.T(), &data.Deleted{}, output)
 	}
 }

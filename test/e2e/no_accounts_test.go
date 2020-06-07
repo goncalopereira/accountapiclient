@@ -47,7 +47,7 @@ func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenDeleteUnknownIDAndVersi
 	output, err := suite.Client.Delete(suite.NewAccountID, 0)
 
 	assert.Nil(suite.T(), err)
-	assert.Equal(suite.T(), &data.NoContent{}, output)
+	assert.Equal(suite.T(), &data.Deleted{}, output)
 }
 
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenCreateUnknownIDThenAccount() {

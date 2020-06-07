@@ -5,6 +5,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	accountsClient "github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/google/uuid"
+	"net/url"
 )
 
 func main() {
@@ -12,23 +13,35 @@ func main() {
 
 	newAccount := data.Account{}
 	newAccount.ID = uuid.New()
-	//data := &data.Data{Account: newAccount}
+	newAccount.Country = "GB"
+	newAccount.TypeOf = "accounts"
+	data := &data.Data{Account: newAccount}
 
-	//delete if already exists
-	output, err := client.Delete(newAccount.ID, 0)
+	newAccountData, err := client.Create(data)
 	if err != nil {
 		panic("is API up?")
 	}
 
-	fmt.Printf("%+v", output.String())
+	fmt.Printf("create %+w\n", newAccountData)
 
-	/*
-		switch t := output.(type) {
-		case *data.NoContent:
-			fmt.Printf("deleted pre existing account: %s", newAccount.ID)
-		case *data.ErrorResponse:
-			fmt.Printf("%i", output.(data.ErrorResponse).StatusCode)
-			fmt.Printf(output.(data.ErrorResponse).ErrorMessage)
-		}
-	*/
+	fetchedData, err := client.Fetch(newAccount.ID)
+	if err != nil {
+		panic("is API up?")
+	}
+
+	fmt.Printf("fetch %+w\n", fetchedData)
+
+	accountsData, err := client.List(&url.Values{})
+	if err != nil {
+		panic("is API up?")
+	}
+
+	fmt.Printf("list %+w\n", accountsData)
+
+	deleted, err := client.Delete(newAccount.ID, 0)
+	if err != nil {
+		panic("is API up?")
+	}
+
+	fmt.Printf("delete %+w\n", deleted)
 }

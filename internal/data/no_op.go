@@ -5,6 +5,6 @@ type NoOp struct {
 	IOutput
 }
 
-type NoContent struct {
+type Deleted struct {
 	NoOp
 }
