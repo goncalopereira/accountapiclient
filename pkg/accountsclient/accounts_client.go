@@ -6,6 +6,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	"github.com/google/uuid"
 	"net/http"
 )
 
@@ -20,6 +21,16 @@ type Client struct {
 //uses env based configuration API_SCHEME, API_HOST, API_PORT.
 func NewClient() *Client {
 	return &Client{Config: api.DefaultAPI(), Request: internalhttp.NewClient()}
+}
+
+//NewAccount returns the minimum required fields to build a new account request.
+func NewAccount(id uuid.UUID, country string) *data.Account {
+	a := &data.Account{}
+	a.TypeOf = "accounts"
+	a.Country = country
+	a.ID = id
+
+	return a
 }
 
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {

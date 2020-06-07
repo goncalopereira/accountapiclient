@@ -11,11 +11,8 @@ import (
 func main() {
 	client := accountsClient.NewClient()
 
-	newAccount := data.Account{}
-	newAccount.ID = uuid.New()
-	newAccount.Country = "GB"
-	newAccount.TypeOf = "accounts"
-	data := &data.Data{Account: newAccount}
+	newAccount := accountsClient.NewAccount(uuid.New(), "Gb")
+	data := &data.Data{Account: *newAccount}
 
 	newAccountData, err := client.Create(data)
 	if err != nil {
