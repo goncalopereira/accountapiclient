@@ -1,11 +1,12 @@
 package accountsclient
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/google/uuid"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	"github.com/google/uuid"
 )
 
 //Delete deletes an Account based on ID and Version,

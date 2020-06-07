@@ -3,15 +3,16 @@ package accountsclient_test
 
 import (
 	"encoding/json"
+	"net/http"
+	"net/url"
+	"reflect"
+	"testing"
+
 	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"net/url"
-	"reflect"
-	"testing"
 )
 
 func TestClient_List(t *testing.T) {

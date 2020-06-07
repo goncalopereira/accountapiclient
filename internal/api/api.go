@@ -2,9 +2,10 @@ package api
 
 import (
 	"fmt"
-	"github.com/google/uuid"
 	"net/url"
 	"os"
+
+	"github.com/google/uuid"
 )
 
 //API holds configuration for client

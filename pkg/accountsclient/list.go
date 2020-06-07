@@ -1,9 +1,10 @@
 package accountsclient
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	"net/http"
 	"net/url"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
 )
 
 //List returns a list of accounts based on the parameters (filters),

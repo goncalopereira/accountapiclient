@@ -2,9 +2,10 @@ package accountsclient
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	"net/http"
 	"net/url"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
 )
 
 //Create creates a new Account for a non existing ID,

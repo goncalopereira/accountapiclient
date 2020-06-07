@@ -5,14 +5,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/goncalopereira/accountapiclient/internal/data"
-	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	test2 "github.com/goncalopereira/accountapiclient/internal/test"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/stretchr/testify/assert"
 )
 
 //createResponseData returns valid static Data with an Account.

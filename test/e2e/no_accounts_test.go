@@ -2,11 +2,13 @@ package e2e_test
 
 import (
 	"fmt"
+	accountsClient "github.com/goncalopereira/accountapiclient/pkg/accountsclient"
+	"net/url"
+	"testing"
+
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"net/url"
-	"testing"
 )
 
 //E2E suite for edge cases where no accounts exist.
@@ -51,7 +53,7 @@ func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenDeleteUnknownIDAndVersi
 }
 
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenCreateUnknownIDThenAccount() {
-	output, err := suite.Client.Create(&suite.NewAccountData(suite.NewAccountID).Account)
+	output, err := suite.Client.Create(accountsClient.NewAccount(suite.NewAccountID, "GB"))
 
 	assert.Nil(suite.T(), err)
 	assert.IsType(suite.T(), &data.Data{}, output)

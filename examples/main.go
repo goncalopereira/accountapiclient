@@ -10,7 +10,7 @@ import (
 func main() {
 	client := accountsClient.NewClient()
 
-	newAccount := accountsClient.NewAccount(uuid.New(), "Gb")
+	newAccount := accountsClient.NewAccount(uuid.New(), accountsClient.GB)
 
 	newAccountData, err := client.Create(newAccount)
 	if err != nil {

@@ -3,12 +3,13 @@ package accountsclient_test
 
 import (
 	"encoding/json"
+	"reflect"
+	"testing"
+
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/stretchr/testify/assert"
-	"reflect"
-	"testing"
 )
 
 //createRequestAccount returns valid static Data with an Account.

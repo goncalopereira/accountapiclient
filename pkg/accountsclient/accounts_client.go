@@ -3,11 +3,12 @@ package accountsclient
 import (
 	"bytes"
 	"encoding/json"
+	"net/http"
+
 	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/google/uuid"
-	"net/http"
 )
 
 //Client holds current API configuration and all allowed commands

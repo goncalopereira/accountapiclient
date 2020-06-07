@@ -3,14 +3,15 @@ package accountsclient_test
 
 import (
 	"encoding/json"
+	"net/http"
+	"reflect"
+	"testing"
+
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"reflect"
-	"testing"
 )
 
 func TestClient_Delete(t *testing.T) {

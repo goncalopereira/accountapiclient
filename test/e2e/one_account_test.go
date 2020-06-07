@@ -1,12 +1,14 @@
 package e2e_test
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	test2 "github.com/goncalopereira/accountapiclient/internal/test"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
+	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"net/url"
 	"testing"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 )
 
 //E2E suite for edge cases where no accounts exist
@@ -24,7 +26,7 @@ func TestOneAccountTestSuite(t *testing.T) {
 
 func (suite *OneAccountTestSuite) SetupTest() {
 	suite.BaseTestSuite.SetupTest()
-	suite.SetupNewAccount(suite.NewAccountData(suite.NewAccountID))
+	suite.SetupNewAccountData(accountsclient.NewAccount(suite.NewAccountID, accountsclient.GB))
 }
 
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenListThenListWithOneAccount() {
@@ -58,7 +60,7 @@ func (suite *OneAccountTestSuite) TestGivenOneAccountWhenDeleteIDAndVersion0Then
 }
 
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenCreateSameIDThenErrorMessage() {
-	output, err := suite.Client.Create(&suite.NewAccountData(suite.NewAccountID).Account)
+	output, err := suite.Client.Create(accountsclient.NewAccount(suite.NewAccountID, accountsclient.GB))
 
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), test2.DuplicateAccountErrorResponse(), output.(*data.ErrorResponse))

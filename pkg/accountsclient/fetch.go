@@ -1,10 +1,11 @@
 package accountsclient
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/google/uuid"
 	"net/http"
 	"net/url"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	"github.com/google/uuid"
 )
 
 //Fetch returns an Account based on ID,
