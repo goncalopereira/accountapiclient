@@ -1,5 +1,7 @@
 .PHONY: build test docker e2e
 
+default: build test
+
 fmt:
 	gofmt -w .
 build: fmt ## format and build all go files
