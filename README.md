@@ -30,4 +30,5 @@ In this section I explain some ways I created this exercise.
 
 * [Discovery](docs/Discovery.md) 
 * [Bootstrap](docs/Bootstrap.md)
+* [Development](docs/Development.md)
 
