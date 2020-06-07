@@ -1,4 +1,4 @@
-package account
+package data
 
 type Account struct {
 	LinkData

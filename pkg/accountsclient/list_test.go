@@ -5,11 +5,9 @@ import (
 	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
-	"github.com/goncalopereira/accountapiclient/test"
-	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -27,21 +25,21 @@ func TestClient_List(t *testing.T) {
 		urls *url.Values
 	}
 
-	multipleAccounts := test.NewAccountsFromFile("list-response.json")
+	multipleAccounts := test2.NewAccountsFromFile("list-response.json")
 
 	accountsBody, err := json.Marshal(multipleAccounts)
 	assert.Nil(t, err)
 
 	accountsResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: accountsBody}
 
-	emptyList := test.NewAccountsFromFile("list-response-empty.json")
+	emptyList := test2.NewAccountsFromFile("list-response-empty.json")
 
 	emptyAccountsBody, err := json.Marshal(emptyList)
 	assert.Nil(t, err)
 
 	emptyAccountsResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: emptyAccountsBody}
 
-	errorBody, err := json.Marshal(test.ServerErrorResponse())
+	errorBody, err := json.Marshal(test2.ServerErrorResponse())
 	assert.Nil(t, err)
 
 	errorResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: errorBody}
@@ -58,27 +56,27 @@ func TestClient_List(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenAccountsWhenDefaultQueryThenReturnAccounts",
-			fields{config: api, request: httptest.NewRequestMock(accountsResponse, nil)},
+			fields{config: api, request: test2.NewRequestMock(accountsResponse, nil)},
 			args{urls: &url.Values{}},
 			multipleAccounts,
 			false},
 		{"GivenNoAccountsWhenDefaultQueryThenReturnNilArray",
-			fields{config: api, request: httptest.NewRequestMock(emptyAccountsResponse, nil)},
+			fields{config: api, request: test2.NewRequestMock(emptyAccountsResponse, nil)},
 			args{urls: &url.Values{}},
-			&account.AccountsData{},
+			&data.AccountsData{},
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
-			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
+			fields{config: api, request: test2.NewRequestMock(errorResponse, nil)},
 			args{urls: &url.Values{}},
-			test.ServerErrorResponse(),
+			test2.ServerErrorResponse(),
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
+			fields{config: api, request: test2.NewRequestMock(brokenResponse, nil)},
 			args{urls: &url.Values{}},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
+			fields{config: api, request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
 			args{urls: &url.Values{}},
 			&data.NoOp{},
 			true},

@@ -4,19 +4,17 @@ package accountsclient_test
 import (
 	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
-	"github.com/goncalopereira/accountapiclient/test"
-	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
 
 //createRequestData returns valid static Data with an Account.
-func createRequestData() *account.Data {
-	account := test.NewAccountFromFile("create.json")
+func createRequestData() *data.Data {
+	account := test2.NewAccountFromFile("create.json")
 	return account
 }
 
@@ -26,17 +24,17 @@ func TestClient_Create(t *testing.T) {
 	}
 
 	type args struct {
-		account *account.Data
+		account *data.Data
 	}
 
-	createdAccount := test.NewAccountFromFile("create-response.json")
+	createdAccount := test2.NewAccountFromFile("create-response.json")
 
 	accountBody, err := json.Marshal(createdAccount)
 	assert.Nil(t, err)
 
 	accountResponse := &internalhttp.Response{StatusCode: 201, Body: accountBody}
 
-	apiErrorMessage := test.DuplicateAccountErrorResponse()
+	apiErrorMessage := test2.DuplicateAccountErrorResponse()
 
 	errorBody, err := json.Marshal(apiErrorMessage)
 	assert.Nil(t, err)
@@ -53,21 +51,21 @@ func TestClient_Create(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenNoAccountWhenPostAccountThenReturnAccount",
-			fields{request: httptest.NewRequestMock(accountResponse, nil)},
+			fields{request: test2.NewRequestMock(accountResponse, nil)},
 			args{account: createRequestData()},
 			createdAccount,
 			false},
 		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
-			fields: fields{request: httptest.NewRequestMock(errorResponse, nil)},
+			fields: fields{request: test2.NewRequestMock(errorResponse, nil)},
 			args:   args{account: createRequestData()},
-			want:   test.DuplicateAccountErrorResponse()},
+			want:   test2.DuplicateAccountErrorResponse()},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{request: httptest.NewRequestMock(brokenResponse, nil)},
+			fields{request: test2.NewRequestMock(brokenResponse, nil)},
 			args{account: createRequestData()},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
+			fields{request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
 			args{account: createRequestData()},
 			&data.NoOp{},
 			true},

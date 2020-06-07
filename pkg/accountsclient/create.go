@@ -3,7 +3,6 @@ package accountsclient
 import (
 	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"net/http"
 	"net/url"
 )
@@ -11,7 +10,7 @@ import (
 //Create creates a new Account for a non existing ID,
 //receives the Data type with Account,
 //returns IOutput with Account, ErrorMessage, or NoOp when error.
-func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error) {
+func (client *Client) Create(accountRequest *data.Data) (data.IOutput, error) {
 	requestURL, err := client.config.Accounts(&url.Values{})
 	if err != nil {
 		return &data.NoOp{}, err
@@ -28,7 +27,7 @@ func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error)
 	}
 
 	if response.StatusCode == http.StatusCreated {
-		return validResponseHandling(response, &account.Data{})
+		return validResponseHandling(response, &data.Data{})
 	}
 
 	return errorResponseHandling(response)

@@ -2,7 +2,6 @@ package accountsclient
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
 	"net/http"
 	"net/url"
 )
@@ -28,7 +27,7 @@ func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
 	}
 
 	if response.StatusCode == http.StatusOK {
-		return validResponseHandling(response, &account.AccountsData{})
+		return validResponseHandling(response, &data.AccountsData{})
 	}
 
 	return errorResponseHandling(response)

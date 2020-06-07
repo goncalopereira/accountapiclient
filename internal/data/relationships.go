@@ -1,4 +1,4 @@
-package account
+package data
 
 type Relationships struct {
 	RelationshipsAccountEvents `json:"account_events,omitempty"`

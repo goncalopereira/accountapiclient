@@ -3,14 +3,13 @@ package test
 import (
 	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
 )
 
 const ErrCouldNotHydrateTestData = "could not hydrate test data"
 
 //NewAccountsFromFile reads relative file path and returns AccountsData ([]Account).
-func NewAccountsFromFile(filename string) *account.AccountsData {
-	accounts := account.AccountsData{}
+func NewAccountsFromFile(filename string) *data.AccountsData {
+	accounts := data.AccountsData{}
 
 	err := json.Unmarshal(ReadJSON(filename), &accounts)
 	if err != nil {
@@ -21,8 +20,8 @@ func NewAccountsFromFile(filename string) *account.AccountsData {
 }
 
 //NewAccountsFromFile reads relative file path and returns Data (Account).
-func NewAccountFromFile(filename string) *account.Data {
-	accountToHydrate := account.Data{}
+func NewAccountFromFile(filename string) *data.Data {
+	accountToHydrate := data.Data{}
 
 	err := json.Unmarshal(ReadJSON(filename), &accountToHydrate)
 	if err != nil {

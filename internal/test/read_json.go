@@ -7,6 +7,7 @@ import (
 
 const integrationDataPath = "../../test/integration/data/"
 
+//ReadJSON returns byte array based on relative file path.
 func ReadJSON(path string) []byte {
 	jsonFile, err := os.Open(integrationDataPath + path)
 	if err != nil {

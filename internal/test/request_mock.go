@@ -1,4 +1,4 @@
-package http_test
+package test
 
 import (
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
@@ -22,6 +22,8 @@ func NewRequestMock(response *internalhttp.Response, err error) internalhttp.IRe
 	return client
 }
 
+//Do should be mocked to wrap http.Client,
+//and returns http.Response byte array already read in Response.
 func (r *RequestMock) Do(req *http.Request) (*internalhttp.Response, error) {
 	arguments := r.Called(req)
 	errArgument := arguments.Get(1)

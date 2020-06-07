@@ -5,9 +5,8 @@ import (
 	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
-	"github.com/goncalopereira/accountapiclient/test"
-	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"reflect"
@@ -26,7 +25,7 @@ func TestClient_Delete(t *testing.T) {
 
 	deleteResponse := &internalhttp.Response{StatusCode: 204}
 
-	errorBody, err := json.Marshal(test.ServerErrorResponse())
+	errorBody, err := json.Marshal(test2.ServerErrorResponse())
 	assert.Nil(t, err)
 
 	errorResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: errorBody}
@@ -41,24 +40,24 @@ func TestClient_Delete(t *testing.T) {
 		wantErr bool
 	}{
 		{"WhenGivenValidIDAndVersionThen204Empty",
-			fields{request: httptest.NewRequestMock(deleteResponse, nil)},
+			fields{request: test2.NewRequestMock(deleteResponse, nil)},
 			args{id: "1", version: 1},
 			&data.NoContent{},
 			false},
 		//includes 404 not found
 		//includes 409 specified version incorrect
 		{"WhenGivenNon200ThenReturnErrorMessage",
-			fields{request: httptest.NewRequestMock(errorResponse, nil)},
+			fields{request: test2.NewRequestMock(errorResponse, nil)},
 			args{id: "1", version: 1},
-			test.ServerErrorResponse(),
+			test2.ServerErrorResponse(),
 			false},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{request: httptest.NewRequestMock(brokenResponse, nil)},
+			fields{request: test2.NewRequestMock(brokenResponse, nil)},
 			args{id: "1", version: 1},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
+			fields{request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
 			args{id: "1", version: 1},
 			&data.NoOp{},
 			true},

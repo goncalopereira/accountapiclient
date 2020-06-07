@@ -8,7 +8,6 @@ import (
 
 var (
 	ErrBrokenHTTPClient = fmt.Errorf("broken http connection")
-	ErrBrokenConfig     = fmt.Errorf("broken config")
 )
 
 //ServerErrorResponse returns valid static ErrorResponse for generic 500 Server Error.
@@ -18,7 +17,7 @@ func ServerErrorResponse() *data.ErrorResponse {
 	return errorMessage
 }
 
-//duplicateAccountErrorResponse returns valid static ErrorResponse
+//DuplicateAccountErrorResponse returns valid static ErrorResponse
 //for existing Account error.
 func DuplicateAccountErrorResponse() *data.ErrorResponse {
 	return &data.ErrorResponse{

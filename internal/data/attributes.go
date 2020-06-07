@@ -1,4 +1,4 @@
-package account
+package data
 
 type Attributes struct {
 	PrivateIdentification      `json:"private_identification,omitempty"`

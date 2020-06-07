@@ -1,8 +1,7 @@
 package e2e_test
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/test/e2e"
+	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -16,7 +15,7 @@ import (
 //Ideally I'd use better provider testing instead of this
 //as many features are not available against fake api.
 type ListTestSuite struct {
-	e2e.BaseTestSuite
+	BaseTestSuite
 }
 
 func TestListTestSuite(t *testing.T) {
@@ -39,10 +38,10 @@ func (suite *ListTestSuite) TestGivenFiveAccountsWhenListThenListWithFiveAccount
 	output, err := suite.Client.List(params)
 
 	assert.Nil(suite.T(), err)
-	assert.IsType(suite.T(), &account.AccountsData{}, output)
+	assert.IsType(suite.T(), &data.AccountsData{}, output)
 
 	//checking length and not IDs just to keep sorting flexible
-	accounts := *output.(*account.AccountsData).Accounts
+	accounts := *output.(*data.AccountsData).Accounts
 	assert.Equal(suite.T(), 5, len(accounts))
 }
 
@@ -54,9 +53,9 @@ func (suite *ListTestSuite) TestGivenFiveAccountsWhenListWithPage0Size3ThenListW
 	output, err := suite.Client.List(params)
 
 	assert.Nil(suite.T(), err)
-	assert.IsType(suite.T(), &account.AccountsData{}, output)
+	assert.IsType(suite.T(), &data.AccountsData{}, output)
 
-	accounts := *output.(*account.AccountsData).Accounts
+	accounts := *output.(*data.AccountsData).Accounts
 	assert.Equal(suite.T(), 3, len(accounts))
 }
 
@@ -68,8 +67,8 @@ func (suite *ListTestSuite) TestGivenFiveAccountsWhenListWithPage1Size3ThenListW
 	output, err := suite.Client.List(params)
 
 	assert.Nil(suite.T(), err)
-	assert.IsType(suite.T(), &account.AccountsData{}, output)
+	assert.IsType(suite.T(), &data.AccountsData{}, output)
 
-	accounts := *output.(*account.AccountsData).Accounts
+	accounts := *output.(*data.AccountsData).Accounts
 	assert.Equal(suite.T(), 2, len(accounts))
 }

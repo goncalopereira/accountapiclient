@@ -1,4 +1,4 @@
-package account
+package data
 
 type LinkData struct {
 	TypeOf string `json:"type"`
