@@ -13,7 +13,7 @@ func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 	parameters := &url.Values{}
 	parameters.Add("version", strconv.Itoa(version))
 
-	requestURL, err := client.config.Account(id, parameters)
+	requestURL, err := client.Config.Account(id, parameters)
 	if err != nil {
 		return &data.NoOp{}, err
 	}

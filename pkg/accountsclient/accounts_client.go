@@ -12,15 +12,14 @@ import (
 //Client holds current API configuration and all allowed commands
 //Request is Exported for testing purposes.
 type Client struct {
-	config  *api.API
+	Config  *api.API
 	Request internalhttp.IRequest
 }
 
 //NewClient returns the default configuration for API
-//uses env based configuration API_SCHEME, API_HOST, API_PORT
-//request should be http.client.
-func NewClient(request internalhttp.IRequest) *Client {
-	return &Client{config: api.DefaultAPI(), Request: request}
+//uses env based configuration API_SCHEME, API_HOST, API_PORT.
+func NewClient() *Client {
+	return &Client{Config: api.DefaultAPI(), Request: internalhttp.NewClient()}
 }
 
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {

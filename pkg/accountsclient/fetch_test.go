@@ -5,8 +5,7 @@ import (
 	"encoding/json"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	test2 "github.com/goncalopereira/accountapiclient/internal/test"
-	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
+	"github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"reflect"
@@ -22,13 +21,13 @@ func TestClient_Fetch(t *testing.T) {
 		id string
 	}
 
-	completeAccount := test2.NewAccountFromFile("fetch-response.json")
+	completeAccount := test.NewAccountFromFile("fetch-response.json")
 	accountBody, err := json.Marshal(completeAccount)
 	assert.Nil(t, err)
 
 	accountResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: accountBody}
 
-	errorBody, err := json.Marshal(test2.ServerErrorResponse())
+	errorBody, err := json.Marshal(test.ServerErrorResponse())
 	assert.Nil(t, err)
 
 	errorResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: errorBody}
@@ -43,29 +42,29 @@ func TestClient_Fetch(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenAccountWhenValidIDThenReturnAccount",
-			fields{request: test2.NewRequestMock(accountResponse, nil)},
+			fields{request: test.NewRequestMock(accountResponse, nil)},
 			args{id: "1"},
 			completeAccount,
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
-			fields{request: test2.NewRequestMock(errorResponse, nil)},
+			fields{request: test.NewRequestMock(errorResponse, nil)},
 			args{id: "1"},
-			test2.ServerErrorResponse(),
+			test.ServerErrorResponse(),
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
-			fields{request: test2.NewRequestMock(brokenResponse, nil)},
+			fields{request: test.NewRequestMock(brokenResponse, nil)},
 			args{id: "1"},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
+			fields{request: test.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
 			args{id: "1"},
 			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := accountsclient.NewClient(tt.fields.request)
+			client := test.NewTestClient(tt.fields.request)
 
 			got, err := client.Fetch(tt.args.id)
 			if (err != nil) != tt.wantErr {

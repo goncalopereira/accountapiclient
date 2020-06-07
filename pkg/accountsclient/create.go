@@ -11,7 +11,7 @@ import (
 //receives the Data type with Account,
 //returns IOutput with Account, ErrorMessage, or NoOp when error.
 func (client *Client) Create(accountRequest *data.Data) (data.IOutput, error) {
-	requestURL, err := client.config.Accounts(&url.Values{})
+	requestURL, err := client.Config.Accounts(&url.Values{})
 	if err != nil {
 		return &data.NoOp{}, err
 	}

@@ -9,7 +9,7 @@ import (
 //Fetch returns an Account based on ID,
 //returns IOutput with Account, ErrorMessage, or NoOp when error.
 func (client *Client) Fetch(id string) (data.IOutput, error) {
-	requestURL, err := client.config.Account(id, &url.Values{})
+	requestURL, err := client.Config.Account(id, &url.Values{})
 	if err != nil {
 		return &data.NoOp{}, err
 	}

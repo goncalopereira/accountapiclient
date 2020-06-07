@@ -3,9 +3,8 @@ package e2e_test
 import (
 	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	test2 "github.com/goncalopereira/accountapiclient/internal/test"
-	client2 "github.com/goncalopereira/accountapiclient/pkg/accountsclient"
+	"github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -19,12 +18,7 @@ import (
 type BaseTestSuite struct {
 	suite.Suite
 	NewAccountID uuid.UUID
-	Client       *client2.Client
-}
-
-//default new client with real http.
-func NewClientFromEnv() *client2.Client {
-	return client2.NewClient(internalhttp.NewRequest())
+	Client       *accountsclient.Client
 }
 
 func (suite *BaseTestSuite) SetupNewAccount(newAccount *data.Data) {
@@ -35,7 +29,7 @@ func (suite *BaseTestSuite) SetupNewAccount(newAccount *data.Data) {
 }
 
 func (suite *BaseTestSuite) NewAccount(id fmt.Stringer) *data.Data {
-	newAccount := test2.NewAccountFromFile("create.json")
+	newAccount := test.NewAccountFromFile("create.json")
 	newAccount.ID = id.String()
 
 	return newAccount
@@ -47,12 +41,12 @@ func (suite *BaseTestSuite) SetupTest() {
 
 func (suite *BaseTestSuite) SetupSuite() {
 	suite.NewAccountID = uuid.New()
-	suite.Client = NewClientFromEnv()
+	suite.Client = accountsclient.NewClient()
 }
 
 //try to clean up the api without accessing the DB
 //will not work if more than 1 page returned.
-func (suite *BaseTestSuite) setupDeleteAllAccounts(client *client2.Client) {
+func (suite *BaseTestSuite) setupDeleteAllAccounts(client *accountsclient.Client) {
 	accounts, err := client.List(&url.Values{})
 	assert.Nil(suite.T(), err)
 

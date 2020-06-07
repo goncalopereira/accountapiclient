@@ -16,7 +16,7 @@ import (
 //did not add a parameter filter to pick the available ones as the API might change this quickly
 //there is the issue of developers mistyping filter names but that's a testing issue.
 func (client *Client) List(parameters *url.Values) (data.IOutput, error) {
-	requestURL, err := client.config.Accounts(parameters)
+	requestURL, err := client.Config.Accounts(parameters)
 	if err != nil {
 		return &data.NoOp{}, err
 	}
