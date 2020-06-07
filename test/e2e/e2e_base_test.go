@@ -1,7 +1,6 @@
 package e2e_test
 
 import (
-	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	"github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
@@ -28,9 +27,9 @@ func (suite *BaseTestSuite) SetupNewAccount(newAccount *data.Data) {
 	assert.IsType(suite.T(), &data.Data{}, output)
 }
 
-func (suite *BaseTestSuite) NewAccount(id fmt.Stringer) *data.Data {
+func (suite *BaseTestSuite) NewAccount(id uuid.UUID) *data.Data {
 	newAccount := test.NewAccountFromFile("create.json")
-	newAccount.ID = id.String()
+	newAccount.ID = id
 
 	return newAccount
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"reflect"
@@ -18,7 +19,7 @@ func TestClient_Fetch(t *testing.T) {
 	}
 
 	type args struct {
-		id string
+		id uuid.UUID
 	}
 
 	completeAccount := test.NewAccountFromFile("fetch-response.json")
@@ -43,22 +44,22 @@ func TestClient_Fetch(t *testing.T) {
 	}{
 		{"GivenAccountWhenValidIDThenReturnAccount",
 			fields{request: test.NewRequestMock(accountResponse, nil)},
-			args{id: "1"},
+			args{id: uuid.New()},
 			completeAccount,
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
 			fields{request: test.NewRequestMock(errorResponse, nil)},
-			args{id: "1"},
+			args{id: uuid.UUID{}},
 			test.ServerErrorResponse(),
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
 			fields{request: test.NewRequestMock(brokenResponse, nil)},
-			args{id: "1"},
+			args{id: uuid.New()},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
 			fields{request: test.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{id: "1"},
+			args{id: uuid.New()},
 			&data.NoOp{},
 			true},
 	}

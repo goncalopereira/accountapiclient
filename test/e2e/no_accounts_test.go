@@ -33,7 +33,7 @@ func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenListThenEmptyList() {
 }
 
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenFetchUnknownIDThenErrorMessage() {
-	output, err := suite.Client.Fetch(suite.NewAccountID.String())
+	output, err := suite.Client.Fetch(suite.NewAccountID)
 
 	assert.Nil(suite.T(), err)
 	errorMessage := fmt.Sprintf("record %s does not exist", suite.NewAccountID.String())
@@ -44,7 +44,7 @@ func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenFetchUnknownIDThenError
 //Expected 404 here but seems to always get a good result even with unknown id
 //Unit tests have the correct behavior tested.
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenDeleteUnknownIDAndVersion0ThenErrorMessage() {
-	output, err := suite.Client.Delete(suite.NewAccountID.String(), 0)
+	output, err := suite.Client.Delete(suite.NewAccountID, 0)
 
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), &data.NoContent{}, output)
@@ -55,5 +55,5 @@ func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenCreateUnknownIDThenAcco
 
 	assert.Nil(suite.T(), err)
 	assert.IsType(suite.T(), &data.Data{}, output)
-	assert.Equal(suite.T(), suite.NewAccountID.String(), output.(*data.Data).ID)
+	assert.Equal(suite.T(), suite.NewAccountID, output.(*data.Data).ID)
 }

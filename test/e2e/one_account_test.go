@@ -36,22 +36,22 @@ func (suite *OneAccountTestSuite) TestGivenOneAccountWhenListThenListWithOneAcco
 
 	accounts := *output.(*data.AccountsData).Accounts
 	firstAccount := accounts[0]
-	assert.EqualValues(suite.T(), suite.NewAccountID.String(), firstAccount.ID)
+	assert.EqualValues(suite.T(), suite.NewAccountID, firstAccount.ID)
 }
 
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenFetchIDThenAccount() {
-	output, err := suite.Client.Fetch(suite.NewAccountID.String())
+	output, err := suite.Client.Fetch(suite.NewAccountID)
 
 	assert.Nil(suite.T(), err)
 	assert.IsType(suite.T(), &data.Data{}, output)
-	assert.Equal(suite.T(), suite.NewAccountID.String(), output.(*data.Data).ID)
+	assert.Equal(suite.T(), suite.NewAccountID, output.(*data.Data).ID)
 }
 
 //Only testing version 0 as FakeAPI does not handle errors like 409 wrong version
 //Expected 404 here but seems to always get a good result even with unknown id
 //Unit tests have the correct behavior tested.
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenDeleteIDAndVersion0ThenNoContent() {
-	output, err := suite.Client.Delete(suite.NewAccountID.String(), 0)
+	output, err := suite.Client.Delete(suite.NewAccountID, 0)
 
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), &data.NoContent{}, output)

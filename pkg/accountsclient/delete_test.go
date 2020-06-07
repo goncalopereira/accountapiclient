@@ -6,6 +6,7 @@ import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"reflect"
@@ -18,7 +19,7 @@ func TestClient_Delete(t *testing.T) {
 	}
 
 	type args struct {
-		id      string
+		id      uuid.UUID
 		version int
 	}
 
@@ -40,24 +41,24 @@ func TestClient_Delete(t *testing.T) {
 	}{
 		{"WhenGivenValidIDAndVersionThen204Empty",
 			fields{request: test.NewRequestMock(deleteResponse, nil)},
-			args{id: "1", version: 1},
+			args{id: uuid.New(), version: 1},
 			&data.NoContent{},
 			false},
 		//includes 404 not found
 		//includes 409 specified version incorrect
 		{"WhenGivenNon200ThenReturnErrorMessage",
 			fields{request: test.NewRequestMock(errorResponse, nil)},
-			args{id: "1", version: 1},
+			args{id: uuid.New(), version: 1},
 			test.ServerErrorResponse(),
 			false},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{request: test.NewRequestMock(brokenResponse, nil)},
-			args{id: "1", version: 1},
+			args{id: uuid.New(), version: 1},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
 			fields{request: test.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{id: "1", version: 1},
+			args{id: uuid.New(), version: 1},
 			&data.NoOp{},
 			true},
 	}
