@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-//build the request wrapper to be able to test net/http separately from service
-//returns response data.
+//Request builds the request wrapper to be able to test net/http separately from service
+//returns Response data.
 type Request struct {
 	IRequest
 	*http.Client
@@ -20,7 +20,7 @@ func NewClient() *Request {
 	return r
 }
 
-//wraps the Do method to be mock-able
+//Do wraps the net.http.client Do method to be mock-able
 //also handles the response reading to be able to close http.response.body
 //returns a plain response type with just status code and body byte array.
 func (h *Request) Do(req *http.Request) (*Response, error) {

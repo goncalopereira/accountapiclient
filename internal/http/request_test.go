@@ -12,13 +12,13 @@ import (
 
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	test2 "github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 
 //createResponseData returns valid static Data with an Account.
 func createResponseData() *data.Data {
-	account := test2.NewAccountDataFromFile("create-response.json")
+	account := test.NewAccountDataFromFile("create-response.json")
 	return account
 }
 
@@ -32,7 +32,7 @@ func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 }
 
 func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test2.ReadJSON("fetch-response.json")}
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test.ReadJSON("fetch-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
 	r := internalhttp.NewClient()
@@ -49,10 +49,10 @@ func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 }
 
 func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test2.ReadJSON("create-response.json")}
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test.ReadJSON("create-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test2.ReadJSON("create-request.json")))
+	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create-request.json")))
 	assert.Nil(t, err)
 
 	response, err := internalhttp.NewClient().Do(req)

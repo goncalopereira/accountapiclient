@@ -1,5 +1,6 @@
 package data
 
+//Attributes for Account.
 type Attributes struct {
 	PrivateIdentification      `json:"private_identification,omitempty"`
 	OrganisationIdentification `json:"organisation_identification,omitempty"`

@@ -2,6 +2,7 @@ package data
 
 import "github.com/google/uuid"
 
+//Account is the basic type to use.
 type Account struct {
 	LinkData
 	ResponseOnlyData
