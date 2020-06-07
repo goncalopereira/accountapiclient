@@ -2,11 +2,13 @@ package test
 
 import (
 	"fmt"
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	"net/http"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
 )
 
 var (
+	//ErrBrokenHTTPClient represents error message from test issues with Request
 	ErrBrokenHTTPClient = fmt.Errorf("broken http connection")
 )
 

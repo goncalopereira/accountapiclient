@@ -1,11 +1,9 @@
 package e2e_test
 
 import (
-	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	test2 "github.com/goncalopereira/accountapiclient/internal/test"
-	client2 "github.com/goncalopereira/accountapiclient/pkg/accountsclient"
+	"github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -19,24 +17,19 @@ import (
 type BaseTestSuite struct {
 	suite.Suite
 	NewAccountID uuid.UUID
-	Client       *client2.Client
+	Client       *accountsclient.Client
 }
 
-//default new client with real http.
-func NewClientFromEnv() *client2.Client {
-	return client2.NewClient(internalhttp.NewRequest())
-}
-
-func (suite *BaseTestSuite) SetupNewAccount(newAccount *data.Data) {
+func (suite *BaseTestSuite) SetupNewAccountData(newAccount *data.Account) {
 	output, err := suite.Client.Create(newAccount)
 
 	assert.Nil(suite.T(), err)
 	assert.IsType(suite.T(), &data.Data{}, output)
 }
 
-func (suite *BaseTestSuite) NewAccount(id fmt.Stringer) *data.Data {
-	newAccount := test2.NewAccountFromFile("create.json")
-	newAccount.ID = id.String()
+func (suite *BaseTestSuite) NewAccount(id uuid.UUID) *data.Data {
+	newAccount := test.NewAccountDataFromFile("create.json")
+	newAccount.ID = id
 
 	return newAccount
 }
@@ -47,12 +40,12 @@ func (suite *BaseTestSuite) SetupTest() {
 
 func (suite *BaseTestSuite) SetupSuite() {
 	suite.NewAccountID = uuid.New()
-	suite.Client = NewClientFromEnv()
+	suite.Client = accountsclient.NewClient()
 }
 
 //try to clean up the api without accessing the DB
 //will not work if more than 1 page returned.
-func (suite *BaseTestSuite) setupDeleteAllAccounts(client *client2.Client) {
+func (suite *BaseTestSuite) setupDeleteAllAccounts(client *accountsclient.Client) {
 	accounts, err := client.List(&url.Values{})
 	assert.Nil(suite.T(), err)
 
@@ -65,6 +58,6 @@ func (suite *BaseTestSuite) setupDeleteAllAccounts(client *client2.Client) {
 	for _, a := range *accountsData.Accounts {
 		output, err := client.Delete(a.ID, 0) //versionId does not work on fake api
 		assert.Nil(suite.T(), err)
-		assert.IsType(suite.T(), &data.NoContent{}, output)
+		assert.IsType(suite.T(), &data.Deleted{}, output)
 	}
 }

@@ -3,19 +3,19 @@ package accountsclient_test
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/data"
-	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	test2 "github.com/goncalopereira/accountapiclient/internal/test"
-	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	"github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/stretchr/testify/assert"
 )
 
-//createRequestData returns valid static Data with an Account.
-func createRequestData() *data.Data {
-	account := test2.NewAccountFromFile("create.json")
-	return account
+//createRequestAccount returns valid static Data with an Account.
+func createRequestAccount() *data.Account {
+	account := test.NewAccountDataFromFile("create-request.json")
+	return &account.Account
 }
 
 func TestClient_Create(t *testing.T) {
@@ -24,17 +24,17 @@ func TestClient_Create(t *testing.T) {
 	}
 
 	type args struct {
-		account *data.Data
+		account *data.Account
 	}
 
-	createdAccount := test2.NewAccountFromFile("create-response.json")
+	createdAccount := test.NewAccountDataFromFile("create-response.json")
 
 	accountBody, err := json.Marshal(createdAccount)
 	assert.Nil(t, err)
 
 	accountResponse := &internalhttp.Response{StatusCode: 201, Body: accountBody}
 
-	apiErrorMessage := test2.DuplicateAccountErrorResponse()
+	apiErrorMessage := test.DuplicateAccountErrorResponse()
 
 	errorBody, err := json.Marshal(apiErrorMessage)
 	assert.Nil(t, err)
@@ -51,28 +51,28 @@ func TestClient_Create(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenNoAccountWhenPostAccountThenReturnAccount",
-			fields{request: test2.NewRequestMock(accountResponse, nil)},
-			args{account: createRequestData()},
+			fields{request: test.NewRequestMock(accountResponse, nil)},
+			args{account: createRequestAccount()},
 			createdAccount,
 			false},
 		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
-			fields: fields{request: test2.NewRequestMock(errorResponse, nil)},
-			args:   args{account: createRequestData()},
-			want:   test2.DuplicateAccountErrorResponse()},
+			fields: fields{request: test.NewRequestMock(errorResponse, nil)},
+			args:   args{account: createRequestAccount()},
+			want:   test.DuplicateAccountErrorResponse()},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{request: test2.NewRequestMock(brokenResponse, nil)},
-			args{account: createRequestData()},
+			fields{request: test.NewRequestMock(brokenResponse, nil)},
+			args{account: createRequestAccount()},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
-			args{account: createRequestData()},
+			fields{request: test.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
+			args{account: createRequestAccount()},
 			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := accountsclient.NewClient(tt.fields.request)
+			client := test.NewTestClient(tt.fields.request)
 
 			got, err := client.Create(tt.args.account)
 			if (err != nil) != tt.wantErr {

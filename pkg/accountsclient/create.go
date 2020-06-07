@@ -2,21 +2,22 @@ package accountsclient
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	"net/http"
 	"net/url"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
 )
 
 //Create creates a new Account for a non existing ID,
 //receives the Data type with Account,
 //returns IOutput with Account, ErrorMessage, or NoOp when error.
-func (client *Client) Create(accountRequest *data.Data) (data.IOutput, error) {
-	requestURL, err := client.config.Accounts(&url.Values{})
+func (client *Client) Create(accountRequest *data.Account) (data.IOutput, error) {
+	requestURL, err := client.Config.Accounts(&url.Values{})
 	if err != nil {
 		return &data.NoOp{}, err
 	}
 
-	requestData, err := json.Marshal(accountRequest)
+	requestData, err := json.Marshal(data.Data{Account: *accountRequest})
 	if err != nil {
 		return &data.NoOp{}, err
 	}

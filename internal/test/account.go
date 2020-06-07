@@ -2,6 +2,7 @@ package test
 
 import (
 	"encoding/json"
+
 	"github.com/goncalopereira/accountapiclient/internal/data"
 )
 
@@ -19,8 +20,8 @@ func NewAccountsFromFile(filename string) *data.AccountsData {
 	return &accounts
 }
 
-//NewAccountsFromFile reads relative file path and returns Data (Account).
-func NewAccountFromFile(filename string) *data.Data {
+//NewAccountDataFromFile reads relative file path and returns Data (Account).
+func NewAccountDataFromFile(filename string) *data.Data {
 	accountToHydrate := data.Data{}
 
 	err := json.Unmarshal(ReadJSON(filename), &accountToHydrate)
@@ -31,7 +32,7 @@ func NewAccountFromFile(filename string) *data.Data {
 	return &accountToHydrate
 }
 
-//NewAccountsFromFile reads relative file path and http.StatusCode and returns ErrorResponse.
+//NewErrorMessageFromFile reads relative file path and http.StatusCode and returns ErrorResponse.
 func NewErrorMessageFromFile(filename string, statusCode int) *data.ErrorResponse {
 	errorResponseToHydrate := data.ErrorResponse{}
 

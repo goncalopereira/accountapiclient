@@ -1,6 +1,7 @@
 //nolint:lll
 package data
 
+//OrganisationIdentification from Account.
 type OrganisationIdentification struct {
 	Actors                                   []Actor  `json:"actors,omitempty"`
 	OrganisationIdentificationIdentification string   `json:"identification,omitempty"`

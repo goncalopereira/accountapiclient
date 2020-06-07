@@ -1,6 +1,7 @@
 //nolint:lll
 package data
 
+//PrivateIdentification from Account.
 type PrivateIdentification struct {
 	PrivateIdentificationBirthDate      string   `json:"birth_date,omitempty"`
 	PrivateIdentificationBirthCountry   string   `json:"birth_country,omitempty"`

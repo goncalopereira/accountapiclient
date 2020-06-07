@@ -5,19 +5,20 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/goncalopereira/accountapiclient/internal/data"
-	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	test2 "github.com/goncalopereira/accountapiclient/internal/test"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	"github.com/goncalopereira/accountapiclient/internal/test"
+	"github.com/stretchr/testify/assert"
 )
 
 //createResponseData returns valid static Data with an Account.
 func createResponseData() *data.Data {
-	account := test2.NewAccountFromFile("create-response.json")
+	account := test.NewAccountDataFromFile("create-response.json")
 	return account
 }
 
@@ -31,10 +32,10 @@ func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 }
 
 func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test2.ReadJSON("fetch-response.json")}
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test.ReadJSON("fetch-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	r := internalhttp.NewRequest()
+	r := internalhttp.NewClient()
 
 	req, err := http.NewRequest("GET", ts.URL, nil)
 	assert.Nil(t, err)
@@ -48,13 +49,13 @@ func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 }
 
 func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test2.ReadJSON("create-response.json")}
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test.ReadJSON("create-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test2.ReadJSON("create.json")))
+	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create-request.json")))
 	assert.Nil(t, err)
 
-	response, err := internalhttp.NewRequest().Do(req)
+	response, err := internalhttp.NewClient().Do(req)
 
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
@@ -72,7 +73,7 @@ func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.
 	req, err := http.NewRequest("DELETE", ts.URL, nil)
 	assert.Nil(t, err)
 
-	response, err := internalhttp.NewRequest().Do(req)
+	response, err := internalhttp.NewClient().Do(req)
 
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusNoContent, response.StatusCode)

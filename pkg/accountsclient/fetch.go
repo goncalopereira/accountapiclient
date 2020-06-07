@@ -1,15 +1,17 @@
 package accountsclient
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	"net/http"
 	"net/url"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	"github.com/google/uuid"
 )
 
 //Fetch returns an Account based on ID,
 //returns IOutput with Account, ErrorMessage, or NoOp when error.
-func (client *Client) Fetch(id string) (data.IOutput, error) {
-	requestURL, err := client.config.Account(id, &url.Values{})
+func (client *Client) Fetch(id uuid.UUID) (data.IOutput, error) {
+	requestURL, err := client.Config.Account(id, &url.Values{})
 	if err != nil {
 		return &data.NoOp{}, err
 	}

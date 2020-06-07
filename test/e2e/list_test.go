@@ -2,6 +2,7 @@ package e2e_test
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
+	accountsClient "github.com/goncalopereira/accountapiclient/pkg/accountsclient"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -26,11 +27,11 @@ func (suite *ListTestSuite) SetupTest() {
 	suite.BaseTestSuite.SetupTest()
 
 	//add five accounts for pagination tests
-	suite.SetupNewAccount(suite.NewAccount(suite.NewAccountID))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
+	suite.SetupNewAccountData(accountsClient.NewAccount(suite.NewAccountID, accountsClient.GB))
+	suite.SetupNewAccountData(accountsClient.NewAccount(uuid.New(), accountsClient.GB))
+	suite.SetupNewAccountData(accountsClient.NewAccount(uuid.New(), accountsClient.GB))
+	suite.SetupNewAccountData(accountsClient.NewAccount(uuid.New(), accountsClient.GB))
+	suite.SetupNewAccountData(accountsClient.NewAccount(uuid.New(), accountsClient.GB))
 }
 
 func (suite *ListTestSuite) TestGivenFiveAccountsWhenListThenListWithFiveAccounts() {

@@ -1,19 +1,21 @@
 package accountsclient
 
 import (
-	"github.com/goncalopereira/accountapiclient/internal/data"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/goncalopereira/accountapiclient/internal/data"
+	"github.com/google/uuid"
 )
 
 //Delete deletes an Account based on ID and Version,
-//returns IOutput with NoContent, or NoOp when error.
-func (client *Client) Delete(id string, version int) (data.IOutput, error) {
+//returns IOutput with Deleted, or NoOp when error.
+func (client *Client) Delete(id uuid.UUID, version int) (data.IOutput, error) {
 	parameters := &url.Values{}
 	parameters.Add("version", strconv.Itoa(version))
 
-	requestURL, err := client.config.Account(id, parameters)
+	requestURL, err := client.Config.Account(id, parameters)
 	if err != nil {
 		return &data.NoOp{}, err
 	}
@@ -24,7 +26,7 @@ func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 	}
 
 	if response.StatusCode == http.StatusNoContent {
-		return &data.NoContent{}, nil
+		return &data.Deleted{}, nil
 	}
 
 	return errorResponseHandling(response)

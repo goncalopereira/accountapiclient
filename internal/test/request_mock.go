@@ -1,12 +1,13 @@
 package test
 
 import (
+	"net/http"
+
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"github.com/stretchr/testify/mock"
-	"net/http"
 )
 
-//need to be able to mock net/http
+//RequestMock to be able to mock net/http
 //looked into using Pact but with only an external Provider it would be too much to force it to use e2e tests
 //looked into using Sling but had to keep all third party libraries out of the client.
 type RequestMock struct {
@@ -14,6 +15,7 @@ type RequestMock struct {
 	internalhttp.IRequest
 }
 
+//NewRequestMock returns Request based on a given test Response.
 //could improve by getting correct urls instead of any.
 func NewRequestMock(response *internalhttp.Response, err error) internalhttp.IRequest {
 	client := new(RequestMock)

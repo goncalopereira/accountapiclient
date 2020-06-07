@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+
+	"github.com/google/uuid"
 )
 
 //API holds configuration for client
@@ -32,8 +34,8 @@ func (c *API) Accounts(parameters *url.Values) (*url.URL, error) {
 	return buildURL(*c.apiURL, parameters)
 }
 
-//Accounts returns the full url for a specific Account based on id.
-func (c *API) Account(id string, parameters *url.Values) (*url.URL, error) {
+//Account returns the full url for a specific Account based on id.
+func (c *API) Account(id uuid.UUID, parameters *url.Values) (*url.URL, error) {
 	newURL := *c.apiURL
 	newURL.Path = fmt.Sprintf("%s/%s", c.apiURL.Path, id)
 

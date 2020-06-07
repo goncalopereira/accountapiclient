@@ -1,10 +1,11 @@
 package data
 
-//Implementing Null Object Pattern, non nil result.
+//NoOp implements Null Object Pattern, non nil result.
 type NoOp struct {
 	IOutput
 }
 
-type NoContent struct {
+//Deleted represents a valid deletion.
+type Deleted struct {
 	NoOp
 }

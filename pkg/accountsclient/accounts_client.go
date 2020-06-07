@@ -3,24 +3,35 @@ package accountsclient
 import (
 	"bytes"
 	"encoding/json"
+	"net/http"
+
 	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	"net/http"
+	"github.com/google/uuid"
 )
 
 //Client holds current API configuration and all allowed commands
 //Request is Exported for testing purposes.
 type Client struct {
-	config  *api.API
+	Config  *api.API
 	Request internalhttp.IRequest
 }
 
 //NewClient returns the default configuration for API
-//uses env based configuration API_SCHEME, API_HOST, API_PORT
-//request should be http.client.
-func NewClient(request internalhttp.IRequest) *Client {
-	return &Client{config: api.DefaultAPI(), Request: request}
+//uses env based configuration API_SCHEME, API_HOST, API_PORT.
+func NewClient() *Client {
+	return &Client{Config: api.DefaultAPI(), Request: internalhttp.NewClient()}
+}
+
+//NewAccount returns the minimum required fields to build a new account request.
+func NewAccount(id uuid.UUID, country string) *data.Account {
+	a := &data.Account{}
+	a.TypeOf = "accounts"
+	a.Country = country
+	a.ID = id
+
+	return a
 }
 
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {
