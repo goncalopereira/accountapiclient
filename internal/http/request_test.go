@@ -15,6 +15,12 @@ import (
 	"testing"
 )
 
+//createResponseData returns valid static Data with an Account.
+func createResponseData() *account.Data {
+	account := test.NewAccountFromFile("create-response.json")
+	return account
+}
+
 func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(response.StatusCode)
@@ -57,7 +63,7 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	err = json.Unmarshal(response.Body, &result)
 
 	assert.Nil(t, err)
-	assert.Equal(t, test.CreateResponseData().Account, result.Account)
+	assert.Equal(t, createResponseData().Account, result.Account)
 }
 
 func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {

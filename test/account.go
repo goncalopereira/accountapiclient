@@ -8,6 +8,7 @@ import (
 
 const ErrCouldNotHydrateTestData = "could not hydrate test data"
 
+//NewAccountsFromFile reads relative file path and returns AccountsData ([]Account).
 func NewAccountsFromFile(filename string) *account.AccountsData {
 	accounts := account.AccountsData{}
 
@@ -18,6 +19,8 @@ func NewAccountsFromFile(filename string) *account.AccountsData {
 
 	return &accounts
 }
+
+//NewAccountsFromFile reads relative file path and returns Data (Account).
 func NewAccountFromFile(filename string) *account.Data {
 	accountToHydrate := account.Data{}
 
@@ -29,13 +32,16 @@ func NewAccountFromFile(filename string) *account.Data {
 	return &accountToHydrate
 }
 
-func NewErrorMessageFromFile(filename string) *data.ErrorResponse {
+//NewAccountsFromFile reads relative file path and http.StatusCode and returns ErrorResponse.
+func NewErrorMessageFromFile(filename string, statusCode int) *data.ErrorResponse {
 	errorResponseToHydrate := data.ErrorResponse{}
 
 	err := json.Unmarshal(ReadJSON(filename), &errorResponseToHydrate)
 	if err != nil {
 		panic(ErrCouldNotHydrateTestData)
 	}
+
+	errorResponseToHydrate.StatusCode = statusCode
 
 	return &errorResponseToHydrate
 }

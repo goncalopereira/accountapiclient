@@ -8,8 +8,9 @@ import (
 	"net/url"
 )
 
-//Create receives the Data type with Account
-//Returns IOutput with Account ErrorMessage, or NoOp when error.
+//Create creates a new Account for a non existing ID,
+//receives the Data type with Account,
+//returns IOutput with Account, ErrorMessage, or NoOp when error.
 func (client *Client) Create(accountRequest *account.Data) (data.IOutput, error) {
 	requestURL, err := client.config.Accounts(&url.Values{})
 	if err != nil {
