@@ -23,7 +23,7 @@ If you prefer to build and run tests locally use `make`
 ## Examples
 The [examples folder](examples) will show examples of uses of the client.
 
-`make examples` will run all examples against the fake-api on docker-compose (localhost:8080)
+`make example` will run all examples against the fake-api on docker-compose (localhost:8080)
 
 ## Stages
 In this section I explain some ways I created this exercise.
