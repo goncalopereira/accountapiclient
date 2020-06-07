@@ -24,7 +24,7 @@ func TestOneAccountTestSuite(t *testing.T) {
 
 func (suite *OneAccountTestSuite) SetupTest() {
 	suite.BaseTestSuite.SetupTest()
-	suite.SetupNewAccount(suite.NewAccount(suite.NewAccountID))
+	suite.SetupNewAccount(suite.NewAccountData(suite.NewAccountID))
 }
 
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenListThenListWithOneAccount() {
@@ -58,7 +58,7 @@ func (suite *OneAccountTestSuite) TestGivenOneAccountWhenDeleteIDAndVersion0Then
 }
 
 func (suite *OneAccountTestSuite) TestGivenOneAccountWhenCreateSameIDThenErrorMessage() {
-	output, err := suite.Client.Create(suite.NewAccount(suite.NewAccountID))
+	output, err := suite.Client.Create(&suite.NewAccountData(suite.NewAccountID).Account)
 
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), test2.DuplicateAccountErrorResponse(), output.(*data.ErrorResponse))

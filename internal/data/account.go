@@ -9,12 +9,3 @@ type Account struct {
 	OrganisationID uuid.UUID `json:"organisation_id"`
 	Relationships  `json:"relationships,omitempty"`
 }
-
-func NewAccount(id uuid.UUID, country string) *Account {
-	a := &Account{}
-	a.TypeOf = "accounts"
-	a.Country = country
-	a.ID = id
-
-	return a
-}

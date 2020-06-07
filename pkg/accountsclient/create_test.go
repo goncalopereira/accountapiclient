@@ -11,10 +11,10 @@ import (
 	"testing"
 )
 
-//createRequestData returns valid static Data with an Account.
-func createRequestData() *data.Data {
-	account := test.NewAccountFromFile("create.json")
-	return account
+//createRequestAccount returns valid static Data with an Account.
+func createRequestAccount() *data.Account {
+	account := test.NewAccountDataFromFile("create-request.json")
+	return &account.Account
 }
 
 func TestClient_Create(t *testing.T) {
@@ -23,10 +23,10 @@ func TestClient_Create(t *testing.T) {
 	}
 
 	type args struct {
-		account *data.Data
+		account *data.Account
 	}
 
-	createdAccount := test.NewAccountFromFile("create-response.json")
+	createdAccount := test.NewAccountDataFromFile("create-response.json")
 
 	accountBody, err := json.Marshal(createdAccount)
 	assert.Nil(t, err)
@@ -51,21 +51,21 @@ func TestClient_Create(t *testing.T) {
 	}{
 		{"GivenNoAccountWhenPostAccountThenReturnAccount",
 			fields{request: test.NewRequestMock(accountResponse, nil)},
-			args{account: createRequestData()},
+			args{account: createRequestAccount()},
 			createdAccount,
 			false},
 		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
 			fields: fields{request: test.NewRequestMock(errorResponse, nil)},
-			args:   args{account: createRequestData()},
+			args:   args{account: createRequestAccount()},
 			want:   test.DuplicateAccountErrorResponse()},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
 			fields{request: test.NewRequestMock(brokenResponse, nil)},
-			args{account: createRequestData()},
+			args{account: createRequestAccount()},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
 			fields{request: test.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{account: createRequestData()},
+			args{account: createRequestAccount()},
 			&data.NoOp{},
 			true},
 	}

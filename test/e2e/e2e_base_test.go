@@ -21,14 +21,14 @@ type BaseTestSuite struct {
 }
 
 func (suite *BaseTestSuite) SetupNewAccount(newAccount *data.Data) {
-	output, err := suite.Client.Create(newAccount)
+	output, err := suite.Client.Create(&newAccount.Account)
 
 	assert.Nil(suite.T(), err)
 	assert.IsType(suite.T(), &data.Data{}, output)
 }
 
-func (suite *BaseTestSuite) NewAccount(id uuid.UUID) *data.Data {
-	newAccount := test.NewAccountFromFile("create.json")
+func (suite *BaseTestSuite) NewAccountData(id uuid.UUID) *data.Data {
+	newAccount := test.NewAccountDataFromFile("create-request.json")
 	newAccount.ID = id
 
 	return newAccount

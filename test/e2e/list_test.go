@@ -26,11 +26,11 @@ func (suite *ListTestSuite) SetupTest() {
 	suite.BaseTestSuite.SetupTest()
 
 	//add five accounts for pagination tests
-	suite.SetupNewAccount(suite.NewAccount(suite.NewAccountID))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
-	suite.SetupNewAccount(suite.NewAccount(uuid.New()))
+	suite.SetupNewAccount(suite.NewAccountData(suite.NewAccountID))
+	suite.SetupNewAccount(suite.NewAccountData(uuid.New()))
+	suite.SetupNewAccount(suite.NewAccountData(uuid.New()))
+	suite.SetupNewAccount(suite.NewAccountData(uuid.New()))
+	suite.SetupNewAccount(suite.NewAccountData(uuid.New()))
 }
 
 func (suite *ListTestSuite) TestGivenFiveAccountsWhenListThenListWithFiveAccounts() {

@@ -51,7 +51,7 @@ func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenDeleteUnknownIDAndVersi
 }
 
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenCreateUnknownIDThenAccount() {
-	output, err := suite.Client.Create(suite.NewAccount(suite.NewAccountID))
+	output, err := suite.Client.Create(&suite.NewAccountData(suite.NewAccountID).Account)
 
 	assert.Nil(suite.T(), err)
 	assert.IsType(suite.T(), &data.Data{}, output)

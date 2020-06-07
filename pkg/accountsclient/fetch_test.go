@@ -22,7 +22,7 @@ func TestClient_Fetch(t *testing.T) {
 		id uuid.UUID
 	}
 
-	completeAccount := test.NewAccountFromFile("fetch-response.json")
+	completeAccount := test.NewAccountDataFromFile("fetch-response.json")
 	accountBody, err := json.Marshal(completeAccount)
 	assert.Nil(t, err)
 

@@ -17,7 +17,7 @@ import (
 
 //createResponseData returns valid static Data with an Account.
 func createResponseData() *data.Data {
-	account := test2.NewAccountFromFile("create-response.json")
+	account := test2.NewAccountDataFromFile("create-response.json")
 	return account
 }
 
@@ -51,7 +51,7 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test2.ReadJSON("create-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test2.ReadJSON("create.json")))
+	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test2.ReadJSON("create-request.json")))
 	assert.Nil(t, err)
 
 	response, err := internalhttp.NewClient().Do(req)

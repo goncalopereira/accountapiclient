@@ -20,7 +20,7 @@ func NewAccountsFromFile(filename string) *data.AccountsData {
 }
 
 //NewAccountsFromFile reads relative file path and returns Data (Account).
-func NewAccountFromFile(filename string) *data.Data {
+func NewAccountDataFromFile(filename string) *data.Data {
 	accountToHydrate := data.Data{}
 
 	err := json.Unmarshal(ReadJSON(filename), &accountToHydrate)
