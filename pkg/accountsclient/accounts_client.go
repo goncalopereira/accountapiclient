@@ -3,19 +3,24 @@ package accountsclient
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/config"
+	"github.com/goncalopereira/accountapiclient/internal/api"
 	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
 	"net/http"
 )
 
+//Client holds current API configuration and all allowed commands
+//Request is Exported for testing purposes.
 type Client struct {
-	config  config.IAPI
+	config  *api.API
 	Request internalhttp.IRequest
 }
 
-func NewClient(config config.IAPI, request internalhttp.IRequest) *Client {
-	return &Client{config: config, Request: request}
+//NewClient returns the default configuration for API
+//uses env based configuration API_SCHEME, API_HOST, API_PORT
+//request should be http.client.
+func NewClient(request internalhttp.IRequest) *Client {
+	return &Client{config: api.DefaultAPI(), Request: request}
 }
 
 func errorResponseHandling(response *internalhttp.Response) (data.IOutput, error) {

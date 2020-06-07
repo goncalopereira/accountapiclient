@@ -1,5 +1,5 @@
 //nolint:lll
-package account
+package data
 
 type OrganisationIdentification struct {
 	Actors                                   []Actor  `json:"actors,omitempty"`

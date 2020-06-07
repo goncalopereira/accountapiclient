@@ -1,4 +1,4 @@
-package account
+package data
 
 type Actor struct {
 	Names     []string `json:"name,omitempty"`

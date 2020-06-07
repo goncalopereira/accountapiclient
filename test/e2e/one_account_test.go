@@ -2,9 +2,7 @@ package e2e_test
 
 import (
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/test"
-	"github.com/goncalopereira/accountapiclient/test/e2e"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"net/url"
@@ -17,7 +15,7 @@ import (
 //Ideally I'd use better provider testing instead of this
 //as many features are not available against fake api.
 type OneAccountTestSuite struct {
-	e2e.BaseTestSuite
+	BaseTestSuite
 }
 
 func TestOneAccountTestSuite(t *testing.T) {
@@ -34,9 +32,9 @@ func (suite *OneAccountTestSuite) TestGivenOneAccountWhenListThenListWithOneAcco
 	output, err := suite.Client.List(params)
 
 	assert.Nil(suite.T(), err)
-	assert.IsType(suite.T(), &account.AccountsData{}, output)
+	assert.IsType(suite.T(), &data.AccountsData{}, output)
 
-	accounts := *output.(*account.AccountsData).Accounts
+	accounts := *output.(*data.AccountsData).Accounts
 	firstAccount := accounts[0]
 	assert.EqualValues(suite.T(), suite.NewAccountID.String(), firstAccount.ID)
 }
@@ -45,8 +43,8 @@ func (suite *OneAccountTestSuite) TestGivenOneAccountWhenFetchIDThenAccount() {
 	output, err := suite.Client.Fetch(suite.NewAccountID.String())
 
 	assert.Nil(suite.T(), err)
-	assert.IsType(suite.T(), &account.Data{}, output)
-	assert.Equal(suite.T(), suite.NewAccountID.String(), output.(*account.Data).ID)
+	assert.IsType(suite.T(), &data.Data{}, output)
+	assert.Equal(suite.T(), suite.NewAccountID.String(), output.(*data.Data).ID)
 }
 
 //Only testing version 0 as FakeAPI does not handle errors like 409 wrong version
@@ -63,5 +61,5 @@ func (suite *OneAccountTestSuite) TestGivenOneAccountWhenCreateSameIDThenErrorMe
 	output, err := suite.Client.Create(suite.NewAccount(suite.NewAccountID))
 
 	assert.Nil(suite.T(), err)
-	assert.Equal(suite.T(), test.DuplicateAccountErrorResponse(), output.(*data.ErrorResponse))
+	assert.Equal(suite.T(), test2.DuplicateAccountErrorResponse(), output.(*data.ErrorResponse))
 }

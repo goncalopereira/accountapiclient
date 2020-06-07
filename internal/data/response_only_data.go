@@ -1,4 +1,4 @@
-package account
+package data
 
 type ResponseOnlyData struct {
 	CreatedOn  string `json:"created_on,omitempty"` //json unmarshal Time some other day

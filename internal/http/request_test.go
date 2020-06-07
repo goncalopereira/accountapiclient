@@ -5,15 +5,21 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
+	"github.com/goncalopereira/accountapiclient/internal/data"
 	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
-	"github.com/goncalopereira/accountapiclient/test"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 )
+
+//createResponseData returns valid static Data with an Account.
+func createResponseData() *data.Data {
+	account := test2.NewAccountFromFile("create-response.json")
+	return account
+}
 
 func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +31,7 @@ func NewServerWithResponse(response *internalhttp.Response) *httptest.Server {
 }
 
 func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test.ReadJSON("fetch-response.json")}
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: test2.ReadJSON("fetch-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
 	r := internalhttp.NewRequest()
@@ -42,10 +48,10 @@ func TestGet_WhenResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
 }
 
 func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {
-	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test.ReadJSON("create-response.json")}
+	originalResponse := &internalhttp.Response{StatusCode: http.StatusCreated, Body: test2.ReadJSON("create-response.json")}
 	ts := NewServerWithResponse(originalResponse)
 
-	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test.ReadJSON("create.json")))
+	req, err := http.NewRequest("POST", ts.URL, bytes.NewBuffer(test2.ReadJSON("create.json")))
 	assert.Nil(t, err)
 
 	response, err := internalhttp.NewRequest().Do(req)
@@ -53,11 +59,11 @@ func TestPost_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T)
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusCreated, response.StatusCode)
 
-	var result = account.Data{}
+	var result = data.Data{}
 	err = json.Unmarshal(response.Body, &result)
 
 	assert.Nil(t, err)
-	assert.Equal(t, test.AccountCreateResponse().Account, result.Account)
+	assert.Equal(t, createResponseData().Account, result.Account)
 }
 
 func TestDelete_WhenDataSentAndResponseIsOKThenStatusOKAndReturnBody(t *testing.T) {

@@ -1,5 +1,5 @@
 //nolint:lll
-package account
+package data
 
 type PrivateIdentification struct {
 	PrivateIdentificationBirthDate      string   `json:"birth_date,omitempty"`

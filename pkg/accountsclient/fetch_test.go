@@ -3,45 +3,37 @@ package accountsclient_test
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/http"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
-	"github.com/goncalopereira/accountapiclient/test"
-	configtest "github.com/goncalopereira/accountapiclient/test/config"
-	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"reflect"
 	"testing"
 )
 
 func TestClient_Fetch(t *testing.T) {
 	type fields struct {
-		config  config.IAPI
-		request http.IRequest
+		request internalhttp.IRequest
 	}
 
 	type args struct {
 		id string
 	}
 
-	completeAccount := test.NewAccountFromFile("fetch-response.json")
+	completeAccount := test2.NewAccountFromFile("fetch-response.json")
 	accountBody, err := json.Marshal(completeAccount)
 	assert.Nil(t, err)
 
-	accountResponse := &http.Response{StatusCode: 200, Body: accountBody}
+	accountResponse := &internalhttp.Response{StatusCode: http.StatusOK, Body: accountBody}
 
-	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
-
-	errorBody, err := json.Marshal(apiErrorMessage)
+	errorBody, err := json.Marshal(test2.ServerErrorResponse())
 	assert.Nil(t, err)
 
-	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
+	errorResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: errorBody}
 
-	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
-
-	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
+	brokenResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: nil}
 
 	tests := []struct {
 		name    string
@@ -51,34 +43,29 @@ func TestClient_Fetch(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenAccountWhenValidIDThenReturnAccount",
-			fields{config: api, request: httptest.NewRequestMock(accountResponse, nil)},
+			fields{request: test2.NewRequestMock(accountResponse, nil)},
 			args{id: "1"},
 			completeAccount,
 			false},
 		{"WhenNon200ThenReturnErrorMessage",
-			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
+			fields{request: test2.NewRequestMock(errorResponse, nil)},
 			args{id: "1"},
-			apiErrorMessage,
+			test2.ServerErrorResponse(),
 			false},
 		{"WhenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
+			fields{request: test2.NewRequestMock(brokenResponse, nil)},
 			args{id: "1"},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{id: "1"},
-			&data.NoOp{},
-			true},
-		{"WhenBrokenAPIConfigThrowsThenReturnError",
-			fields{config: brokenAPI, request: nil},
+			fields{request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
 			args{id: "1"},
 			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := accountsclient.NewClient(tt.fields.config, tt.fields.request)
+			client := accountsclient.NewClient(tt.fields.request)
 
 			got, err := client.Fetch(tt.args.id)
 			if (err != nil) != tt.wantErr {

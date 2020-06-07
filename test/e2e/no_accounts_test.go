@@ -3,8 +3,6 @@ package e2e_test
 import (
 	"fmt"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/test/e2e"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"net/url"
@@ -13,7 +11,7 @@ import (
 
 //E2E suite for edge cases where no accounts exist.
 type NoAccountsTestSuite struct {
-	e2e.BaseTestSuite
+	BaseTestSuite
 }
 
 func TestNoAccountsTestSuite(t *testing.T) {
@@ -23,16 +21,15 @@ func TestNoAccountsTestSuite(t *testing.T) {
 //testing with an added filter but fake api does not respect filters.
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenListThenEmptyList() {
 	params := &url.Values{}
-	params.Add("filter[bank_id]", suite.BankID)
 	output, err := suite.Client.List(params)
 
 	assert.Nil(suite.T(), err)
-	assert.IsType(suite.T(), &account.AccountsData{}, output)
+	assert.IsType(suite.T(), &data.AccountsData{}, output)
 
 	//https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices
-	assert.Nil(suite.T(), output.(*account.AccountsData).Accounts) //nil list is default behaviour
+	assert.Nil(suite.T(), output.(*data.AccountsData).Accounts) //nil list is default behaviour
 
-	assert.Equal(suite.T(), &account.AccountsData{}, output) //empty list
+	assert.Equal(suite.T(), &data.AccountsData{}, output) //empty list
 }
 
 func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenFetchUnknownIDThenErrorMessage() {
@@ -57,6 +54,6 @@ func (suite *NoAccountsTestSuite) TestGivenNoAccountsWhenCreateUnknownIDThenAcco
 	output, err := suite.Client.Create(suite.NewAccount(suite.NewAccountID))
 
 	assert.Nil(suite.T(), err)
-	assert.IsType(suite.T(), &account.Data{}, output)
-	assert.Equal(suite.T(), suite.NewAccountID.String(), output.(*account.Data).ID)
+	assert.IsType(suite.T(), &data.Data{}, output)
+	assert.Equal(suite.T(), suite.NewAccountID.String(), output.(*data.Data).ID)
 }

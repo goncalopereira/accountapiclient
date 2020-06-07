@@ -3,47 +3,45 @@ package accountsclient_test
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/data/account"
-	"github.com/goncalopereira/accountapiclient/internal/http"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
-	"github.com/goncalopereira/accountapiclient/test"
-	configtest "github.com/goncalopereira/accountapiclient/test/config"
-	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
 
+//createRequestData returns valid static Data with an Account.
+func createRequestData() *data.Data {
+	account := test2.NewAccountFromFile("create.json")
+	return account
+}
+
 func TestClient_Create(t *testing.T) {
 	type fields struct {
-		config  config.IAPI
-		request http.IRequest
+		request internalhttp.IRequest
 	}
 
 	type args struct {
-		account *account.Data
+		account *data.Data
 	}
 
-	createdAccount := test.NewAccountFromFile("create-response.json")
+	createdAccount := test2.NewAccountFromFile("create-response.json")
 
 	accountBody, err := json.Marshal(createdAccount)
 	assert.Nil(t, err)
 
-	accountResponse := &http.Response{StatusCode: 201, Body: accountBody}
+	accountResponse := &internalhttp.Response{StatusCode: 201, Body: accountBody}
 
-	apiErrorMessage := test.DuplicateAccountErrorResponse()
+	apiErrorMessage := test2.DuplicateAccountErrorResponse()
 
 	errorBody, err := json.Marshal(apiErrorMessage)
 	assert.Nil(t, err)
 
-	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
+	errorResponse := &internalhttp.Response{StatusCode: 500, Body: errorBody}
 
-	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
-
-	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
+	brokenResponse := &internalhttp.Response{StatusCode: 500, Body: nil}
 
 	tests := []struct {
 		name    string
@@ -53,33 +51,28 @@ func TestClient_Create(t *testing.T) {
 		wantErr bool
 	}{
 		{"GivenNoAccountWhenPostAccountThenReturnAccount",
-			fields{config: api, request: httptest.NewRequestMock(accountResponse, nil)},
-			args{account: test.AccountCreateRequest()},
+			fields{request: test2.NewRequestMock(accountResponse, nil)},
+			args{account: createRequestData()},
 			createdAccount,
 			false},
 		{name: "GivenAccountWhenPostSameIDThenReturnErrorMessage", //409 conflict existing
-			fields: fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
-			args:   args{account: test.AccountCreateRequest()},
-			want:   test.DuplicateAccountErrorResponse()},
+			fields: fields{request: test2.NewRequestMock(errorResponse, nil)},
+			args:   args{account: createRequestData()},
+			want:   test2.DuplicateAccountErrorResponse()},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
-			args{account: test.AccountCreateRequest()},
+			fields{request: test2.NewRequestMock(brokenResponse, nil)},
+			args{account: createRequestData()},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
-			args{account: test.AccountCreateRequest()},
-			&data.NoOp{},
-			true},
-		{"WhenBrokenAPIConfigThrowsThenReturnError",
-			fields{config: brokenAPI, request: nil},
-			args{account: test.AccountCreateRequest()},
+			fields{request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
+			args{account: createRequestData()},
 			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := accountsclient.NewClient(tt.fields.config, tt.fields.request)
+			client := accountsclient.NewClient(tt.fields.request)
 
 			got, err := client.Create(tt.args.account)
 			if (err != nil) != tt.wantErr {

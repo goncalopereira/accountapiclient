@@ -7,18 +7,20 @@ import (
 	"strconv"
 )
 
+//Delete deletes an Account based on ID and Version,
+//returns IOutput with NoContent, or NoOp when error.
 func (client *Client) Delete(id string, version int) (data.IOutput, error) {
 	parameters := &url.Values{}
 	parameters.Add("version", strconv.Itoa(version))
 
-	requestURL, configErr := client.config.Account(id, parameters)
-	if configErr != nil {
-		return &data.NoOp{}, configErr
+	requestURL, err := client.config.Account(id, parameters)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
-	response, responseErr := client.handleRequest("DELETE", requestURL.String(), nil)
-	if responseErr != nil {
-		return &data.NoOp{}, responseErr
+	response, err := client.handleRequest(http.MethodDelete, requestURL.String(), nil)
+	if err != nil {
+		return &data.NoOp{}, err
 	}
 
 	if response.StatusCode == http.StatusNoContent {

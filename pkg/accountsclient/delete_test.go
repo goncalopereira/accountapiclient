@@ -3,22 +3,19 @@ package accountsclient_test
 
 import (
 	"encoding/json"
-	"github.com/goncalopereira/accountapiclient/internal/config"
 	"github.com/goncalopereira/accountapiclient/internal/data"
-	"github.com/goncalopereira/accountapiclient/internal/http"
+	internalhttp "github.com/goncalopereira/accountapiclient/internal/http"
+	test2 "github.com/goncalopereira/accountapiclient/internal/test"
 	"github.com/goncalopereira/accountapiclient/pkg/accountsclient"
-	"github.com/goncalopereira/accountapiclient/test"
-	configtest "github.com/goncalopereira/accountapiclient/test/config"
-	httptest "github.com/goncalopereira/accountapiclient/test/http"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"reflect"
 	"testing"
 )
 
 func TestClient_Delete(t *testing.T) {
 	type fields struct {
-		config  config.IAPI
-		request http.IRequest
+		request internalhttp.IRequest
 	}
 
 	type args struct {
@@ -26,19 +23,14 @@ func TestClient_Delete(t *testing.T) {
 		version int
 	}
 
-	deleteResponse := &http.Response{StatusCode: 204}
+	deleteResponse := &internalhttp.Response{StatusCode: 204}
 
-	apiErrorMessage := test.NewErrorMessageFromFile("server-error.json")
-
-	errorBody, err := json.Marshal(apiErrorMessage)
+	errorBody, err := json.Marshal(test2.ServerErrorResponse())
 	assert.Nil(t, err)
 
-	errorResponse := &http.Response{StatusCode: 500, Body: errorBody}
+	errorResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: errorBody}
 
-	brokenResponse := &http.Response{StatusCode: 500, Body: nil}
-
-	api := config.DefaultAPI()
-	brokenAPI := configtest.NewAPIMock(nil, test.ErrBrokenConfig)
+	brokenResponse := &internalhttp.Response{StatusCode: http.StatusInternalServerError, Body: nil}
 
 	tests := []struct {
 		name    string
@@ -48,36 +40,31 @@ func TestClient_Delete(t *testing.T) {
 		wantErr bool
 	}{
 		{"WhenGivenValidIDAndVersionThen204Empty",
-			fields{config: api, request: httptest.NewRequestMock(deleteResponse, nil)},
+			fields{request: test2.NewRequestMock(deleteResponse, nil)},
 			args{id: "1", version: 1},
 			&data.NoContent{},
 			false},
 		//includes 404 not found
 		//includes 409 specified version incorrect
 		{"WhenGivenNon200ThenReturnErrorMessage",
-			fields{config: api, request: httptest.NewRequestMock(errorResponse, nil)},
+			fields{request: test2.NewRequestMock(errorResponse, nil)},
 			args{id: "1", version: 1},
-			apiErrorMessage,
+			test2.ServerErrorResponse(),
 			false},
 		{"WhenGivenNon200BrokenResponseThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(brokenResponse, nil)},
+			fields{request: test2.NewRequestMock(brokenResponse, nil)},
 			args{id: "1", version: 1},
 			&data.NoOp{},
 			true},
 		{"WhenHTTPClientThrowsThenReturnError",
-			fields{config: api, request: httptest.NewRequestMock(nil, test.ErrBrokenHTTPClient)},
+			fields{request: test2.NewRequestMock(nil, test2.ErrBrokenHTTPClient)},
 			args{id: "1", version: 1},
-			&data.NoOp{},
-			true},
-		{"WhenBrokenAPIConfigThrowsThenReturnError",
-			fields{config: brokenAPI, request: nil},
-			args{id: "1"},
 			&data.NoOp{},
 			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := accountsclient.NewClient(tt.fields.config, tt.fields.request)
+			c := accountsclient.NewClient(tt.fields.request)
 
 			got, err := c.Delete(tt.args.id, tt.args.version)
 			if (err != nil) != tt.wantErr {
